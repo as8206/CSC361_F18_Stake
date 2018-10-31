@@ -24,7 +24,7 @@ public class DesktopLauncher
 		 }
 	 		LwjglApplicationConfiguration cfg = new
 	 		LwjglApplicationConfiguration();
-	 		cfg.title = "CanyonBunny";
+	 		cfg.title = "Amareth";
 	 		cfg.width = 800;
 	 		cfg.height = 480;
 	 		new LwjglApplication(new MyGdxGame(), cfg);

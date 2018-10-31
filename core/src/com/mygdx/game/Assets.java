@@ -125,7 +125,7 @@ public static final String TAG = Assets.class.getName();
 			topRight = atlas.findRegion("wall_top_right");
 			topLeft = atlas.findRegion("wall_top_left");
 			bottomRight = atlas.findRegion("wall_bot_right");
-			bottomLeft = atlas.findRegion("wall_bottom_left");
+			bottomLeft = atlas.findRegion("wall_bot_left");
 		}
 	}
 	

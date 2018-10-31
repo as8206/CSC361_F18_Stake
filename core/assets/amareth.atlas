@@ -151,7 +151,7 @@ wall_top_right
   orig: 16, 16
   offset: 0, 0
   index: -1
-wall_verticle
+wall_vertical
   rotate: false
   xy: 202, 41
   size: 16, 16
