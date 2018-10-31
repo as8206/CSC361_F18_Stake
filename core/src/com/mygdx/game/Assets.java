@@ -40,6 +40,7 @@ public static final String TAG = Assets.class.getName();
 	public assetBarbarian barbarian;
 	public assetGoblin goblin;
 	public assetCharacter character;
+	public assetWallEnd wallEnd;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -78,6 +79,7 @@ public static final String TAG = Assets.class.getName();
 		barbarian = new assetBarbarian(atlas);
 		goblin = new assetGoblin(atlas);
 		character = new assetCharacter(atlas);
+		wallEnd = new assetWallEnd(atlas);
 	}
 	
 	@Override
@@ -238,6 +240,22 @@ public static final String TAG = Assets.class.getName();
 		public assetCharacter (TextureAtlas atlas)
 		{
 			character = atlas.findRegion("wizard1");
+		}
+	}
+	
+	public class assetWallEnd
+	{
+		public final AtlasRegion wallEndLeft;
+		public final AtlasRegion wallEndRight;
+		public final AtlasRegion wallEndTop;
+		public final AtlasRegion wallEndBot;
+		
+		public assetWallEnd (TextureAtlas atlas)
+		{
+			wallEndLeft = atlas.findRegion("wallDoorLeft");
+			wallEndRight = atlas.findRegion("wallDoorRight");
+			wallEndTop = atlas.findRegion("wallDoorTop");
+			wallEndBot = atlas.findRegion("wallDoorBottom");
 		}
 	}
 }
