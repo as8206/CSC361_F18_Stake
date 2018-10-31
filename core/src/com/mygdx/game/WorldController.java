@@ -91,7 +91,7 @@ public class WorldController extends InputAdapter
 	
 	public void initTestRoomObjects()
 	{
-		testRoomSprites = new Sprite[290];
+		testRoomSprites = new Sprite[302];
 		int index = 0;
 		Sprite spr = new Sprite(Assets.instance.wallCorner.topLeft);
 		//middle = 8, corner = -8
@@ -107,6 +107,16 @@ public class WorldController extends InputAdapter
 		
 		for(int i = 0; i < 15; i++)
 		{
+			if(i == 6 || i == 7 || i == 8)
+			{
+				spr = new Sprite(Assets.instance.tile.tile);
+				spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+				spr.setPosition(x, y);
+				spr.setSize(1, 1);
+				testRoomSprites[index] = spr;
+				index++;
+			}
+			
 			spr = new Sprite(Assets.instance.wall.wallHorizontal);
 			if(i == 7)
 				spr.setRegion(Assets.instance.door.doorHor);
@@ -114,6 +124,7 @@ public class WorldController extends InputAdapter
 				spr.setRegion(Assets.instance.wallEnd.wallEndLeft);
 			if(i == 8)
 				spr.setRegion(Assets.instance.wallEnd.wallEndRight);
+			
 			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
 			spr.setPosition(x, y);
 			spr.setSize(1, 1);
@@ -133,6 +144,16 @@ public class WorldController extends InputAdapter
 		
 		for (int i = 0; i < 15; i++)
 		{
+			if(i == 6 || i == 7 || i == 8)
+			{
+				spr = new Sprite(Assets.instance.tile.tile);
+				spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+				spr.setPosition(x, y);
+				spr.setSize(1, 1);
+				testRoomSprites[index] = spr;
+				index++;
+			}
+			
 			spr = new Sprite(Assets.instance.wall.wallVertical);
 			if (i == 7)
 				spr.setRegion(Assets.instance.door.doorVert);
@@ -156,6 +177,16 @@ public class WorldController extends InputAdapter
 				testRoomSprites[index] = spr;
 				index++;
 				x += 1.0f;
+			}
+			
+			if(i == 6 || i == 7 || i == 8)
+			{
+				spr = new Sprite(Assets.instance.tile.tile);
+				spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+				spr.setPosition(x, y);
+				spr.setSize(1, 1);
+				testRoomSprites[index] = spr;
+				index++;
 			}
 			
 			spr = new Sprite(Assets.instance.wall.wallVertical);
@@ -184,14 +215,24 @@ public class WorldController extends InputAdapter
 		
 		for(int i = 0; i < 15; i++)
 		{
+			if(i == 6 || i == 7 || i == 8)
+			{
+				spr = new Sprite(Assets.instance.tile.tile);
+				spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+				spr.setPosition(x, y);
+				spr.setSize(1, 1);
+				testRoomSprites[index] = spr;
+				index++;
+			}
+			
 			spr = new Sprite(Assets.instance.wall.wallHorizontal);
-			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
 			if(i == 7)
 				spr.setRegion(Assets.instance.door.doorHor);
 			if(i == 6)
 				spr.setRegion(Assets.instance.wallEnd.wallEndLeft);
 			if(i == 8)
 				spr.setRegion(Assets.instance.wallEnd.wallEndRight);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
 			spr.setPosition(x, y);
 			spr.setSize(1, 1);
 			testRoomSprites[index] = spr;
