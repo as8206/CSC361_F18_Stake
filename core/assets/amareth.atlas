@@ -1,0 +1,167 @@
+
+amareth.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+barbarian
+  rotate: false
+  xy: 2, 52
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 1
+crate
+  rotate: false
+  xy: 76, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+door_horizontal
+  rotate: false
+  xy: 94, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+door_vertical
+  rotate: false
+  xy: 112, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+floor
+  rotate: false
+  xy: 2, 2
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+floor
+  rotate: false
+  xy: 208, 92
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+goblin
+  rotate: false
+  xy: 76, 60
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+ladder_down
+  rotate: false
+  xy: 52, 13
+  size: 16, 17
+  orig: 16, 17
+  offset: 0, 0
+  index: -1
+ladder_up
+  rotate: false
+  xy: 52, 32
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+rubble
+  rotate: false
+  xy: 130, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+rubble
+  rotate: false
+  xy: 148, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+tiles
+  rotate: false
+  xy: 208, 59
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 1
+wall_bot_left
+  rotate: false
+  xy: 166, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_bot_right
+  rotate: false
+  xy: 184, 42
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_door_bottom
+  rotate: false
+  xy: 70, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_door_left
+  rotate: false
+  xy: 88, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_door_right
+  rotate: false
+  xy: 106, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_door_top
+  rotate: false
+  xy: 124, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_horizontal
+  rotate: false
+  xy: 142, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_top_left
+  rotate: false
+  xy: 160, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_top_right
+  rotate: false
+  xy: 178, 24
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wall_verticle
+  rotate: false
+  xy: 202, 41
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wizard
+  rotate: false
+  xy: 142, 60
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
