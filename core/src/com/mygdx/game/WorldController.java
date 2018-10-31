@@ -31,7 +31,7 @@ public class WorldController extends InputAdapter
 	{
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
-//		initTestObjects();
+		initTestObjects();
 		initTestRoomObjects();
 	}
 	
@@ -62,8 +62,6 @@ public class WorldController extends InputAdapter
 		regions.add(Assets.instance.wallCorner.topRight);
 		
 		//Create new sprites using a random texture region
-		float x = -8.0f;
-		float y = 0.0f;
 		for(int i = 0; i < testSprites.length; i++)
 		{
 			Sprite spr = new Sprite(regions.pop());
@@ -75,11 +73,11 @@ public class WorldController extends InputAdapter
 			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
 			
 			//Calculate random positions for sprite
-//			float randomX = MathUtils.random(-8.0f, 8.0f);
-//			float randomY = MathUtils.random(-4.0f, 4.0f);
-			x += 1.0f;
-//			spr.setPosition(randomX, randomY);
-			spr.setPosition(x, y);
+			float randomX = MathUtils.random(-8.0f, 8.0f);
+			float randomY = MathUtils.random(-4.0f, 4.0f);
+
+			spr.setPosition(randomX, randomY);
+
 			
 			// Put new sprite into array
 			testSprites[i] = spr;
@@ -278,7 +276,7 @@ public class WorldController extends InputAdapter
 	public void update(float deltaTime)
 	{
 		handleDebugInput(deltaTime);
-//		updateTestObjects(deltaTime);
+		updateTestObjects(deltaTime);
 		cameraHelper.update(deltaTime);
 	}
 	
