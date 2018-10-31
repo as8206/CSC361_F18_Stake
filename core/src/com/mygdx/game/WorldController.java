@@ -18,6 +18,7 @@ public class WorldController extends InputAdapter
 	private static final String TAG = WorldController.class.getName();
 	
 	public Sprite[] testSprites;
+	public Sprite[] testRoomSprites;
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	
@@ -30,7 +31,8 @@ public class WorldController extends InputAdapter
 	{
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
-		initTestObjects();
+//		initTestObjects();
+		initTestRoomObjects();
 	}
 	
 	private void initTestObjects()
@@ -60,10 +62,12 @@ public class WorldController extends InputAdapter
 		regions.add(Assets.instance.wallCorner.topRight);
 		
 		//Create new sprites using a random texture region
+		float x = -8.0f;
+		float y = 0.0f;
 		for(int i = 0; i < testSprites.length; i++)
 		{
 			Sprite spr = new Sprite(regions.pop());
-			
+
 			//define sprite size to be 1m x 1m in game world
 			spr.setSize(1, 1);
 			
@@ -71,9 +75,11 @@ public class WorldController extends InputAdapter
 			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
 			
 			//Calculate random positions for sprite
-			float randomX = MathUtils.random(-8.0f, 8.0f);
-			float randomY = MathUtils.random(-4.0f, 4.0f);
-			spr.setPosition(randomX, randomY);
+//			float randomX = MathUtils.random(-8.0f, 8.0f);
+//			float randomY = MathUtils.random(-4.0f, 4.0f);
+			x += 1.0f;
+//			spr.setPosition(randomX, randomY);
+			spr.setPosition(x, y);
 			
 			// Put new sprite into array
 			testSprites[i] = spr;
@@ -81,6 +87,115 @@ public class WorldController extends InputAdapter
 		
 		// Set first sprite as selected one
 		selectedSprite = 0;
+	}
+	
+	public void initTestRoomObjects()
+	{
+		testRoomSprites = new Sprite[290];
+		int index = 0;
+		Sprite spr = new Sprite(Assets.instance.wallCorner.topLeft);
+		//middle = 8, corner = -8
+		float x = -8.0f;
+		float y = 8.0f;
+		
+		spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+		spr.setPosition(x, y);
+		spr.setSize(1, 1);
+		testRoomSprites[index] = spr;
+		index++;
+		x += 1.0f;
+		
+		for(int i = 0; i < 15; i++)
+		{
+			spr = new Sprite(Assets.instance.wall.wallHorizontal);
+			if(i == 7)
+				spr.setRegion(Assets.instance.door.doorHor);
+			if(i == 6 || i == 8)
+				spr.setRegion(Assets.instance.wall.wallVertical);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+			spr.setPosition(x, y);
+			spr.setSize(1, 1);
+			testRoomSprites[index] = spr;
+			index++;
+			x += 1.0f;
+		}
+		
+		spr = new Sprite(Assets.instance.wallCorner.topRight);
+		spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+		spr.setPosition(x, y);
+		spr.setSize(1, 1);
+		testRoomSprites[index] = spr;
+		index++;
+		x = -8.0f;
+		y -= 1.0f;
+		
+		for (int i = 0; i < 15; i++)
+		{
+			spr = new Sprite(Assets.instance.wall.wallVertical);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+			spr.setPosition(x, y);
+			spr.setSize(1, 1);
+			testRoomSprites[index] = spr;
+			index++;
+			x += 1.0f;
+			
+			for (int j = 0; j < 15; j++)
+			{
+				spr = new Sprite(Assets.instance.tile.tile);
+				spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+				spr.setPosition(x, y);
+				spr.setSize(1, 1);
+				testRoomSprites[index] = spr;
+				index++;
+				x += 1.0f;
+			}
+			
+			spr = new Sprite(Assets.instance.wall.wallVertical);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+			spr.setPosition(x, y);
+			spr.setSize(1, 1);
+			testRoomSprites[index] = spr;
+			index++;
+			x = -8.0f;
+			y -= 1.0f;
+		}
+		
+		spr = new Sprite(Assets.instance.wallCorner.bottomLeft);		
+		spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+		spr.setPosition(x, y);
+		spr.setSize(1, 1);
+		testRoomSprites[index] = spr;
+		index++;
+		x += 1.0f;
+		
+		for(int i = 0; i < 15; i++)
+		{
+			spr = new Sprite(Assets.instance.wall.wallHorizontal);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() /2.0f);
+			spr.setPosition(x, y);
+			spr.setSize(1, 1);
+			testRoomSprites[index] = spr;
+			index++;
+			x += 1.0f;
+		}
+		
+		spr = new Sprite(Assets.instance.wallCorner.bottomRight);
+		spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+		spr.setPosition(x, y);
+		spr.setSize(1, 1);
+		testRoomSprites[index] = spr;
+		index++;
+		x = -8.0f;
+		y -= 1.0f;
+		
+		//place character in a random position
+		spr = new Sprite(Assets.instance.character.character);
+		spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+		spr.setPosition(MathUtils.random(-7.0f, 7.0f), MathUtils.random(-7.0f, 7.0f));
+		spr.setSize(1.5f, 1.5f);
+		testRoomSprites[index] = spr;
+		index++;
+		
 	}
 	
 	private Pixmap createProceduralPixmap(int width, int height)
@@ -102,7 +217,7 @@ public class WorldController extends InputAdapter
 	public void update(float deltaTime)
 	{
 		handleDebugInput(deltaTime);
-		updateTestObjects(deltaTime);
+//		updateTestObjects(deltaTime);
 		cameraHelper.update(deltaTime);
 	}
 	

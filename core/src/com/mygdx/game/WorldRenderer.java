@@ -28,7 +28,8 @@ public class WorldRenderer implements Disposable
 	
 	public void render ()
 	{
-		renderTestObjects();
+//		renderTestObjects();
+		renderTestRoom();
 	}
 	
 	private void renderTestObjects()
@@ -39,6 +40,19 @@ public class WorldRenderer implements Disposable
 		for(Sprite sprite : worldController.testSprites)
 		{
 			sprite.draw(batch);
+		}
+		batch.end();
+	}
+	
+	private void renderTestRoom()
+	{
+		worldController.cameraHelper.applyTo(camera);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		for(Sprite sprite : worldController.testRoomSprites)
+		{
+			if(sprite != null)
+				sprite.draw(batch);
 		}
 		batch.end();
 	}

@@ -9,7 +9,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 public class DesktopLauncher 
 {
 	private static boolean rebuildAtlas = true;
-	private static boolean drawDebugOutline = true;
+	private static boolean drawDebugOutline = false;
 	
 	public static void main (String[] arg) 
 	{
@@ -18,15 +18,15 @@ public class DesktopLauncher
 		 	Settings settings = new Settings();
 		 	settings.maxWidth = 1024;
 			 settings.maxHeight = 1024;
-			 settings.duplicatePadding = false;
+			 settings.duplicatePadding = true;
 			 settings.debug = drawDebugOutline;
 			 TexturePacker.process(settings, "assets-raw/images","../core/assets","amareth.atlas");
 		 }
 	 		LwjglApplicationConfiguration cfg = new
 	 		LwjglApplicationConfiguration();
 	 		cfg.title = "Amareth";
-	 		cfg.width = 800;
-	 		cfg.height = 480;
+	 		cfg.width = 1600;
+	 		cfg.height = 960;
 	 		new LwjglApplication(new MyGdxGame(), cfg);
 	 	
 	}
