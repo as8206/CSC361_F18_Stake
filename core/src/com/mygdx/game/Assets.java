@@ -11,12 +11,12 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
-//import com.mygdx.game.util.Constants;
+import com.mygdx.game.util.Constants;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
-public class Assets
+public class Assets implements AssetErrorListener, Disposable
 {
 public static final String TAG = Assets.class.getName();
 	
@@ -41,9 +41,43 @@ public static final String TAG = Assets.class.getName();
 	public assetGoblin goblin;
 	public assetCharacter character;
 	
+	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
 	{
+		this.assetManager = assetManager;
+		//set assent manager error handler
+		assetManager.setErrorListener(this);
+		//load texture atlas
+		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		//start loading assets and wait until finished
+		assetManager.finishLoading();
+		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames());
 		
+		for (String a : assetManager.getAssetNames())
+			Gdx.app.debug(TAG, "asset: " + a);
+		
+		TextureAtlas atlas = new TextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS);
+		
+		//enable texture filtering for pixel smoothing
+		for(Texture t : atlas.getTextures())
+		{
+			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		
+		//create asset objects
+		wall = new assetWall(atlas);
+		wallCorner = new assetWallCorner(atlas);
+		door = new assetDoor(atlas);
+		tile = new assetTile(atlas);
+		floor = new assetFloor(atlas);
+		floorBig = new assetFloorBig(atlas);
+		rubble = new assetRubble(atlas);
+		rubbleBig = new assetRubbleBig(atlas);
+		ladderUp = new assetLadderUp(atlas);
+		ladderDown = new assetLadderDown(atlas);
+		barbarian = new assetBarbarian(atlas);
+		goblin = new assetGoblin(atlas);
+		character = new assetCharacter(atlas);
 	}
 	
 	@Override
