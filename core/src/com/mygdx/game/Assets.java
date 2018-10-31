@@ -63,29 +63,147 @@ public static final String TAG = Assets.class.getName();
 		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception)throwable);
 	}
 	
+	//asset class for the walls
 	public class assetWall
 	{
-		
+		//The actual asset to be used for this object
+		public final AtlasRegion wallVertical;
+		public final AtlasRegion wallHorizontal;
+				
+		//Create the object and give it's sprite the proper image
+		public assetWall(TextureAtlas atlas)
+		{
+			wallVertical= atlas.findRegion("wall_vertical");
+			wallHorizontal = atlas.findRegion("wall_horizontal");
+		}
 	}
 	
+	//asset class for the 4 wall corners
 	public class assetWallCorner
 	{
+		public final AtlasRegion topRight;
+		public final AtlasRegion topLeft;
+		public final AtlasRegion bottomRight;
+		public final AtlasRegion bottomLeft;
 		
+		public assetWallCorner(TextureAtlas atlas)
+		{
+			topRight = atlas.findRegion("wall_top_right");
+			topLeft = atlas.findRegion("wall_top_left");
+			bottomRight = atlas.findRegion("wall_bot_right");
+			bottomLeft = atlas.findRegion("wall_bottom_left");
+		}
 	}
 	
 	public class assetDoor
 	{
+		public final AtlasRegion doorHor;
+		public final AtlasRegion doorVert;
 		
+		public assetDoor(TextureAtlas atlas)
+		{
+			doorHor = atlas.findRegion("door_horizontal");
+			doorVert = atlas.findRegion("door_vertical");
+		}
 	}
 	
 	public class assetTile
 	{
+		public final AtlasRegion tile;
 		
+		public assetTile (TextureAtlas atlas)
+		{
+			tile = atlas.findRegion("tile_1");
+		}
 	}
 	
 	public class assetFloor
 	{
+		public final AtlasRegion floor;
 		
+		public assetFloor (TextureAtlas atlas)
+		{
+			floor = atlas.findRegion("floor_1");
+		}
 	}
 	
+	public class assetFloorBig
+	{
+		public final AtlasRegion floorBig;
+		
+		public assetFloorBig (TextureAtlas atlas)
+		{
+			floorBig = atlas.findRegion("floor_2");
+		}
+	}
+	
+	public class assetRubble
+	{
+		public final AtlasRegion rubble;
+		
+		public assetRubble (TextureAtlas atlas)
+		{
+			rubble = atlas.findRegion("rubble_1");
+		}
+	}
+	
+	public class assetRubbleBig
+	{
+		public final AtlasRegion rubbleBig;
+		
+		public assetRubbleBig (TextureAtlas atlas)
+		{
+			rubbleBig = atlas.findRegion("rubble_2");
+		}
+	}
+	
+	public class assetLadderUp
+	{
+		public final AtlasRegion ladderUp;
+		
+		public assetLadderUp (TextureAtlas atlas)
+		{
+			ladderUp = atlas.findRegion("ladder_up");
+		}
+	}
+	
+	public class assetLadderDown
+	{
+		public final AtlasRegion ladderDown;
+		
+		public assetLadderDown (TextureAtlas atlas)
+		{
+			ladderDown = atlas.findRegion("ladder_down");
+		}
+	}
+	
+	public class assetBarbarian
+	{
+		public final AtlasRegion barbarian;
+		
+		public assetBarbarian (TextureAtlas atlas)
+		{
+			barbarian = atlas.findRegion("barbarian_1");
+		}
+	}
+	
+	public class assetGoblin
+	{
+		public final AtlasRegion goblin;
+		
+		public assetGoblin (TextureAtlas atlas)
+		{
+			goblin = atlas.findRegion("goblin_2");
+		}
+	}
+	
+	public class assetCharacter
+	{
+		public final AtlasRegion character;
+		
+		public assetCharacter (TextureAtlas atlas)
+		{
+			character = atlas.findRegion("wizard_1");
+		}
+	}
 }
