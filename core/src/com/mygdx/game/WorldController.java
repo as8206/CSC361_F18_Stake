@@ -62,7 +62,7 @@ public class WorldController extends InputAdapter
 		//Create new sprites using a random texture region
 		for(int i = 0; i < testSprites.length; i++)
 		{
-			Sprite spr = new Sprite(regions.random());
+			Sprite spr = new Sprite(regions.pop());
 			
 			//define sprite size to be 1m x 1m in game world
 			spr.setSize(1, 1);
@@ -71,8 +71,8 @@ public class WorldController extends InputAdapter
 			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
 			
 			//Calculate random positions for sprite
-			float randomX = MathUtils.random(-2.0f, 2.0f);
-			float randomY = MathUtils.random(-2.0f, 2.0f);
+			float randomX = MathUtils.random(-8.0f, 8.0f);
+			float randomY = MathUtils.random(-4.0f, 4.0f);
 			spr.setPosition(randomX, randomY);
 			
 			// Put new sprite into array

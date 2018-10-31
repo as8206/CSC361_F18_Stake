@@ -107,8 +107,8 @@ public static final String TAG = Assets.class.getName();
 		//Create the object and give it's sprite the proper image
 		public assetWall(TextureAtlas atlas)
 		{
-			wallVertical= atlas.findRegion("wall_vertical");
-			wallHorizontal = atlas.findRegion("wall_horizontal");
+			wallVertical= atlas.findRegion("wallVertical");
+			wallHorizontal = atlas.findRegion("wallHorizontal");
 		}
 	}
 	
@@ -122,10 +122,10 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetWallCorner(TextureAtlas atlas)
 		{
-			topRight = atlas.findRegion("wall_top_right");
-			topLeft = atlas.findRegion("wall_top_left");
-			bottomRight = atlas.findRegion("wall_bot_right");
-			bottomLeft = atlas.findRegion("wall_bottom_left");
+			topRight = atlas.findRegion("wallTopRight");
+			topLeft = atlas.findRegion("wallTopLeft");
+			bottomRight = atlas.findRegion("wallBotRight");
+			bottomLeft = atlas.findRegion("wallBotLeft");
 		}
 	}
 	
@@ -136,8 +136,8 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetDoor(TextureAtlas atlas)
 		{
-			doorHor = atlas.findRegion("door_horizontal");
-			doorVert = atlas.findRegion("door_vertical");
+			doorHor = atlas.findRegion("doorHorizontal");
+			doorVert = atlas.findRegion("doorVertical");
 		}
 	}
 	
@@ -147,7 +147,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetTile (TextureAtlas atlas)
 		{
-			tile = atlas.findRegion("tile_1");
+			tile = atlas.findRegion("tiles1");
 		}
 	}
 	
@@ -157,7 +157,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetFloor (TextureAtlas atlas)
 		{
-			floor = atlas.findRegion("floor_1");
+			floor = atlas.findRegion("floor1");
 		}
 	}
 	
@@ -167,7 +167,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetFloorBig (TextureAtlas atlas)
 		{
-			floorBig = atlas.findRegion("floor_2");
+			floorBig = atlas.findRegion("floor2");
 		}
 	}
 	
@@ -177,7 +177,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetRubble (TextureAtlas atlas)
 		{
-			rubble = atlas.findRegion("rubble_1");
+			rubble = atlas.findRegion("rubble1");
 		}
 	}
 	
@@ -187,7 +187,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetRubbleBig (TextureAtlas atlas)
 		{
-			rubbleBig = atlas.findRegion("rubble_2");
+			rubbleBig = atlas.findRegion("rubble2");
 		}
 	}
 	
@@ -197,7 +197,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetLadderUp (TextureAtlas atlas)
 		{
-			ladderUp = atlas.findRegion("ladder_up");
+			ladderUp = atlas.findRegion("ladderUp");
 		}
 	}
 	
@@ -207,7 +207,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetLadderDown (TextureAtlas atlas)
 		{
-			ladderDown = atlas.findRegion("ladder_down");
+			ladderDown = atlas.findRegion("ladderDown");
 		}
 	}
 	
@@ -217,7 +217,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetBarbarian (TextureAtlas atlas)
 		{
-			barbarian = atlas.findRegion("barbarian_1");
+			barbarian = atlas.findRegion("barbarian1");
 		}
 	}
 	
@@ -227,7 +227,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetGoblin (TextureAtlas atlas)
 		{
-			goblin = atlas.findRegion("goblin_2");
+			goblin = atlas.findRegion("goblin2");
 		}
 	}
 	
@@ -237,7 +237,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetCharacter (TextureAtlas atlas)
 		{
-			character = atlas.findRegion("wizard_1");
+			character = atlas.findRegion("wizard1");
 		}
 	}
 }
