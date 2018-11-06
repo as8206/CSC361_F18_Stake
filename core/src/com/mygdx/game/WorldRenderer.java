@@ -30,6 +30,7 @@ public class WorldRenderer implements Disposable
 	{
 //		renderTestObjects();
 		renderTestRoom();
+		WorldController.testWall.render(batch);
 	}
 	
 	private void renderTestObjects()
