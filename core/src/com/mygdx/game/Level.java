@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.*;
+import com.mygdx.game.objects.Character;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
@@ -35,7 +35,10 @@ public class Level
 		RUBBLEBIG(255,127,0),			//shades of orange
 		LADDERUP(255,0,255),
 		LADDERDOWN(200,0,200),			//shades of purple
-		CHEST(0,38,255);				//blue
+		CHEST(0,38,255),				//blue
+		PLAYER(0,255,0),				//green
+		ERANGED(255,0,0),				//red
+		EMELEE(127,0,0);				//dark red
 		
 		private int color;
 		
@@ -61,6 +64,7 @@ public class Level
 	public Array<Rubble> rubbles;
 	public Array<Ladder> ladders;
 	public Array<Chest> chests;
+	public Character player;
 	
 	//non-interactable textures
 	public Array<Sprite> grounds;
@@ -311,6 +315,20 @@ public class Level
 					
 					grounds.add(spr);
 				}
+				//player spawn position
+				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
+				{
+					obj = new Character(Assets.instance.character.character);
+					obj.body.setTransform(pixelX - 0.25f, -pixelY, 0);
+					player = (Character)obj;
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
+				}
 				else
 				{
 					int r = 0xff & (currentPixel >>> 24); 	//Red color channel
@@ -353,6 +371,8 @@ public class Level
 		//draw chests
 		for(Chest chest : chests)
 			chest.render(batch);
+		
+		player.render(batch);
 	}
 	
 }

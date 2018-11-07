@@ -12,7 +12,6 @@ public class Rubble extends AbstractGameObject
 	public Rubble(TextureRegion img)
 	{
 		super(img);
-		// TODO Auto-generated constructor stub
 	}
 	
 }
