@@ -10,13 +10,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.Constants;
 
-public class Character extends AbstractGameObject
+public abstract class Enemy extends AbstractGameObject
 {
+
 	/**
-	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
+	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Character(TextureRegion img)
+	public Enemy(TextureRegion img)
 	{
 		super(img);
 		
