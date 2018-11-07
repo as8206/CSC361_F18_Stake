@@ -39,6 +39,6 @@ public abstract class AbstractGameObject
 	{
 		batch.begin();
 		batch.draw(reg, body.getPosition().x, body.getPosition().y, 1, 1);	
-		batch.enold();
+		batch.end(); //TODO remove batch commands from here and move to location in renderer
 	}
 }

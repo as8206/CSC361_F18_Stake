@@ -11,4 +11,7 @@ public class Constants
 
 	//Location of description file for the texture atlas
 	public static final String TEXTURE_ATLAS_OBJECTS =  "../core/assets/amareth.atlas";
+	
+	//Location of level 1
+	public static final String LEVEL_01 = "../core/assets/levels/level01.png";
 }

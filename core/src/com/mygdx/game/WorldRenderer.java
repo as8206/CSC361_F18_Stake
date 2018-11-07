@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.objects.AbstractGameObject;
+import com.mygdx.game.objects.Ladder;
 import com.mygdx.game.utils.Constants;
 
 public class WorldRenderer implements Disposable
@@ -29,8 +31,8 @@ public class WorldRenderer implements Disposable
 	public void render ()
 	{
 //		renderTestObjects();
-		renderTestRoom();
-		WorldController.testWall.render(batch);
+//		renderTestRoom();
+		worldController.level01.render(batch);
 	}
 	
 	private void renderTestObjects()
