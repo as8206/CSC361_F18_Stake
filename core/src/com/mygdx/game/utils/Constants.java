@@ -14,4 +14,7 @@ public class Constants
 	
 	//Location of level 1
 	public static final String LEVEL_01 = "../core/assets/levels/level01.png";
+	
+	//offset of render vs collision box
+	public static final float OFFSET = 0.5f;
 }

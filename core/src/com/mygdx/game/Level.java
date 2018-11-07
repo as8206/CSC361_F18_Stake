@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.objects.Character;
+import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
@@ -124,7 +125,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -138,7 +139,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -218,7 +219,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -228,7 +229,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floor.floor);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -238,7 +239,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floorBig.floorBig);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -252,7 +253,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr); //TODO add random broken floors below rubble
@@ -266,7 +267,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -281,7 +282,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -296,7 +297,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -310,7 +311,7 @@ public class Level
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -319,12 +320,12 @@ public class Level
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
 				{
 					obj = new Character(Assets.instance.character.character);
-					obj.body.setTransform(pixelX - 0.25f, -pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					player = (Character)obj;
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, -pixelY);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);

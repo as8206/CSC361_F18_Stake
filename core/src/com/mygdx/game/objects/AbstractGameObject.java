@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.utils.Constants;
 
 public abstract class AbstractGameObject
 {
@@ -37,6 +38,6 @@ public abstract class AbstractGameObject
 	
 	public void render (SpriteBatch batch)
 	{
-		batch.draw(reg, body.getPosition().x, body.getPosition().y, 1, 1);	
+		batch.draw(reg, body.getPosition().x - Constants.OFFSET , body.getPosition().y - Constants.OFFSET, 1, 1);	
 	}
 }
