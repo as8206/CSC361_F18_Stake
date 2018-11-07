@@ -65,6 +65,8 @@ public class Level
 	public Array<Rubble> rubbles;
 	public Array<Ladder> ladders;
 	public Array<Chest> chests;
+	public Array<EnemyRanged> rangedEnemies;
+	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
 	
 	//non-interactable textures
@@ -83,6 +85,8 @@ public class Level
 		rubbles = new Array<Rubble>();
 		ladders = new Array<Ladder>();
 		chests = new Array<Chest>();
+		rangedEnemies = new Array<EnemyRanged>();
+		meleeEnemies = new Array<EnemyMelee>();
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
@@ -330,6 +334,34 @@ public class Level
 					
 					grounds.add(spr);
 				}
+				//melee enemy spawn positions
+				else if(BLOCK_TYPE.EMELEE.sameColor(currentPixel))
+				{
+					obj = new EnemyMelee(Assets.instance.barbarian.barbarian);
+					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
+					meleeEnemies.add((EnemyMelee)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
+				}
+				//ranged enemy spawn positions
+				else if(BLOCK_TYPE.ERANGED.sameColor(currentPixel))
+				{
+					obj = new EnemyRanged(Assets.instance.goblin.goblin);
+					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
+					rangedEnemies.add((EnemyRanged)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
+				}
 				else
 				{
 					int r = 0xff & (currentPixel >>> 24); 	//Red color channel
@@ -372,6 +404,14 @@ public class Level
 		//draw chests
 		for(Chest chest : chests)
 			chest.render(batch);
+		
+		//draw ranged enemies
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.render(batch);
+		
+		//draw melee enemies
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.render(batch);
 		
 		player.render(batch);
 	}
