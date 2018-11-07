@@ -32,7 +32,7 @@ public class WorldRenderer implements Disposable
 	{
 //		renderTestObjects();
 //		renderTestRoom();
-		renderLevel();
+		renderLevel(); //TODO add level parameter to load a specified level
 	}
 	
 	private void renderLevel()

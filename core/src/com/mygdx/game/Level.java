@@ -329,15 +329,11 @@ public class Level
 	}
 	
 	public void render(SpriteBatch batch)
-	{	
-//		batch.begin();
-		
+	{			
 		//draw ground textures
 		for(Sprite ground : grounds)
 			ground.draw(batch);
-		
-//		batch.end(); //TODO remove batch commands from here
-		
+				
 		//Draw walls
 		for(Wall wall : walls)
 			wall.render(batch);	
