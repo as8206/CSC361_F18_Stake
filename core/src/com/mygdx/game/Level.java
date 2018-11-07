@@ -35,7 +35,7 @@ public class Level
 		RUBBLEBIG(255,127,0),			//shades of orange
 		LADDERUP(255,0,255),
 		LADDERDOWN(200,0,200),			//shades of purple
-		CHEST(1,38,255);				//blue
+		CHEST(0,38,255);				//blue
 		
 		private int color;
 		
@@ -115,84 +115,98 @@ public class Level
 				else if(BLOCK_TYPE.DOORHOR.sameColor(currentPixel))
 				{
 					obj = new Door(Assets.instance.door.doorHor);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				//door vertical
 				else if(BLOCK_TYPE.DOORVERT.sameColor(currentPixel))
 				{
 					obj = new Door(Assets.instance.door.doorVert);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				//wall horizontal
 				else if(BLOCK_TYPE.WALLHOR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wall.wallHorizontal);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall vertical
 				else if(BLOCK_TYPE.WALLVERT.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wall.wallVertical);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall top left corner
 				else if(BLOCK_TYPE.WALLTOPL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.topLeft);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall top right corner
 				else if(BLOCK_TYPE.WALLTOPR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.topRight);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall bottom left corner
 				else if(BLOCK_TYPE.WALLBOTL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.bottomLeft);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall bottom right corner
 				else if(BLOCK_TYPE.WALLBOTR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.bottomRight);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall end left
 				else if(BLOCK_TYPE.WALLENDL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndLeft);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall end right
 				else if(BLOCK_TYPE.WALLENDR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndRight);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall end top
 				else if(BLOCK_TYPE.WALLENDT.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndTop);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//wall end bottom
 				else if(BLOCK_TYPE.WALLENDB.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndBot);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
 				}
 				//tile ground texture
@@ -200,7 +214,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, pixelY);
+					spr.setPosition(pixelX, -pixelY);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -210,7 +224,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floor.floor);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, pixelY);
+					spr.setPosition(pixelX, -pixelY);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -220,7 +234,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floorBig.floorBig);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX, pixelY);
+					spr.setPosition(pixelX, -pixelY);
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -229,38 +243,73 @@ public class Level
 				else if(BLOCK_TYPE.RUBBLE.sameColor(currentPixel))
 				{
 					obj = new Rubble(Assets.instance.rubble.rubble);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					rubbles.add((Rubble)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr); //TODO add random broken floors below rubble
 				}
 				//larger rubble object
 				else if(BLOCK_TYPE.RUBBLEBIG.sameColor(currentPixel))
 				{
 					obj = new Rubble(Assets.instance.rubbleBig.rubbleBig);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					rubbles.add((Rubble)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				//ladder up
 				//TODO maybe not a static object? maybe can walk through it
 				else if(BLOCK_TYPE.LADDERUP.sameColor(currentPixel))
 				{
 					obj = new Ladder(Assets.instance.ladderUp.ladderUp);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					ladders.add((Ladder)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				//ladder down
 				//TODO maybe not a static object? maybe can walk through it
 				else if(BLOCK_TYPE.LADDERDOWN.sameColor(currentPixel))
 				{
 					obj = new Ladder(Assets.instance.ladderDown.ladderDown);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					ladders.add((Ladder)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				//chest object
 				else if(BLOCK_TYPE.CHEST.sameColor(currentPixel))
 				{
 					obj = new Chest(Assets.instance.chest.chest);
-					obj.body.setTransform(pixelX, pixelY, 0);
+					obj.body.setTransform(pixelX, -pixelY, 0);
 					chests.add((Chest)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX, -pixelY);
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
 				}
 				else
 				{
@@ -281,13 +330,13 @@ public class Level
 	
 	public void render(SpriteBatch batch)
 	{	
-		batch.begin();
+//		batch.begin();
 		
 		//draw ground textures
 		for(Sprite ground : grounds)
 			ground.draw(batch);
 		
-		batch.end(); //TODO remove batch commands from here
+//		batch.end(); //TODO remove batch commands from here
 		
 		//Draw walls
 		for(Wall wall : walls)

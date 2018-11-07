@@ -27,6 +27,7 @@ public class WorldController extends InputAdapter
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
 	public Level level01;
+	public Wall testWall;
 	
 	public WorldController()
 	{

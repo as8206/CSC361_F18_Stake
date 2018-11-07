@@ -32,9 +32,18 @@ public class WorldRenderer implements Disposable
 	{
 //		renderTestObjects();
 //		renderTestRoom();
-		worldController.level01.render(batch);
+		renderLevel();
 	}
 	
+	private void renderLevel()
+	{
+		worldController.cameraHelper.applyTo(camera);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		worldController.level01.render(batch);
+		batch.end();
+	}
+
 	private void renderTestObjects()
 	{
 		worldController.cameraHelper.applyTo(camera);
