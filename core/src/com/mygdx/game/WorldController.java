@@ -39,6 +39,7 @@ public class WorldController extends InputAdapter
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
+		
 		initTestObjects();
 		initTestRoomObjects();
 		initLevel();
