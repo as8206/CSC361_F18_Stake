@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.InputAdapter;
-import com.mygdx.game.objects.Wall;
+import com.mygdx.game.objects.*;
 import com.mygdx.game.utils.CameraHelper;
 
 public class WorldController extends InputAdapter
@@ -40,8 +40,9 @@ public class WorldController extends InputAdapter
 		initTestObjects();
 		initTestRoomObjects();
 		
-//		testWall = new Wall(Assets.instance.wall.wallHorizontal);
-//		testWall.body.setTransform(0.0f, 1.0f, 0);
+		testWall = new Wall(Assets.instance.wall.wallHorizontal);
+		testWall.body.setTransform(0.0f, 9.0f, 0);
+		Door door = new Door(Assets.instance.door.doorHor);
 	}
 	
 	private void initTestObjects()

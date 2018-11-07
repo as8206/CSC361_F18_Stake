@@ -37,8 +37,8 @@ public abstract class AbstractGameObject
 	
 	public void render (SpriteBatch batch)
 	{
-//		batch.begin();
+		batch.begin();
 		batch.draw(reg, body.getPosition().x, body.getPosition().y, 1, 1);	
-//		batch.end();
+		batch.enold();
 	}
 }

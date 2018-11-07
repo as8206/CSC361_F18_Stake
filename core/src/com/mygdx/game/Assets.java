@@ -41,6 +41,7 @@ public static final String TAG = Assets.class.getName();
 	public assetGoblin goblin;
 	public assetCharacter character;
 	public assetWallEnd wallEnd;
+	public assetChest chest;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -256,6 +257,16 @@ public static final String TAG = Assets.class.getName();
 			wallEndRight = atlas.findRegion("wallDoorRight");
 			wallEndTop = atlas.findRegion("wallDoorTop");
 			wallEndBot = atlas.findRegion("wallDoorBottom");
+		}
+	}
+	
+	public class assetChest
+	{
+		public final AtlasRegion chest;
+		
+		public assetChest (TextureAtlas atlas)
+		{
+			chest = atlas.findRegion("chest1");
 		}
 	}
 }
