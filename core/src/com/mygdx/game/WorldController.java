@@ -9,9 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.InputAdapter;
+import com.mygdx.game.objects.*;
 import com.mygdx.game.utils.CameraHelper;
+import com.mygdx.game.utils.Constants;
 
 public class WorldController extends InputAdapter
 {
@@ -21,6 +25,9 @@ public class WorldController extends InputAdapter
 	public Sprite[] testRoomSprites;
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
+	public static World b2dWorld;
+	public Level level01;
+	public Wall testWall;
 	
 	public WorldController()
 	{
@@ -31,10 +38,19 @@ public class WorldController extends InputAdapter
 	{
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
+		b2dWorld = new World(new Vector2(0, 0), true); 
+		
 		initTestObjects();
 		initTestRoomObjects();
+		initLevel();
 	}
 	
+	private void initLevel()
+	{
+		level01 = new Level(Constants.LEVEL_01);
+		
+	}
+
 	private void initTestObjects()
 	{
 		// Create new array for 18 sprites

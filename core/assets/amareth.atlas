@@ -6,28 +6,35 @@ filter: Nearest,Nearest
 repeat: none
 barbarian1
   rotate: false
-  xy: 151, 36
+  xy: 81, 2
   size: 27, 27
   orig: 27, 27
   offset: 0, 0
   index: -1
+chest1
+  rotate: false
+  xy: 110, 13
+  size: 18, 17
+  orig: 18, 17
+  offset: 0, 0
+  index: -1
 crate1
   rotate: false
-  xy: 216, 47
+  xy: 151, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorHorizontal
   rotate: false
-  xy: 234, 47
+  xy: 166, 29
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorVertical
   rotate: false
-  xy: 180, 27
+  xy: 169, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -55,28 +62,28 @@ goblin2
   index: -1
 ladderDown
   rotate: false
-  xy: 198, 46
+  xy: 148, 13
   size: 16, 17
   orig: 16, 17
   offset: 0, 0
   index: -1
 ladderUp
   rotate: false
-  xy: 180, 45
+  xy: 130, 12
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 rubble1
   rotate: false
-  xy: 198, 28
+  xy: 166, 11
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 rubble2
   rotate: false
-  xy: 216, 29
+  xy: 184, 29
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -90,70 +97,70 @@ tiles1
   index: -1
 wallBotLeft
   rotate: false
-  xy: 234, 29
+  xy: 187, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallBotRight
   rotate: false
-  xy: 81, 13
+  xy: 184, 11
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorBottom
   rotate: false
-  xy: 99, 14
+  xy: 202, 29
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorLeft
   rotate: false
-  xy: 117, 14
+  xy: 205, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorRight
   rotate: false
-  xy: 135, 14
+  xy: 202, 11
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorTop
   rotate: false
-  xy: 153, 18
+  xy: 220, 29
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallHorizontal
   rotate: false
-  xy: 198, 10
+  xy: 223, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopLeft
   rotate: false
-  xy: 216, 11
+  xy: 238, 29
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopRight
   rotate: false
-  xy: 234, 11
+  xy: 220, 11
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallVertical
   rotate: false
-  xy: 171, 9
+  xy: 238, 11
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
