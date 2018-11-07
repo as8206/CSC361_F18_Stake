@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.utils.CameraHelper;
+import com.mygdx.game.utils.Constants;
 
 public class WorldController extends InputAdapter
 {
@@ -25,7 +26,8 @@ public class WorldController extends InputAdapter
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
-	public static Wall testWall;
+	public Level level01;
+	public Wall testWall;
 	
 	public WorldController()
 	{
@@ -39,12 +41,15 @@ public class WorldController extends InputAdapter
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		initTestObjects();
 		initTestRoomObjects();
-		
-		testWall = new Wall(Assets.instance.wall.wallHorizontal);
-		testWall.body.setTransform(0.0f, 9.0f, 0);
-		Door door = new Door(Assets.instance.door.doorHor);
+		initLevel();
 	}
 	
+	private void initLevel()
+	{
+		level01 = new Level(Constants.LEVEL_01);
+		
+	}
+
 	private void initTestObjects()
 	{
 		// Create new array for 18 sprites

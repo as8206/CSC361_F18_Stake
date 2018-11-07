@@ -81,6 +81,7 @@ public static final String TAG = Assets.class.getName();
 		goblin = new assetGoblin(atlas);
 		character = new assetCharacter(atlas);
 		wallEnd = new assetWallEnd(atlas);
+		chest = new assetChest(atlas);
 	}
 	
 	@Override
