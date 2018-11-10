@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.objects.AbstractGameObject;
 
 //controls the view of the camera
 public class CameraHelper 
@@ -15,7 +16,7 @@ public class CameraHelper
 	
 	private Vector2 position;
 	private float zoom;
-	private Sprite target;
+	private AbstractGameObject target;
 	
 	/**
 	 * Creates the target with a default position and zoom level
@@ -30,8 +31,8 @@ public class CameraHelper
 	{
 		if (!hasTarget()) return;
 		
-		position.x = target.getX() + target.getOriginX();
-		position.y = target.getY() + target.getOriginY();
+		position.x = target.body.getPosition().x;
+		position.y = target.body.getPosition().y;
 	}
 	
 	/**
@@ -84,7 +85,7 @@ public class CameraHelper
 	 * Sets the cameras target
 	 * @param target
 	 */
-	public void setTarget (Sprite target)
+	public void setTarget (AbstractGameObject target)
 	{
 		this.target = target;
 	}
@@ -93,7 +94,7 @@ public class CameraHelper
 	 * Returns the camera's current target
 	 * @return
 	 */
-	public Sprite getTarget()
+	public AbstractGameObject getTarget()
 	{
 		return target;
 	}
