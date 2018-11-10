@@ -43,6 +43,8 @@ public class WorldController extends InputAdapter
 		initTestObjects();
 		initTestRoomObjects();
 		initLevel();
+		
+		cameraHelper.setTarget(level01.player);
 	}
 	
 	private void initLevel()
@@ -273,22 +275,6 @@ public class WorldController extends InputAdapter
 		
 	}
 	
-	private Pixmap createProceduralPixmap(int width, int height)
-	{
-		Pixmap pixmap = new Pixmap(width, height, Format.RGBA8888);
-		// Fill square with red color at 50% opacity
-		pixmap.setColor(1, 0, 0, 0.5f);
-		pixmap.fill();
-		// Draw a yellow-colored X shape on square
-		pixmap.setColor(1, 1, 0, 1);
-		pixmap.drawLine(0, 0, width, height);
-		pixmap.drawLine(width, 0, 0, height);
-		// Draw a cyan-colored border around square
-		pixmap.setColor(0, 1, 1, 1);
-		pixmap.drawRectangle(0, 0, width, height);
-		return pixmap;
-	}
-	
 	public void update(float deltaTime)
 	{
 		b2dWorld.step(deltaTime, 5, 3);
@@ -300,16 +286,30 @@ public class WorldController extends InputAdapter
 	
 	private void handlePlayerInput(float deltaTime)
 	{
-		//Player Movement
+		Vector2 velocity = new Vector2(0,0);
+		
+		//Player Movement: x
 		if (Gdx.input.isKeyPressed(Keys.D))
 		{
-//			level01.player.body.applyForceToCenter(0, 10, true);
-			//level01.player.body.ap
-			level01.player.body.setLinearVelocity(new Vector2(10,10));
-			System.out.println(level01.player.body.getPosition());
-			System.out.println(level01.player.body.getLinearVelocity());
+			velocity.x += level01.player.movementSpeed;
+		}
+		else if (Gdx.input.isKeyPressed(Keys.A))
+		{
+			velocity.x -= level01.player.movementSpeed;
 		}
 		
+		//Player Movement: y
+		if (Gdx.input.isKeyPressed(Keys.W))
+		{
+			velocity.y += level01.player.movementSpeed;
+		}
+		else if (Gdx.input.isKeyPressed(Keys.S))
+		{
+			velocity.y -= level01.player.movementSpeed;
+		}
+		
+		//Set velocity of player
+		level01.player.body.setLinearVelocity(velocity); //TODO Abstract out level so player can be found when a new level is created
 	}
 
 	private void handleDebugInput(float deltaTime)
@@ -389,23 +389,11 @@ public class WorldController extends InputAdapter
 			init();
 			Gdx.app.debug(TAG, "Game world resetted");
 		}
-		// Select next sprite
-		else if (keycode == Keys.SPACE)
-		{
-			selectedSprite = (selectedSprite + 1) % testSprites.length;
-			// Update camera's target to follow the currently
-			// selected sprite
-			if (cameraHelper.hasTarget())
-			{
-				cameraHelper.setTarget(testSprites[selectedSprite]);
-			}
-			Gdx.app.debug(TAG, "Sprite #" + selectedSprite + " selected");
-		}
 		// Toggle camera follow
 		else if (keycode == Keys.ENTER)
 		{
 			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : 
-				testSprites[selectedSprite]);
+				level01.player);
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		return false;
