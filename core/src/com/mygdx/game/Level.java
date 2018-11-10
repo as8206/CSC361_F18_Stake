@@ -139,6 +139,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//door vertical
 				else if(BLOCK_TYPE.DOORVERT.sameColor(currentPixel))
@@ -153,6 +155,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall horizontal
 				else if(BLOCK_TYPE.WALLHOR.sameColor(currentPixel))
@@ -160,6 +164,8 @@ public class Level
 					obj = new Wall(Assets.instance.wall.wallHorizontal);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall vertical
 				else if(BLOCK_TYPE.WALLVERT.sameColor(currentPixel))
@@ -167,6 +173,8 @@ public class Level
 					obj = new Wall(Assets.instance.wall.wallVertical);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall top left corner
 				else if(BLOCK_TYPE.WALLTOPL.sameColor(currentPixel))
@@ -174,6 +182,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.topLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall top right corner
 				else if(BLOCK_TYPE.WALLTOPR.sameColor(currentPixel))
@@ -181,6 +191,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.topRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall bottom left corner
 				else if(BLOCK_TYPE.WALLBOTL.sameColor(currentPixel))
@@ -188,6 +200,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.bottomLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall bottom right corner
 				else if(BLOCK_TYPE.WALLBOTR.sameColor(currentPixel))
@@ -195,6 +209,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.bottomRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end left
 				else if(BLOCK_TYPE.WALLENDL.sameColor(currentPixel))
@@ -202,6 +218,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end right
 				else if(BLOCK_TYPE.WALLENDR.sameColor(currentPixel))
@@ -209,6 +227,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end top
 				else if(BLOCK_TYPE.WALLENDT.sameColor(currentPixel))
@@ -216,6 +236,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndTop);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end bottom
 				else if(BLOCK_TYPE.WALLENDB.sameColor(currentPixel))
@@ -223,6 +245,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndBot);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//tile ground texture
 				else if(BLOCK_TYPE.GTILE.sameColor(currentPixel))
@@ -267,6 +291,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr); //TODO add random broken floors below rubble
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//larger rubble object
 				else if(BLOCK_TYPE.RUBBLEBIG.sameColor(currentPixel))
@@ -325,6 +351,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//player spawn position
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))

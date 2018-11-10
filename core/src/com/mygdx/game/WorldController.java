@@ -45,6 +45,7 @@ public class WorldController extends InputAdapter
 		initLevel();
 		
 		cameraHelper.setTarget(level01.player);
+		System.out.println(level01.movementGrid);
 	}
 	
 	private void initLevel()

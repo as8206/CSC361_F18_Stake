@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.Constants;
@@ -15,6 +16,9 @@ public abstract class Enemy extends AbstractGameObject
 {
 	//maximum movement speed
 	public final float movementSpeed = 3.0f;
+	
+	//target for attack and pathfinding
+	Character target;
 	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
@@ -56,9 +60,46 @@ public abstract class Enemy extends AbstractGameObject
 		body.setLinearVelocity(moveX, moveY);		
 	}
 	
-	public void findPath()
+	public Array<Vector2> findPath()
 	{
+		Array<Vector2> tempPath = new Array<Vector2>();
 		
+		int targetX = (int) target.body.getPosition().x;
+		int targetY = (int) target.body.getPosition().y;
+		int curX = (int) body.getPosition().x;
+		int curY = (int) body.getPosition().y;
+		int nextX, nextY;
+		
+		if(targetX != curX && targetY != curY)
+		{
+			if(Math.abs(targetX - curX) > Math.abs(targetY - curY))
+			{
+				nextX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
+				nextY = curY;
+				//check x, then y, then diagonal if both x and y are clear and difference in y is not 0. If none are clear continue to expand out.
+				//Once a working move is found, add it to the path plus the next recusive call.
+			}
+			else
+			{
+				//same code as above but prioritizing y over x.
+			}
+		}
+		else
+		{
+			
+		}
+		
+		return null;
+	}
+	
+	public Array<Vector2> findPath(int queryX, int queryY)
+	{
+		return null;
+	}
+	
+	public void setTarget(Character target)
+	{
+		this.target = target;
 	}
 
 }
