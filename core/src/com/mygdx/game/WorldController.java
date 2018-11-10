@@ -291,11 +291,27 @@ public class WorldController extends InputAdapter
 	
 	public void update(float deltaTime)
 	{
+		b2dWorld.step(deltaTime, 5, 3);
 		handleDebugInput(deltaTime);
 		updateTestObjects(deltaTime);
+		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
 	}
 	
+	private void handlePlayerInput(float deltaTime)
+	{
+		//Player Movement
+		if (Gdx.input.isKeyPressed(Keys.D))
+		{
+//			level01.player.body.applyForceToCenter(0, 10, true);
+			//level01.player.body.ap
+			level01.player.body.setLinearVelocity(new Vector2(10,10));
+			System.out.println(level01.player.body.getPosition());
+			System.out.println(level01.player.body.getLinearVelocity());
+		}
+		
+	}
+
 	private void handleDebugInput(float deltaTime)
 	{
 		if (Gdx.app.getType() != ApplicationType.Desktop) return;
