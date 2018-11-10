@@ -14,6 +14,8 @@ public class Level
 {
 	public static final String TAG = Level.class.getName();
 	
+	public boolean[][] movementGrid;
+	
 	public enum BLOCK_TYPE
 	{
 		EMPTY(255,255,255), 			//White
@@ -78,7 +80,7 @@ public class Level
 	}
 	
 	private void init(String filename)
-	{
+	{		
 		//objects
 		walls = new Array<Wall>();
 		doors = new Array<Door>();
@@ -93,6 +95,10 @@ public class Level
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
+		
+		//grid for ai movement
+		//false- nothing on tile, true- tile not passable
+		movementGrid = new boolean[pixmap.getWidth()][pixmap.getHeight()];
 		
 		//scan pixels form top-left to bottom-right
 		int lastPixel = -1;
