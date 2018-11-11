@@ -139,25 +139,9 @@ public abstract class Enemy extends AbstractGameObject
 				//Checks the direct x move
 				potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
 				potentialY = curY;
-				
 				if(!level.movementGrid[potentialX][-potentialY])
 				{
 					nextMove = new Vector2(potentialX, potentialY);
-					
-					//Checks the direct y move
-					potentialX = curX;
-					potentialY = curY + (MathUtils.clamp(targetY - curY, -1, 1));
-					if(!level.movementGrid[potentialX][-potentialY])
-					{
-						//Checks the diagonal
-						potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
-						potentialY = curY + (MathUtils.clamp(targetY - curY, -1, 1));
-						if(!level.movementGrid[potentialX][-potentialY])
-						{
-							nextMove.set(new Vector2(potentialX, potentialY));
-						}
-
-					}
 					
 					tempPath.addAll(findPath(nextMove));
 					tempPath.add(nextMove);
@@ -214,21 +198,6 @@ public abstract class Enemy extends AbstractGameObject
 				if(!level.movementGrid[potentialX][-potentialY])
 				{
 					nextMove = new Vector2(potentialX, potentialY);
-					
-					//Checks the direct x move
-					potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
-					potentialY = curY;
-					if(!level.movementGrid[potentialX][-potentialY])
-					{
-						//Checks the diagonal
-						potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
-						potentialY = curY + (MathUtils.clamp(targetY - curY, -1, 1));
-						if(!level.movementGrid[potentialX][-potentialY])
-						{
-							nextMove.set(new Vector2(potentialX, potentialY));
-						}
-
-					}
 					
 					tempPath.addAll(findPath(nextMove));
 					tempPath.add(nextMove);
