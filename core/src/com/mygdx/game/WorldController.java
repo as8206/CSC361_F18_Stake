@@ -283,6 +283,7 @@ public class WorldController extends InputAdapter
 		updateTestObjects(deltaTime);
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
+		level01.update(deltaTime);
 	}
 	
 	private void handlePlayerInput(float deltaTime)

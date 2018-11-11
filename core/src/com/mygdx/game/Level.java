@@ -371,9 +371,10 @@ public class Level
 				//melee enemy spawn positions
 				else if(BLOCK_TYPE.EMELEE.sameColor(currentPixel))
 				{
-					obj = new EnemyMelee(Assets.instance.barbarian.barbarian);
+					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					meleeEnemies.add((EnemyMelee)obj);
+					meleeEnemies.peek().initStep();
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
@@ -385,9 +386,10 @@ public class Level
 				//ranged enemy spawn positions
 				else if(BLOCK_TYPE.ERANGED.sameColor(currentPixel))
 				{
-					obj = new EnemyRanged(Assets.instance.goblin.goblin);
+					obj = new EnemyRanged(Assets.instance.goblin.goblin, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					rangedEnemies.add((EnemyRanged)obj);
+					rangedEnemies.peek().initStep();
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
@@ -407,6 +409,13 @@ public class Level
 				lastPixel = currentPixel;
 			}
 		}
+		
+		//Set enemy targets
+		//TODO make a way to do this when a new room is loaded
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.setTarget(player);
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.setTarget(player);
 		
 		//free memory
 		pixmap.dispose();
@@ -448,6 +457,17 @@ public class Level
 			enemy.render(batch);
 		
 		player.render(batch);
+	}
+	
+	public void update(float deltaTime)
+	{
+		//update ranged enemies
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.update(deltaTime);
+		
+		//update melee enemies
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.update(deltaTime);
 	}
 	
 }
