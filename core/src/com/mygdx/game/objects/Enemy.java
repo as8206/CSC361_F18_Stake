@@ -25,14 +25,6 @@ public abstract class Enemy extends AbstractGameObject
 	//Level the enemy is a part of
 	Level level;
 	
-	//Keeps track of time for pathfinding
-	float timeKeeper = 0;
-	
-	//current path and step
-	private Array<Vector2> path;
-	private Vector2 step;
-	private boolean pathReset;
-	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
 	 * @param img
@@ -61,11 +53,6 @@ public abstract class Enemy extends AbstractGameObject
 		this.level = level;
 	}
 	
-	public void initStep()
-	{
-		step = new Vector2(body.getPosition().x, body.getPosition().y);
-	}
-	
 	@Override
 	public void render (SpriteBatch batch)
 	{
@@ -80,37 +67,14 @@ public abstract class Enemy extends AbstractGameObject
 	
 	public void move(float deltaTime)
 	{
-		timeKeeper += deltaTime;
-		
-		if(timeKeeper > .5)
+		if((int)body.getPosition().x != (int)target.body.getPosition().x || (int)body.getPosition().y != (int)target.body.getPosition().y)
 		{
-			path = findPath(body.getPosition());
-			pathReset = true;
-			timeKeeper = 0;
+			moveTo(target.body.getPosition().x, target.body.getPosition().y);
 		}
-		
-		if(pathReset)
+		else
 		{
-			step = path.pop();
-			System.out.println(this + " Reset: x: " + step.x + " y: " + step.y);
-			pathReset = false;
+			body.setLinearVelocity(0,0);
 		}
-		
-		if(path.size != 0 && step.x == (int)body.getPosition().x && step.y == (int) body.getPosition().y)
-		{
-			step = path.pop();
-			System.out.println(this + " Reached: x: " + step.x + " y: " + step.y);
-		}
-//		else
-//		{
-//			System.out.println("size: " + path.size);
-//		}
-		
-//		if((int)body.getPosition().x != step.x || (int)body.getPosition().y != step.y)
-//		{
-//			moveTo(step.x, step.y);
-//		}
-		moveTo(step.x, step.y);
 	}
 	
 	public void moveTo(float posX, float posY)
@@ -120,139 +84,10 @@ public abstract class Enemy extends AbstractGameObject
 		
 		body.setLinearVelocity(moveX, moveY);		
 	}
-	
-	public Array<Vector2> findPath(Vector2 position)
-	{
-		Array<Vector2> tempPath = new Array<Vector2>();
-		
-		int targetX = (int) target.body.getPosition().x;
-		int targetY = (int) target.body.getPosition().y;
-		int curX = (int) position.x;
-		int curY = (int) position.y;
-		int potentialX, potentialY;
-		Vector2 nextMove;
-		
-		if(targetX != curX && targetY != curY)
-		{
-			if(Math.abs(targetX - curX) > Math.abs(targetY - curY))
-			{
-				//Checks the direct x move
-				potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
-				potentialY = curY;
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the direct y move
-				potentialX = curX;
-				potentialY = curY + (MathUtils.clamp(targetY - curY, -1, 1));
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the reverse x move
-				potentialX = curX - (MathUtils.clamp(targetX - curX, -1, 1));
-				potentialY = curY;
-				
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the reverse y move
-				potentialX = curX;
-				potentialY = curY - (MathUtils.clamp(targetY - curY, -1, 1));
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-					
-				//check x, then y, then diagonal if both x and y are clear and difference in y is not 0. If none are clear continue to expand out.
-				//Once a working move is found, add it to the path plus the next recusive call.
-			}
-			else
-			{
-				//Checks the direct y move
-				potentialX = curX;
-				potentialY = curY + (MathUtils.clamp(targetY - curY, -1, 1));
-				
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the direct x move
-				potentialX = curX + (MathUtils.clamp(targetX - curX, -1, 1));
-				potentialY = curY;
-				
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the reverse y move
-				potentialX = curX;
-				potentialY = curY - (MathUtils.clamp(targetY - curY, -1, 1));
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-				
-				//Checks the reverse x move
-				potentialX = curX - (MathUtils.clamp(targetX - curX, -1, 1));
-				potentialY = curY;
-				
-				if(!level.movementGrid[potentialX][-potentialY])
-				{
-					nextMove = new Vector2(potentialX, potentialY);
-					
-					tempPath.addAll(findPath(nextMove));
-					tempPath.add(nextMove);
-					return tempPath;
-				}
-			}
-		}
-		
-		nextMove = new Vector2(curX, curY);
-		tempPath.add(nextMove);
-		return tempPath;
-	}
-	
+
 	public void setTarget(Character target)
 	{
 		this.target = target;
-		path = findPath(body.getPosition());
 	}
 
 }

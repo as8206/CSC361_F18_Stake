@@ -374,7 +374,6 @@ public class Level
 					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					meleeEnemies.add((EnemyMelee)obj);
-					meleeEnemies.peek().initStep();
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
@@ -389,7 +388,6 @@ public class Level
 					obj = new EnemyRanged(Assets.instance.goblin.goblin, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					rangedEnemies.add((EnemyRanged)obj);
-					rangedEnemies.peek().initStep();
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
