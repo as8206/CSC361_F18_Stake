@@ -36,47 +36,24 @@ public class WorldRenderer implements Disposable
 	
 	public void render ()
 	{
-//		renderTestObjects();
-//		renderTestRoom();
 		renderLevel(); //TODO add level parameter to load a specified level
 	}
 	
+	/**
+	 * Renders the level and all objects within it
+	 */
 	private void renderLevel()
 	{
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		worldController.level01.render(batch);
+		worldController.activeLevel.render(batch);
 		batch.end();
 		
 		if(debug)
-			b2debugRenderer.render(worldController.b2dWorld, camera.combined);
+			b2debugRenderer.render(WorldController.b2dWorld, camera.combined);
 	}
 
-	private void renderTestObjects()
-	{
-		worldController.cameraHelper.applyTo(camera);
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		for(Sprite sprite : worldController.testSprites)
-		{
-			sprite.draw(batch);
-		}
-		batch.end();
-	}
-	
-	private void renderTestRoom()
-	{
-		worldController.cameraHelper.applyTo(camera);
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		for(Sprite sprite : worldController.testRoomSprites)
-		{
-			if(sprite != null)
-				sprite.draw(batch);
-		}
-		batch.end();
-	}
 	
 	public void resize (int width, int height)
 	{

@@ -65,6 +65,11 @@ public abstract class Enemy extends AbstractGameObject
 		move(deltaTime);
 	}
 	
+	/**
+	 * called with each update
+	 * decides if the enemy needs to move or is close enough to stay still
+	 * @param deltaTime
+	 */
 	public void move(float deltaTime)
 	{
 		if((int)body.getPosition().x != (int)target.body.getPosition().x || (int)body.getPosition().y != (int)target.body.getPosition().y)
@@ -77,6 +82,11 @@ public abstract class Enemy extends AbstractGameObject
 		}
 	}
 	
+	/**
+	 * Moves the enemy towards the position passed in
+	 * @param posX
+	 * @param posY
+	 */
 	public void moveTo(float posX, float posY)
 	{
 		float moveX = MathUtils.clamp(posX - body.getPosition().x, -movementSpeed, movementSpeed);
@@ -85,6 +95,10 @@ public abstract class Enemy extends AbstractGameObject
 		body.setLinearVelocity(moveX, moveY);		
 	}
 
+	/**
+	 * Sets this enemey's target
+	 * @param target
+	 */
 	public void setTarget(Character target)
 	{
 		this.target = target;
