@@ -14,6 +14,8 @@ public class Level
 {
 	public static final String TAG = Level.class.getName();
 	
+	public boolean[][] movementGrid;
+	
 	public enum BLOCK_TYPE
 	{
 		EMPTY(255,255,255), 			//White
@@ -78,7 +80,7 @@ public class Level
 	}
 	
 	private void init(String filename)
-	{
+	{		
 		//objects
 		walls = new Array<Wall>();
 		doors = new Array<Door>();
@@ -93,6 +95,10 @@ public class Level
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
+		
+		//grid for ai movement
+		//false- nothing on tile, true- tile not passable
+		movementGrid = new boolean[pixmap.getWidth()][pixmap.getHeight()];
 		
 		//scan pixels form top-left to bottom-right
 		int lastPixel = -1;
@@ -133,6 +139,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//door vertical
 				else if(BLOCK_TYPE.DOORVERT.sameColor(currentPixel))
@@ -147,6 +155,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall horizontal
 				else if(BLOCK_TYPE.WALLHOR.sameColor(currentPixel))
@@ -154,6 +164,8 @@ public class Level
 					obj = new Wall(Assets.instance.wall.wallHorizontal);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall vertical
 				else if(BLOCK_TYPE.WALLVERT.sameColor(currentPixel))
@@ -161,6 +173,8 @@ public class Level
 					obj = new Wall(Assets.instance.wall.wallVertical);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall top left corner
 				else if(BLOCK_TYPE.WALLTOPL.sameColor(currentPixel))
@@ -168,6 +182,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.topLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall top right corner
 				else if(BLOCK_TYPE.WALLTOPR.sameColor(currentPixel))
@@ -175,6 +191,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.topRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall bottom left corner
 				else if(BLOCK_TYPE.WALLBOTL.sameColor(currentPixel))
@@ -182,6 +200,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.bottomLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall bottom right corner
 				else if(BLOCK_TYPE.WALLBOTR.sameColor(currentPixel))
@@ -189,6 +209,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallCorner.bottomRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end left
 				else if(BLOCK_TYPE.WALLENDL.sameColor(currentPixel))
@@ -196,6 +218,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndLeft);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end right
 				else if(BLOCK_TYPE.WALLENDR.sameColor(currentPixel))
@@ -203,6 +227,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndRight);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end top
 				else if(BLOCK_TYPE.WALLENDT.sameColor(currentPixel))
@@ -210,6 +236,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndTop);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//wall end bottom
 				else if(BLOCK_TYPE.WALLENDB.sameColor(currentPixel))
@@ -217,6 +245,8 @@ public class Level
 					obj = new Wall(Assets.instance.wallEnd.wallEndBot);
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					walls.add((Wall)obj);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//tile ground texture
 				else if(BLOCK_TYPE.GTILE.sameColor(currentPixel))
@@ -261,6 +291,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr); //TODO add random broken floors below rubble
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//larger rubble object
 				else if(BLOCK_TYPE.RUBBLEBIG.sameColor(currentPixel))
@@ -319,6 +351,8 @@ public class Level
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
 				}
 				//player spawn position
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
@@ -337,7 +371,7 @@ public class Level
 				//melee enemy spawn positions
 				else if(BLOCK_TYPE.EMELEE.sameColor(currentPixel))
 				{
-					obj = new EnemyMelee(Assets.instance.barbarian.barbarian);
+					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					meleeEnemies.add((EnemyMelee)obj);
 					
@@ -351,7 +385,7 @@ public class Level
 				//ranged enemy spawn positions
 				else if(BLOCK_TYPE.ERANGED.sameColor(currentPixel))
 				{
-					obj = new EnemyRanged(Assets.instance.goblin.goblin);
+					obj = new EnemyRanged(Assets.instance.goblin.goblin, this);
 					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
 					rangedEnemies.add((EnemyRanged)obj);
 					
@@ -373,6 +407,13 @@ public class Level
 				lastPixel = currentPixel;
 			}
 		}
+		
+		//Set enemy targets
+		//TODO make a way to do this when a new room is loaded
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.setTarget(player);
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.setTarget(player);
 		
 		//free memory
 		pixmap.dispose();
@@ -414,6 +455,17 @@ public class Level
 			enemy.render(batch);
 		
 		player.render(batch);
+	}
+	
+	public void update(float deltaTime)
+	{
+		//update ranged enemies
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.update(deltaTime);
+		
+		//update melee enemies
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.update(deltaTime);
 	}
 	
 }

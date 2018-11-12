@@ -12,6 +12,8 @@ import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
 {
+	public final float movementSpeed = 3.0f;
+	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
 	 * @param img

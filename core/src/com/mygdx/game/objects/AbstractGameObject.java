@@ -16,6 +16,10 @@ public abstract class AbstractGameObject
 	public Body body;
 	protected TextureRegion reg;
 	
+	/**
+	 * Provides a default box2d body for the object if a differencet constructor is not used.
+	 * @param img
+	 */
 	public AbstractGameObject(TextureRegion img)
 	{
 		BodyDef bodyDef = new BodyDef();
@@ -36,6 +40,10 @@ public abstract class AbstractGameObject
 	
 	public void update (float deltaTime) {}
 	
+	/**
+	 * Drasw the object with default parameters
+	 * @param batch
+	 */
 	public void render (SpriteBatch batch)
 	{
 		batch.draw(reg, body.getPosition().x - Constants.OFFSET , body.getPosition().y - Constants.OFFSET, 1, 1);	
