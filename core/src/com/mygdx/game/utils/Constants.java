@@ -17,4 +17,7 @@ public class Constants
 	
 	//offset of render vs collision box
 	public static final float OFFSET = 0.5f;
+	
+	//radius of interaction circle for interact-able objects
+	public static final float INTERRAD = 0.9f; //TODO radius value needs testing
 }

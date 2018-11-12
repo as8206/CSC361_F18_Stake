@@ -14,6 +14,8 @@ public class Level
 {
 	public static final String TAG = Level.class.getName();
 	
+	public boolean enemiesDisabled;
+	
 	public boolean[][] movementGrid;
 	
 	public enum BLOCK_TYPE
@@ -90,6 +92,9 @@ public class Level
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
 		
+		//controls disabling enemies for debugging
+		enemiesDisabled = false;
+		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
 		
@@ -129,7 +134,19 @@ public class Level
 				//door horizontal
 				else if(BLOCK_TYPE.DOORHOR.sameColor(currentPixel))
 				{
-					obj = new Door(Assets.instance.door.doorHor);
+					if(pixelY == 0)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.TOP);
+					}
+					else if (pixelY == pixmap.getHeight()-1)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM);
+					}
+					else
+					{
+						System.out.println("ERROR: door location could not be found, defaulting to bottom");
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM);
+					}
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);
 					
@@ -145,7 +162,19 @@ public class Level
 				//door vertical
 				else if(BLOCK_TYPE.DOORVERT.sameColor(currentPixel))
 				{
-					obj = new Door(Assets.instance.door.doorVert);
+					if(pixelX == 0)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.LEFT);
+					}
+					else if(pixelX == pixmap.getWidth()-1)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT);
+					}
+					else
+					{
+						System.out.println("ERROR: door location could not be found, defaulting to right");
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT);
+					}
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);
 					
@@ -459,13 +488,21 @@ public class Level
 	
 	public void update(float deltaTime)
 	{
-		//update ranged enemies
-		for(EnemyRanged enemy : rangedEnemies)
-			enemy.update(deltaTime);
-		
-		//update melee enemies
-		for(EnemyMelee enemy : meleeEnemies)
-			enemy.update(deltaTime);
+		if(!enemiesDisabled)
+		{
+			//update ranged enemies
+			for(EnemyRanged enemy : rangedEnemies)
+				enemy.update(deltaTime);
+			
+			//update melee enemies
+			for(EnemyMelee enemy : meleeEnemies)
+				enemy.update(deltaTime);
+		}
+	}
+
+	public void disableEnemies(boolean bool)
+	{
+		enemiesDisabled = bool;
 	}
 	
 }

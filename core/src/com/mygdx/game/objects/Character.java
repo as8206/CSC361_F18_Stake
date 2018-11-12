@@ -38,6 +38,8 @@ public class Character extends AbstractGameObject
 		box.dispose();
 		
 		body = tempBody;
+		
+		body.setUserData(this);
 	}
 	
 	@Override
