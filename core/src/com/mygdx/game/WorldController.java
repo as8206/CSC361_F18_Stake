@@ -45,6 +45,7 @@ public class WorldController extends InputAdapter
 		initLevel();
 		
 		cameraHelper.setTarget(level01.player);
+		System.out.println(level01.movementGrid);
 	}
 	
 	private void initLevel()
@@ -282,6 +283,7 @@ public class WorldController extends InputAdapter
 		updateTestObjects(deltaTime);
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
+		level01.update(deltaTime);
 	}
 	
 	private void handlePlayerInput(float deltaTime)
@@ -354,6 +356,13 @@ public class WorldController extends InputAdapter
 			cameraHelper.addZoom(-camZoomSpeed);
 		if (Gdx.input.isKeyPressed(Keys.SLASH))
 			cameraHelper.setZoom(1);
+		
+		//test moveTo
+		if(Gdx.input.isKeyPressed(Keys.B))
+		{
+			level01.meleeEnemies.peek().moveTo(0, 0);
+			System.out.println(level01.meleeEnemies.peek().body.getPosition());
+		}
 	}
 	
 	private void moveCamera(float x, float y)
