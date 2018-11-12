@@ -256,13 +256,49 @@ public class WorldController extends InputAdapter implements ContactListener
 			newDoorSide = Door.LEFT;
 		else if(door.side == Door.BOTTOM)
 			newDoorSide = Door.TOP;
-		else if(door.side == Door.LEFT)
+		else //if(door.side == Door.LEFT)
 			newDoorSide = Door.RIGHT;
+		
 		
 		//TODO add random room selection
 		Room newRoom = new Room(Constants.LEVEL_02, this);
-		activeRoom = newRoom;
 		
+		Door newDoor = newRoom.doors.first();
+		for (Door tempDoor : newRoom.doors)
+		{
+			if(tempDoor.side == newDoorSide)
+				newDoor = tempDoor;
+		}
+		
+		newDoor.setLinkedRoom(activeRoom);
+		door.setLinkedRoom(newRoom);
+		
+		float newX, newY;
+		if(newDoor.side == Door.TOP)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y - 1;
+		}
+		else if(newDoor.side == Door.RIGHT)
+		{
+			newX = newDoor.body.getPosition().x - 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		else if(newDoor.side == Door.BOTTOM)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y + 1;
+		}
+		else //if(newDoor.side == Door.LEFT)
+		{
+			newX = newDoor.body.getPosition().x + 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		activeRoom.player.body.setTransform(newX, newY, 0);
+		newRoom.setPlayer(activeRoom.player);
+		newRoom.reassignTarget();
+		
+		activeRoom = newRoom;
 	}
 	
 	

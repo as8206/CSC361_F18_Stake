@@ -26,7 +26,7 @@ public class Door extends AbstractGameObject
 	private WorldController worldController;
 	
 	//holds the reference to the room this door connects to
-	Room linkedRoom;
+	private Room linkedRoom;
 	
 	public Door(TextureRegion img, int side, WorldController wc)
 	{
@@ -64,5 +64,10 @@ public class Door extends AbstractGameObject
 			System.out.println("LEFT"); //TODO remove this
 		
 		worldController.createNewRoom(this);
+	}
+	
+	public void setLinkedRoom(Room room)
+	{
+		linkedRoom = room;
 	}
 }

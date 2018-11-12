@@ -509,4 +509,17 @@ public class Room
 		enemiesDisabled = bool;
 	}
 	
+	public void setPlayer(Character player)
+	{
+		this.player = player;
+	}
+	
+	public void reassignTarget()
+	{
+		for(EnemyRanged enemy : rangedEnemies)
+			enemy.setTarget(player);
+		for(EnemyMelee enemy : meleeEnemies)
+			enemy.setTarget(player);
+	}
+	
 }
