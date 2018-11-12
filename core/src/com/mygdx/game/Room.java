@@ -10,9 +10,9 @@ import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Level 
+public class Room 
 {
-	public static final String TAG = Level.class.getName();
+	public static final String TAG = Room.class.getName();
 	
 	public boolean enemiesDisabled;
 	
@@ -76,8 +76,12 @@ public class Level
 	//non-interactable textures
 	public Array<Sprite> grounds;
 	
-	public Level (String filename)
+	//reference to worldController
+	WorldController worldController;
+	
+	public Room (String filename, WorldController wc)
 	{
+		worldController = wc;
 		init(filename);
 	}
 	
@@ -136,16 +140,16 @@ public class Level
 				{
 					if(pixelY == 0)
 					{
-						obj = new Door(Assets.instance.door.doorHor, Door.TOP);
+						obj = new Door(Assets.instance.door.doorHor, Door.TOP, worldController);
 					}
 					else if (pixelY == pixmap.getHeight()-1)
 					{
-						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM);
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM, worldController);
 					}
 					else
 					{
 						System.out.println("ERROR: door location could not be found, defaulting to bottom");
-						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM);
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM, worldController);
 					}
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);
@@ -164,16 +168,16 @@ public class Level
 				{
 					if(pixelX == 0)
 					{
-						obj = new Door(Assets.instance.door.doorHor, Door.LEFT);
+						obj = new Door(Assets.instance.door.doorHor, Door.LEFT, worldController);
 					}
 					else if(pixelX == pixmap.getWidth()-1)
 					{
-						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT);
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT, worldController);
 					}
 					else
 					{
 						System.out.println("ERROR: door location could not be found, defaulting to right");
-						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT);
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT, worldController);
 					}
 					obj.body.setTransform(pixelX, -pixelY, 0);
 					doors.add((Door)obj);

@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.mygdx.game.Level;
+import com.mygdx.game.Room;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.Constants;
@@ -23,13 +23,13 @@ public abstract class Enemy extends AbstractGameObject
 	Character target;
 	
 	//Level the enemy is a part of
-	Level level;
+	Room level;
 	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Enemy(TextureRegion img, Level level)
+	public Enemy(TextureRegion img, Room level)
 	{
 		super(img);
 		

@@ -28,8 +28,8 @@ public class WorldController extends InputAdapter implements ContactListener
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
-	public Level activeLevel;
-	public Array<Level> levels;
+	public Room activeLevel;
+	public Array<Room> levels;
 	public Wall testWall;
 	public AbstractGameObject touchedObject;
 	public boolean disabled;
@@ -48,7 +48,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
-		levels = new Array<Level>();
+		levels = new Array<Room>();
 		
 		initLevel();
 		
@@ -61,7 +61,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	 */
 	private void initLevel()
 	{
-		levels.add(new Level(Constants.LEVEL_01));
+		levels.add(new Room(Constants.LEVEL_01, this));
 		activeLevel = levels.first(); //TODO add level switching
 		
 	}
