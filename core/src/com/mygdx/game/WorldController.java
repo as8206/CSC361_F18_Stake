@@ -32,6 +32,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	public Array<Level> levels;
 	public Wall testWall;
 	public AbstractGameObject touchedObject;
+	public boolean disabled;
 	
 	public WorldController()
 	{
@@ -105,7 +106,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		activeLevel.player.body.setLinearVelocity(velocity);
 		
 		//interaction button
-		if (Gdx.input.isKeyPressed(Keys.E))
+		if (Gdx.input.isKeyJustPressed(Keys.E))
 		{
 			if(touchedObject != null)
 			{
@@ -151,11 +152,21 @@ public class WorldController extends InputAdapter implements ContactListener
 		if (Gdx.input.isKeyPressed(Keys.SLASH))
 			cameraHelper.setZoom(1);
 		
-		//test moveTo
-		if(Gdx.input.isKeyPressed(Keys.B)) //TODO remove this
+		//disable enemies for easier debugging
+		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
-			activeLevel.meleeEnemies.peek().moveTo(0, 0);
-//			System.out.println(activeLevel.meleeEnemies.peek().body.getPosition());
+			if(disabled)
+			{
+				activeLevel.disableEnemies(false);
+				disabled = false;
+				System.out.println("Enemies Re-enabled");
+			}
+			else
+			{
+				activeLevel.disableEnemies(true);
+				disabled = true;
+				System.out.println("Enemies Disabled");
+			}
 		}
 	}
 	
@@ -196,20 +207,29 @@ public class WorldController extends InputAdapter implements ContactListener
 	@Override
 	public void beginContact(Contact contact)
 	{
-		if(contact.getFixtureA().getBody().getUserData() == activeLevel.player)
+		if(contact.getFixtureA().getBody().getUserData() == activeLevel.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeLevel.player)
+		else if(contact.getFixtureB().getBody().getUserData() == activeLevel.player && contact.getFixtureA().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
 		}
+		
+		System.out.println(touchedObject);
 	}
 
 	@Override
 	public void endContact(Contact contact)
 	{
-		touchedObject = null;		
+		if(contact.getFixtureA().getBody().getUserData() == touchedObject)
+		{
+			touchedObject = null;	
+		}
+		else if(contact.getFixtureB().getBody().getUserData() == touchedObject)
+		{
+			touchedObject = null;
+		}
 	}
 
 	@Override

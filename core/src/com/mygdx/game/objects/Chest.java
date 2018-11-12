@@ -29,5 +29,11 @@ public class Chest extends AbstractGameObject
 		
 		circle.dispose();
 	}
+	
+	@Override
+	public void activate()
+	{
+		System.out.println("Chest touched");
+	}
 
 }

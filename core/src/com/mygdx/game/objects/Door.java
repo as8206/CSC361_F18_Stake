@@ -19,12 +19,11 @@ public class Door extends AbstractGameObject
 	
 	public int side;
 	
-	public Door(TextureRegion img/*, int side*/)
+	public Door(TextureRegion img, int side)
 	{
 		super(img);
 		
-//		this.side = side;
-		//TODO add this back in and fix level
+		this.side = side;
 		
 		CircleShape circle = new CircleShape();
 		circle.setRadius(Constants.INTERRAD);
@@ -44,6 +43,14 @@ public class Door extends AbstractGameObject
 	@Override
 	public void activate()
 	{
-		System.out.println("door activated");
+		System.out.print("This door is on side: ");
+		if(side == 1)
+			System.out.println("TOP");
+		else if(side == 2)
+			System.out.println("RIGHT");
+		else if(side == 3)
+			System.out.println("BOTTOM");
+		else if(side == 4)
+			System.out.println("LEFT");
 	}
 }
