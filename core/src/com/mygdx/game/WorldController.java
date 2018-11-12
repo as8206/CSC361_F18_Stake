@@ -28,8 +28,8 @@ public class WorldController extends InputAdapter implements ContactListener
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
-	public Room activeLevel;
-	public Array<Room> levels;
+	public Room activeRoom;
+	public Array<Room> rooms;
 	public Wall testWall;
 	public AbstractGameObject touchedObject;
 	public boolean disabled;
@@ -48,12 +48,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
-		levels = new Array<Room>();
+		rooms = new Array<Room>();
 		
 		initLevel();
 		
-		cameraHelper.setTarget(activeLevel.player);
-		System.out.println(activeLevel.movementGrid);
+		cameraHelper.setTarget(activeRoom.player);
+		System.out.println(activeRoom.movementGrid);
 	}
 	
 	/**
@@ -61,8 +61,8 @@ public class WorldController extends InputAdapter implements ContactListener
 	 */
 	private void initLevel()
 	{
-		levels.add(new Room(Constants.LEVEL_01, this));
-		activeLevel = levels.first(); //TODO add level switching
+		rooms.add(new Room(Constants.LEVEL_01, this));
+		activeRoom = rooms.first(); //TODO add level switching
 		
 	}
 	
@@ -72,7 +72,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		handleDebugInput(deltaTime);
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
-		activeLevel.update(deltaTime);
+		activeRoom.update(deltaTime);
 	}
 	
 	/**
@@ -86,24 +86,24 @@ public class WorldController extends InputAdapter implements ContactListener
 		//Player Movement: x
 		if (Gdx.input.isKeyPressed(Keys.D))
 		{
-			velocity.x += activeLevel.player.movementSpeed;
+			velocity.x += activeRoom.player.movementSpeed;
 		}
 		else if (Gdx.input.isKeyPressed(Keys.A))
 		{
-			velocity.x -= activeLevel.player.movementSpeed;
+			velocity.x -= activeRoom.player.movementSpeed;
 		}
 		
 		//Player Movement: y
 		if (Gdx.input.isKeyPressed(Keys.W))
 		{
-			velocity.y += activeLevel.player.movementSpeed;
+			velocity.y += activeRoom.player.movementSpeed;
 		}
 		else if (Gdx.input.isKeyPressed(Keys.S))
 		{
-			velocity.y -= activeLevel.player.movementSpeed;
+			velocity.y -= activeRoom.player.movementSpeed;
 		}
 		//Set velocity of player
-		activeLevel.player.body.setLinearVelocity(velocity);
+		activeRoom.player.body.setLinearVelocity(velocity);
 		
 		//interaction button
 		if (Gdx.input.isKeyJustPressed(Keys.E))
@@ -157,13 +157,13 @@ public class WorldController extends InputAdapter implements ContactListener
 		{
 			if(disabled)
 			{
-				activeLevel.disableEnemies(false);
+				activeRoom.disableEnemies(false);
 				disabled = false;
 				System.out.println("Enemies Re-enabled");
 			}
 			else
 			{
-				activeLevel.disableEnemies(true);
+				activeRoom.disableEnemies(true);
 				disabled = true;
 				System.out.println("Enemies Disabled");
 			}
@@ -198,7 +198,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		else if (keycode == Keys.ENTER)
 		{
 			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : 
-				activeLevel.player);
+				activeRoom.player);
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		return false;
@@ -207,11 +207,11 @@ public class WorldController extends InputAdapter implements ContactListener
 	@Override
 	public void beginContact(Contact contact)
 	{
-		if(contact.getFixtureA().getBody().getUserData() == activeLevel.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeLevel.player && contact.getFixtureA().isSensor())
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
 		}
@@ -243,6 +243,25 @@ public class WorldController extends InputAdapter implements ContactListener
 	public void postSolve(Contact contact, ContactImpulse impulse)
 	{
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void createNewRoom(Door door) 
+	{
+		//finds and selects what side of the room the new linked door should be
+		int newDoorSide;
+		if(door.side == Door.TOP)
+			newDoorSide = Door.BOTTOM;
+		else if(door.side == Door.RIGHT)
+			newDoorSide = Door.LEFT;
+		else if(door.side == Door.BOTTOM)
+			newDoorSide = Door.TOP;
+		else if(door.side == Door.LEFT)
+			newDoorSide = Door.RIGHT;
+		
+		//TODO add random room selection
+		Room newRoom = new Room(Constants.LEVEL_02, this);
+		activeRoom = newRoom;
 		
 	}
 	
