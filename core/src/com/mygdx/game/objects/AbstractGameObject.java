@@ -40,6 +40,8 @@ public abstract class AbstractGameObject
 	
 	public void update (float deltaTime) {}
 	
+	public void activate() {}
+	
 	/**
 	 * Drasw the object with default parameters
 	 * @param batch

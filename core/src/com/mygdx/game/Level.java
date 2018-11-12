@@ -459,13 +459,13 @@ public class Level
 	
 	public void update(float deltaTime)
 	{
-		//update ranged enemies
-		for(EnemyRanged enemy : rangedEnemies)
-			enemy.update(deltaTime);
-		
-		//update melee enemies
-		for(EnemyMelee enemy : meleeEnemies)
-			enemy.update(deltaTime);
+//		//update ranged enemies
+//		for(EnemyRanged enemy : rangedEnemies)
+//			enemy.update(deltaTime);
+//		
+//		//update melee enemies
+//		for(EnemyMelee enemy : meleeEnemies)
+//			enemy.update(deltaTime);
 	}
 	
 }

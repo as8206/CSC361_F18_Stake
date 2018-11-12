@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.InputAdapter;
@@ -17,7 +21,7 @@ import com.mygdx.game.objects.*;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
 
-public class WorldController extends InputAdapter
+public class WorldController extends InputAdapter implements ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
 	
@@ -27,6 +31,7 @@ public class WorldController extends InputAdapter
 	public Level activeLevel;
 	public Array<Level> levels;
 	public Wall testWall;
+	public AbstractGameObject touchedObject;
 	
 	public WorldController()
 	{
@@ -41,6 +46,7 @@ public class WorldController extends InputAdapter
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
+		b2dWorld.setContactListener(this);
 		levels = new Array<Level>();
 		
 		initLevel();
@@ -95,9 +101,18 @@ public class WorldController extends InputAdapter
 		{
 			velocity.y -= activeLevel.player.movementSpeed;
 		}
-		
 		//Set velocity of player
-		activeLevel.player.body.setLinearVelocity(velocity); //TODO Abstract out level so player can be found when a new level is created
+		activeLevel.player.body.setLinearVelocity(velocity);
+		
+		//interaction button
+		if (Gdx.input.isKeyPressed(Keys.E))
+		{
+			if(touchedObject != null)
+			{
+				touchedObject.activate();
+			}
+		}
+		
 	}
 
 	/**
@@ -137,10 +152,10 @@ public class WorldController extends InputAdapter
 			cameraHelper.setZoom(1);
 		
 		//test moveTo
-		if(Gdx.input.isKeyPressed(Keys.B))
+		if(Gdx.input.isKeyPressed(Keys.B)) //TODO remove this
 		{
 			activeLevel.meleeEnemies.peek().moveTo(0, 0);
-			System.out.println(activeLevel.meleeEnemies.peek().body.getPosition());
+//			System.out.println(activeLevel.meleeEnemies.peek().body.getPosition());
 		}
 	}
 	
@@ -176,6 +191,39 @@ public class WorldController extends InputAdapter
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 		}
 		return false;
+	}
+
+	@Override
+	public void beginContact(Contact contact)
+	{
+		if(contact.getFixtureA().getBody().getUserData() == activeLevel.player)
+		{
+			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
+		}
+		else if(contact.getFixtureB().getBody().getUserData() == activeLevel.player)
+		{
+			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
+		}
+	}
+
+	@Override
+	public void endContact(Contact contact)
+	{
+		touchedObject = null;		
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
