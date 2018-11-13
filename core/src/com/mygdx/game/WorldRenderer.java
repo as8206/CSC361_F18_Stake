@@ -36,7 +36,7 @@ public class WorldRenderer implements Disposable
 	
 	public void render ()
 	{
-		renderLevel(); //TODO add level parameter to load a specified level
+		renderLevel();
 	}
 	
 	/**

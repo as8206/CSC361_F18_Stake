@@ -15,6 +15,7 @@ public abstract class AbstractGameObject
 {
 	public Body body;
 	protected TextureRegion reg;
+	public boolean mirrored;
 	
 	/**
 	 * Provides a default box2d body for the object if a differencet constructor is not used.
@@ -49,5 +50,20 @@ public abstract class AbstractGameObject
 	public void render (SpriteBatch batch)
 	{
 		batch.draw(reg, body.getPosition().x - Constants.OFFSET , body.getPosition().y - Constants.OFFSET, 1, 1);	
+	}
+	
+	/**
+	 * Mirrors the image, true: left (flipped), false: right (default direction)
+	 * @param direction
+	 */
+	public void mirror(boolean direction) //TODO figure out why this persists after a reset
+	{
+//		if(direction != mirrored)
+//		{
+//			TextureRegion tempReg = reg;
+//			tempReg.flip(true, false);
+//			reg = tempReg;
+//			mirrored = direction;
+//		}
 	}
 }

@@ -80,6 +80,11 @@ public abstract class Enemy extends AbstractGameObject
 		{
 			body.setLinearVelocity(0,0);
 		}
+		
+		if(body.getLinearVelocity().x >= 0) //TODO figure out why this only works for barbarian
+			mirror(false);
+		else
+			mirror(true);
 	}
 	
 	/**
