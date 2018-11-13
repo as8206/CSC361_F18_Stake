@@ -47,7 +47,7 @@ public class WorldRenderer implements Disposable
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		worldController.activeLevel.render(batch);
+		worldController.activeRoom.render(batch);
 		batch.end();
 		
 		if(debug)

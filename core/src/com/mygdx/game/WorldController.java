@@ -1,13 +1,10 @@
 package com.mygdx.game;
 
+import java.io.File;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -24,15 +21,15 @@ import com.mygdx.game.utils.Constants;
 public class WorldController extends InputAdapter implements ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
+	private static final int roomArrayOffset = (Constants.MAXROOMS - 1) /2;
 	
-	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
-	public Level activeLevel;
-	public Array<Level> levels;
-	public Wall testWall;
-	public AbstractGameObject touchedObject;
-	public boolean disabled;
+	public Room activeRoom;
+	private AbstractGameObject touchedObject;
+	public boolean enemiesDisabled;
+	private Room[][] rooms;
+	private Array<String> randomizedRooms;
 	
 	public WorldController()
 	{
@@ -48,12 +45,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
-		levels = new Array<Level>();
+		rooms = new Room[Constants.MAXROOMS][Constants.MAXROOMS];
+		prepRoomFiles();
 		
 		initLevel();
 		
-		cameraHelper.setTarget(activeLevel.player);
-		System.out.println(activeLevel.movementGrid);
+		cameraHelper.setTarget(activeRoom.player);
 	}
 	
 	/**
@@ -61,8 +58,8 @@ public class WorldController extends InputAdapter implements ContactListener
 	 */
 	private void initLevel()
 	{
-		levels.add(new Level(Constants.LEVEL_01));
-		activeLevel = levels.first(); //TODO add level switching
+		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.STARTROOM, this, 0, 0);
+		activeRoom = rooms[roomArrayOffset][roomArrayOffset]; //TODO add level switching
 		
 	}
 	
@@ -72,7 +69,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		handleDebugInput(deltaTime);
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
-		activeLevel.update(deltaTime);
+		activeRoom.update(deltaTime);
 	}
 	
 	/**
@@ -86,24 +83,24 @@ public class WorldController extends InputAdapter implements ContactListener
 		//Player Movement: x
 		if (Gdx.input.isKeyPressed(Keys.D))
 		{
-			velocity.x += activeLevel.player.movementSpeed;
+			velocity.x += activeRoom.player.movementSpeed;
 		}
 		else if (Gdx.input.isKeyPressed(Keys.A))
 		{
-			velocity.x -= activeLevel.player.movementSpeed;
+			velocity.x -= activeRoom.player.movementSpeed;
 		}
 		
 		//Player Movement: y
 		if (Gdx.input.isKeyPressed(Keys.W))
 		{
-			velocity.y += activeLevel.player.movementSpeed;
+			velocity.y += activeRoom.player.movementSpeed;
 		}
 		else if (Gdx.input.isKeyPressed(Keys.S))
 		{
-			velocity.y -= activeLevel.player.movementSpeed;
+			velocity.y -= activeRoom.player.movementSpeed;
 		}
 		//Set velocity of player
-		activeLevel.player.body.setLinearVelocity(velocity);
+		activeRoom.player.body.setLinearVelocity(velocity);
 		
 		//interaction button
 		if (Gdx.input.isKeyJustPressed(Keys.E))
@@ -117,7 +114,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	}
 
 	/**
-	 * Handles the camera input
+	 * Handles the camera input and debug input
 	 * @param deltaTime
 	 */
 	private void handleDebugInput(float deltaTime)
@@ -152,19 +149,19 @@ public class WorldController extends InputAdapter implements ContactListener
 		if (Gdx.input.isKeyPressed(Keys.SLASH))
 			cameraHelper.setZoom(1);
 		
-		//disable enemies for easier debugging
+		//disable enemies and speeds up player for easier debugging
 		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
-			if(disabled)
+			if(enemiesDisabled)
 			{
-				activeLevel.disableEnemies(false);
-				disabled = false;
+				enemiesDisabled = false;
+				activeRoom.player.movementSpeed = 3.0f;
 				System.out.println("Enemies Re-enabled");
 			}
 			else
 			{
-				activeLevel.disableEnemies(true);
-				disabled = true;
+				enemiesDisabled = true;
+				activeRoom.player.movementSpeed = 7.0f;
 				System.out.println("Enemies Disabled");
 			}
 		}
@@ -198,25 +195,25 @@ public class WorldController extends InputAdapter implements ContactListener
 		else if (keycode == Keys.ENTER)
 		{
 			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : 
-				activeLevel.player);
+				activeRoom.player);
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 		}
+		
 		return false;
 	}
 
 	@Override
 	public void beginContact(Contact contact)
 	{
-		if(contact.getFixtureA().getBody().getUserData() == activeLevel.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeLevel.player && contact.getFixtureA().isSensor())
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
 		}
 		
-		System.out.println(touchedObject);
 	}
 
 	@Override
@@ -245,7 +242,170 @@ public class WorldController extends InputAdapter implements ContactListener
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * Called if a door with no room linked is activated
+	 * if a room already exists, links the door and calls swap room
+	 * if a room doesn't exists, this creates it and swaps to it
+	 * @param door
+	 */
+	public void createNewRoom(Door door) 
+	{
+		int roomOffsetX = activeRoom.roomOffsetX;
+		int roomOffsetY = activeRoom.roomOffsetY;
+		
+		//finds and selects what side of the room the new linked door should be
+		//also calculates the offset for the new room
+		int newDoorSide;
+		if(door.side == Door.TOP)
+		{
+			newDoorSide = Door.BOTTOM;
+			roomOffsetY += Constants.ROOMOFFSET;
+		}
+		else if(door.side == Door.RIGHT)
+		{
+			newDoorSide = Door.LEFT;
+			roomOffsetX += Constants.ROOMOFFSET;
+		}
+		else if(door.side == Door.BOTTOM)
+		{
+			newDoorSide = Door.TOP;
+			roomOffsetY -= Constants.ROOMOFFSET;
+		}
+		else //if(door.side == Door.LEFT)
+		{
+			newDoorSide = Door.RIGHT;
+			roomOffsetX -= Constants.ROOMOFFSET;
+		}
+		
+		//Checks that the room isn't outside the bounds
+		if((roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset < 0 )
+		{
+			return; //TODO trigger a message here "door is jammed"
+		}
+		
+		if((roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset < 0)
+		{
+			return; //TODO also trigger same message here
+		}
+		
+		if(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] != null)
+		{
+			door.setLinkedRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset]);
+			swapRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset], door);
+			return;
+		}
+			
+		//checks that a new room is available //TODO if a new unique room isnt available, use a random non treasure room
+		if(randomizedRooms.size == 0)
+		{
+			return; //TODO trigger message here "this door seems locked"
+		}
+		
+		Room newRoom = new Room(randomizedRooms.pop(), this, roomOffsetX, roomOffsetY);
+		
+		Door newDoor = newRoom.doors.first();
+		for (Door tempDoor : newRoom.doors)
+		{
+			if(tempDoor.side == newDoorSide)
+				newDoor = tempDoor;
+		}
+		
+		newDoor.setLinkedRoom(activeRoom);
+		door.setLinkedRoom(newRoom);
+		
+		float newX, newY;
+		if(newDoor.side == Door.TOP)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y - 1;
+		}
+		else if(newDoor.side == Door.RIGHT)
+		{
+			newX = newDoor.body.getPosition().x - 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		else if(newDoor.side == Door.BOTTOM)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y + 1;
+		}
+		else //if(newDoor.side == Door.LEFT)
+		{
+			newX = newDoor.body.getPosition().x + 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		activeRoom.player.body.setTransform(newX, newY, 0);
+		newRoom.setPlayer(activeRoom.player);
+		newRoom.reassignTarget();
+		
+		rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] = newRoom;
+		activeRoom = newRoom;
+	}
+
+	/**
+	 * Swaps the active room to the new room from the given door
+	 * @param newRoom
+	 * @param door
+	 */
+	public void swapRoom(Room newRoom, Door door)
+	{
+		int newDoorSide;
+		if(door.side == Door.TOP)
+			newDoorSide = Door.BOTTOM;
+		else if(door.side == Door.RIGHT)
+			newDoorSide = Door.LEFT;
+		else if(door.side == Door.BOTTOM)
+			newDoorSide = Door.TOP;
+		else //if(door.side == Door.LEFT)
+			newDoorSide = Door.RIGHT;
+		
+		Door newDoor = newRoom.doors.first();
+		for (Door tempDoor : newRoom.doors)
+		{
+			if(tempDoor.side == newDoorSide)
+				newDoor = tempDoor;
+		}
+		
+		float newX, newY;
+		if(newDoor.side == Door.TOP)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y - 1;
+		}
+		else if(newDoor.side == Door.RIGHT)
+		{
+			newX = newDoor.body.getPosition().x - 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		else if(newDoor.side == Door.BOTTOM)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y + 1;
+		}
+		else //if(newDoor.side == Door.LEFT)
+		{
+			newX = newDoor.body.getPosition().x + 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		activeRoom.player.body.setTransform(newX, newY, 0);
+		newRoom.setPlayer(activeRoom.player);
+		newRoom.reassignTarget();
+		
+		activeRoom = newRoom;
+	}
 	
+	public void prepRoomFiles()
+	{
+		randomizedRooms = new Array<String>();
+	    File path = new File(Constants.ROOMFILES);
+
+	    File [] files = path.listFiles();
+	    for (int i = 0; i < files.length; i++)
+	        if (files[i].isFile())
+	            randomizedRooms.add(files[i].toString());
+	    randomizedRooms.shuffle();
+	}
 	
 }
 
