@@ -149,17 +149,19 @@ public class WorldController extends InputAdapter implements ContactListener
 		if (Gdx.input.isKeyPressed(Keys.SLASH))
 			cameraHelper.setZoom(1);
 		
-		//disable enemies for easier debugging
+		//disable enemies and speeds up player for easier debugging
 		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
 			if(enemiesDisabled)
 			{
 				enemiesDisabled = false;
+				activeRoom.player.movementSpeed = 3.0f;
 				System.out.println("Enemies Re-enabled");
 			}
 			else
 			{
 				enemiesDisabled = true;
+				activeRoom.player.movementSpeed = 7.0f;
 				System.out.println("Enemies Disabled");
 			}
 		}
