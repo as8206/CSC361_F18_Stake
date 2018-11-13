@@ -13,9 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Room 
 {
 	public static final String TAG = Room.class.getName();
-	
-	public boolean enemiesDisabled;
-	
+		
 	public boolean[][] movementGrid;
 	
 	public enum BLOCK_TYPE
@@ -101,9 +99,6 @@ public class Room
 		chests = new Array<Chest>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
-		
-		//controls disabling enemies for debugging
-		enemiesDisabled = false;
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
@@ -494,7 +489,7 @@ public class Room
 	
 	public void update(float deltaTime)
 	{
-		if(!enemiesDisabled)
+		if(!worldController.enemiesDisabled)
 		{
 			//update ranged enemies
 			for(EnemyRanged enemy : rangedEnemies)
@@ -504,11 +499,6 @@ public class Room
 			for(EnemyMelee enemy : meleeEnemies)
 				enemy.update(deltaTime);
 		}
-	}
-
-	public void disableEnemies(boolean bool)
-	{
-		enemiesDisabled = bool;
 	}
 	
 	public void setPlayer(Character player)

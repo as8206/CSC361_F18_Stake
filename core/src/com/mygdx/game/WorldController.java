@@ -1,13 +1,10 @@
 package com.mygdx.game;
 
+import java.io.File;
+
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -24,16 +21,15 @@ import com.mygdx.game.utils.Constants;
 public class WorldController extends InputAdapter implements ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
-	public static final int roomArrayOffset = (Constants.MAXROOMS - 1) /2;
+	private static final int roomArrayOffset = (Constants.MAXROOMS - 1) /2;
 	
-	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
 	public Room activeRoom;
-	public Wall testWall;
-	public AbstractGameObject touchedObject;
-	public boolean disabled;
-	public Room[][] rooms;
+	private AbstractGameObject touchedObject;
+	public boolean enemiesDisabled;
+	private Room[][] rooms;
+	private Array<String> randomizedRooms;
 	
 	public WorldController()
 	{
@@ -50,6 +46,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
 		rooms = new Room[Constants.MAXROOMS][Constants.MAXROOMS];
+		prepRoomFiles();
 		
 		initLevel();
 		
@@ -61,7 +58,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	 */
 	private void initLevel()
 	{
-		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.LEVEL_01, this, 0, 0);
+		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.STARTROOM, this, 0, 0);
 		activeRoom = rooms[roomArrayOffset][roomArrayOffset]; //TODO add level switching
 		
 	}
@@ -117,7 +114,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	}
 
 	/**
-	 * Handles the camera input
+	 * Handles the camera input and debug input
 	 * @param deltaTime
 	 */
 	private void handleDebugInput(float deltaTime)
@@ -155,16 +152,14 @@ public class WorldController extends InputAdapter implements ContactListener
 		//disable enemies for easier debugging
 		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
-			if(disabled)
+			if(enemiesDisabled)
 			{
-				activeRoom.disableEnemies(false);
-				disabled = false;
+				enemiesDisabled = false;
 				System.out.println("Enemies Re-enabled");
 			}
 			else
 			{
-				activeRoom.disableEnemies(true);
-				disabled = true;
+				enemiesDisabled = true;
 				System.out.println("Enemies Disabled");
 			}
 		}
@@ -201,6 +196,7 @@ public class WorldController extends InputAdapter implements ContactListener
 				activeRoom.player);
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 		}
+		
 		return false;
 	}
 
@@ -245,6 +241,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		
 	}
 
+	/**
+	 * Called if a door with no room linked is activated
+	 * if a room already exists, links the door and calls swap room
+	 * if a room doesn't exists, this creates it and swaps to it
+	 * @param door
+	 */
 	public void createNewRoom(Door door) 
 	{
 		int roomOffsetX = activeRoom.roomOffsetX;
@@ -274,15 +276,31 @@ public class WorldController extends InputAdapter implements ContactListener
 			roomOffsetX -= Constants.ROOMOFFSET;
 		}
 		
+		//Checks that the room isn't outside the bounds
+		if((roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset < 0 )
+		{
+			return; //TODO trigger a message here "door is jammed"
+		}
+		
+		if((roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset < 0)
+		{
+			return; //TODO also trigger same message here
+		}
+		
 		if(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] != null)
 		{
 			door.setLinkedRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset]);
-			swapRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset]);
+			swapRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset], door);
 			return;
 		}
+			
+		//checks that a new room is available //TODO if a new unique room isnt available, use a random non treasure room
+		if(randomizedRooms.size == 0)
+		{
+			return; //TODO trigger message here "this door seems locked"
+		}
 		
-		//TODO add random room selection
-		Room newRoom = new Room(Constants.LEVEL_02, this, roomOffsetX, roomOffsetY);
+		Room newRoom = new Room(randomizedRooms.pop(), this, roomOffsetX, roomOffsetY);
 		
 		Door newDoor = newRoom.doors.first();
 		for (Door tempDoor : newRoom.doors)
@@ -323,12 +341,69 @@ public class WorldController extends InputAdapter implements ContactListener
 		activeRoom = newRoom;
 	}
 
-	public void swapRoom(Room room)
+	/**
+	 * Swaps the active room to the new room from the given door
+	 * @param newRoom
+	 * @param door
+	 */
+	public void swapRoom(Room newRoom, Door door)
 	{
-		// TODO Auto-generated method stub
+		int newDoorSide;
+		if(door.side == Door.TOP)
+			newDoorSide = Door.BOTTOM;
+		else if(door.side == Door.RIGHT)
+			newDoorSide = Door.LEFT;
+		else if(door.side == Door.BOTTOM)
+			newDoorSide = Door.TOP;
+		else //if(door.side == Door.LEFT)
+			newDoorSide = Door.RIGHT;
 		
+		Door newDoor = newRoom.doors.first();
+		for (Door tempDoor : newRoom.doors)
+		{
+			if(tempDoor.side == newDoorSide)
+				newDoor = tempDoor;
+		}
+		
+		float newX, newY;
+		if(newDoor.side == Door.TOP)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y - 1;
+		}
+		else if(newDoor.side == Door.RIGHT)
+		{
+			newX = newDoor.body.getPosition().x - 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		else if(newDoor.side == Door.BOTTOM)
+		{
+			newX = newDoor.body.getPosition().x;
+			newY = newDoor.body.getPosition().y + 1;
+		}
+		else //if(newDoor.side == Door.LEFT)
+		{
+			newX = newDoor.body.getPosition().x + 1;
+			newY = newDoor.body.getPosition().y;
+		}
+		activeRoom.player.body.setTransform(newX, newY, 0);
+		newRoom.setPlayer(activeRoom.player);
+		newRoom.reassignTarget();
+		
+		activeRoom = newRoom;
 	}
 	
+	public void prepRoomFiles()
+	{
+		randomizedRooms = new Array<String>();
+	    File path = new File(Constants.ROOMFILES);
+
+	    File [] files = path.listFiles();
+	    for (int i = 0; i < files.length; i++)
+	        if (files[i].isFile())
+	            randomizedRooms.add(files[i].toString());
+	    randomizedRooms.shuffle();
+	}
 	
 }
 
