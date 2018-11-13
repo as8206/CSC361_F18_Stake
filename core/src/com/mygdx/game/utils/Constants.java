@@ -23,4 +23,11 @@ public class Constants
 	
 	//radius of interaction circle for interact-able objects
 	public static final float INTERRAD = 0.9f; //TODO radius value needs testing
+	
+	//maximum size a room pixmap will be drawn is 23 x 23
+	//room offset value of 25 gives 2 meters or extra spacing between rooms
+	public static final int ROOMOFFSET = 25;
+	
+	//max amount of rooms that can be on a floor, n X n grid
+	public static final int MAXROOMS = 51;
 }

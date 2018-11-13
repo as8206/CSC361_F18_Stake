@@ -24,15 +24,16 @@ import com.mygdx.game.utils.Constants;
 public class WorldController extends InputAdapter implements ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
+	public static final int roomArrayOffset = (Constants.MAXROOMS - 1) /2;
 	
 	public int selectedSprite;
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
 	public Room activeRoom;
-	public Array<Room> rooms;
 	public Wall testWall;
 	public AbstractGameObject touchedObject;
 	public boolean disabled;
+	public Room[][] rooms;
 	
 	public WorldController()
 	{
@@ -48,12 +49,11 @@ public class WorldController extends InputAdapter implements ContactListener
 		cameraHelper = new CameraHelper();
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
-		rooms = new Array<Room>();
+		rooms = new Room[Constants.MAXROOMS][Constants.MAXROOMS];
 		
 		initLevel();
 		
 		cameraHelper.setTarget(activeRoom.player);
-		System.out.println(activeRoom.movementGrid);
 	}
 	
 	/**
@@ -61,8 +61,8 @@ public class WorldController extends InputAdapter implements ContactListener
 	 */
 	private void initLevel()
 	{
-		rooms.add(new Room(Constants.LEVEL_01, this));
-		activeRoom = rooms.first(); //TODO add level switching
+		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.LEVEL_01, this, 0, 0);
+		activeRoom = rooms[roomArrayOffset][roomArrayOffset]; //TODO add level switching
 		
 	}
 	
@@ -216,7 +216,6 @@ public class WorldController extends InputAdapter implements ContactListener
 			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
 		}
 		
-		System.out.println(touchedObject);
 	}
 
 	@Override
@@ -248,20 +247,42 @@ public class WorldController extends InputAdapter implements ContactListener
 
 	public void createNewRoom(Door door) 
 	{
+		int roomOffsetX = activeRoom.roomOffsetX;
+		int roomOffsetY = activeRoom.roomOffsetY;
+		
 		//finds and selects what side of the room the new linked door should be
+		//also calculates the offset for the new room
 		int newDoorSide;
 		if(door.side == Door.TOP)
+		{
 			newDoorSide = Door.BOTTOM;
+			roomOffsetY += Constants.ROOMOFFSET;
+		}
 		else if(door.side == Door.RIGHT)
+		{
 			newDoorSide = Door.LEFT;
+			roomOffsetX += Constants.ROOMOFFSET;
+		}
 		else if(door.side == Door.BOTTOM)
+		{
 			newDoorSide = Door.TOP;
+			roomOffsetY -= Constants.ROOMOFFSET;
+		}
 		else //if(door.side == Door.LEFT)
+		{
 			newDoorSide = Door.RIGHT;
+			roomOffsetX -= Constants.ROOMOFFSET;
+		}
 		
+		if(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] != null)
+		{
+			door.setLinkedRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset]);
+			swapRoom(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset]);
+			return;
+		}
 		
 		//TODO add random room selection
-		Room newRoom = new Room(Constants.LEVEL_02, this);
+		Room newRoom = new Room(Constants.LEVEL_02, this, roomOffsetX, roomOffsetY);
 		
 		Door newDoor = newRoom.doors.first();
 		for (Door tempDoor : newRoom.doors)
@@ -298,7 +319,14 @@ public class WorldController extends InputAdapter implements ContactListener
 		newRoom.setPlayer(activeRoom.player);
 		newRoom.reassignTarget();
 		
+		rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] = newRoom;
 		activeRoom = newRoom;
+	}
+
+	public void swapRoom(Room room)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

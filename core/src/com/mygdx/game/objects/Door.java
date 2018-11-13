@@ -63,9 +63,12 @@ public class Door extends AbstractGameObject
 		else if(side == 4)
 			System.out.println("LEFT"); //TODO remove this
 		
-		worldController.createNewRoom(this);
+		if(linkedRoom != null)
+			worldController.swapRoom(linkedRoom);
+		else
+			worldController.createNewRoom(this);
 	}
-	
+
 	public void setLinkedRoom(Room room)
 	{
 		linkedRoom = room;
