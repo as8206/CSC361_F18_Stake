@@ -49,6 +49,7 @@ public abstract class Enemy extends AbstractGameObject
 		box.dispose();
 		
 		body = tempBody;
+		body.setUserData(this);
 		
 		this.level = level;
 	}

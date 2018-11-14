@@ -33,6 +33,7 @@ public abstract class AbstractGameObject
 		box.setAsBox(0.5f, 0.5f);
 		
 		body.createFixture(box, 0.0f);
+		body.setUserData(this);
 		
 		box.dispose();
 		

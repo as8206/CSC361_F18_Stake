@@ -42,6 +42,8 @@ public static final String TAG = Assets.class.getName();
 	public assetCharacter character;
 	public assetWallEnd wallEnd;
 	public assetChest chest;
+	public assetCrate crate;
+	public assetCoin goldCoin;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -82,6 +84,8 @@ public static final String TAG = Assets.class.getName();
 		character = new assetCharacter(atlas);
 		wallEnd = new assetWallEnd(atlas);
 		chest = new assetChest(atlas);
+		crate = new assetCrate(atlas);
+		goldCoin = new assetCoin(atlas);
 	}
 	
 	@Override
@@ -268,6 +272,26 @@ public static final String TAG = Assets.class.getName();
 		public assetChest (TextureAtlas atlas)
 		{
 			chest = atlas.findRegion("chest1");
+		}
+	}
+	
+	public class assetCrate
+	{
+		public final AtlasRegion crate;
+		
+		public assetCrate (TextureAtlas atlas)
+		{
+			crate = atlas.findRegion("crate1");
+		}
+	}
+	
+	public class assetCoin
+	{
+		public final AtlasRegion goldCoin;
+		
+		public assetCoin (TextureAtlas atlas)
+		{
+			goldCoin = atlas.findRegion("goldCoin");
 		}
 	}
 }

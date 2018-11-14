@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -30,6 +31,11 @@ public class WorldController extends InputAdapter implements ContactListener
 	public boolean enemiesDisabled;
 	private Room[][] rooms;
 	private Array<String> randomizedRooms;
+	private Array<Body> bodiesToBeRemoved;
+	private int score;
+	
+	//increases with each deeper level of the dungeon
+	public int goldModifier;
 	
 	public WorldController()
 	{
@@ -46,6 +52,8 @@ public class WorldController extends InputAdapter implements ContactListener
 		b2dWorld = new World(new Vector2(0, 0), true); 
 		b2dWorld.setContactListener(this);
 		rooms = new Room[Constants.MAXROOMS][Constants.MAXROOMS];
+		bodiesToBeRemoved = new Array<Body>();
+		score = 0;
 		prepRoomFiles();
 		
 		initLevel();
@@ -74,6 +82,46 @@ public class WorldController extends InputAdapter implements ContactListener
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
 		activeRoom.update(deltaTime);
+		removeBodies();
+	}
+	
+	/**
+	 * Removes all bodies in bodiesToBeRemoved from the Box2d World
+	 */
+	private void removeBodies()
+	{
+		for(Body body : bodiesToBeRemoved)
+		{
+			b2dWorld.destroyBody(body);
+			bodiesToBeRemoved.removeValue(body, false);
+		}
+	}
+
+	/**
+	 * Adds a body to be removed from the world
+	 * @param body
+	 */
+	public void addToRemoval(Body body)
+	{
+		bodiesToBeRemoved.add(body);
+	}
+	
+	/**
+	 * Adds to the score tracker
+	 * @param addedScore
+	 */
+	public void addScore(int addedScore)
+	{
+		score += addedScore;
+	}
+	
+	/**
+	 * Returns the value of the score tracker
+	 * @return
+	 */
+	public int getScore()
+	{
+		return score;
 	}
 	
 	/**
@@ -211,7 +259,23 @@ public class WorldController extends InputAdapter implements ContactListener
 	@Override
 	public void beginContact(Contact contact)
 	{
-		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
+		//collisions for gold coin, non-button activated
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().getBody().getUserData().getClass() == GoldCoin.class && contact.getFixtureB().isSensor())
+		{
+			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
+			touchedObject.activate();
+			touchedObject = null;
+			
+		}
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().getBody().getUserData().getClass() == GoldCoin.class && contact.getFixtureB().isSensor())
+		{
+			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
+			touchedObject.activate();
+			touchedObject = null;
+			
+		}
+		//collisions for button activated objects
+		else if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 		}
