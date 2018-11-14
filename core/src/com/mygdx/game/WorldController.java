@@ -59,7 +59,11 @@ public class WorldController extends InputAdapter implements ContactListener
 	private void initLevel()
 	{
 		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.STARTROOM, this, 0, 0);
-		activeRoom = rooms[roomArrayOffset][roomArrayOffset]; //TODO add level switching
+		activeRoom = rooms[roomArrayOffset][roomArrayOffset];
+		if(activeRoom.player.mirrored)
+		{
+			System.out.println("settings saved? how?");
+		}
 		
 	}
 	
@@ -84,10 +88,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		if (Gdx.input.isKeyPressed(Keys.D))
 		{
 			velocity.x += activeRoom.player.movementSpeed;
+			activeRoom.player.mirror(false);
 		}
 		else if (Gdx.input.isKeyPressed(Keys.A))
 		{
 			velocity.x -= activeRoom.player.movementSpeed;
+			activeRoom.player.mirror(true);
 		}
 		
 		//Player Movement: y

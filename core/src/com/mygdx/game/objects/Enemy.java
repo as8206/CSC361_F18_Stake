@@ -56,7 +56,16 @@ public abstract class Enemy extends AbstractGameObject
 	@Override
 	public void render (SpriteBatch batch)
 	{
-		batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		if(!mirrored)
+		{
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		}
+		else
+		{
+			reg.flip(true, false); //TODO refactor this same as in character
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			reg.flip(true, false);
+		}
 	}
 	
 	@Override
@@ -80,6 +89,11 @@ public abstract class Enemy extends AbstractGameObject
 		{
 			body.setLinearVelocity(0,0);
 		}
+		
+		if(body.getLinearVelocity().x >= 0) //TODO figure out why this only works for barbarian
+			mirror(false);
+		else
+			mirror(true);
 	}
 	
 	/**

@@ -53,16 +53,6 @@ public class Door extends AbstractGameObject
 	@Override
 	public void activate()
 	{
-		System.out.print("This door is on side: ");
-		if(side == 1)
-			System.out.println("TOP");
-		else if(side == 2)
-			System.out.println("RIGHT");
-		else if(side == 3)
-			System.out.println("BOTTOM");
-		else if(side == 4)
-			System.out.println("LEFT"); //TODO remove this
-		
 		if(linkedRoom != null)
 			worldController.swapRoom(linkedRoom, this);
 		else
