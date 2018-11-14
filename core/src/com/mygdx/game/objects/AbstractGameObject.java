@@ -44,7 +44,7 @@ public abstract class AbstractGameObject
 	public void activate() {}
 	
 	/**
-	 * Drasw the object with default parameters
+	 * Draw the object with default parameters
 	 * @param batch
 	 */
 	public void render (SpriteBatch batch)
@@ -58,12 +58,7 @@ public abstract class AbstractGameObject
 	 */
 	public void mirror(boolean direction) //TODO figure out why this persists after a reset
 	{
-//		if(direction != mirrored)
-//		{
-//			TextureRegion tempReg = reg;
-//			tempReg.flip(true, false);
-//			reg = tempReg;
-//			mirrored = direction;
-//		}
+		if(direction != mirrored)
+			mirrored = direction;
 	}
 }
