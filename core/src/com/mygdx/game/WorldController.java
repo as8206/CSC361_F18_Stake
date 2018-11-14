@@ -34,6 +34,9 @@ public class WorldController extends InputAdapter implements ContactListener
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
 	
+	//increases with each deeper level of the dungeon
+	public int goldModifier;
+	
 	public WorldController()
 	{
 		init();
@@ -98,6 +101,25 @@ public class WorldController extends InputAdapter implements ContactListener
 	{
 		bodiesToBeRemoved.add(body);
 	}
+	
+	/**
+	 * Adds to the score tracker
+	 * @param addedScore
+	 */
+	public void addScore(int addedScore)
+	{
+		score += addedScore;
+	}
+	
+	/**
+	 * Returns the value of the score tracker
+	 * @return
+	 */
+	public int getScore()
+	{
+		return score;
+	}
+	
 	/**
 	 * Handles the input for player movement and actions
 	 * @param deltaTime

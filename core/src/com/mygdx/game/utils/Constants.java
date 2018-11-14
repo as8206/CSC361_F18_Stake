@@ -33,4 +33,6 @@ public class Constants
 	
 	//max amount of rooms that can be on a floor, n X n grid
 	public static final int MAXROOMS = 51;
+
+	public static final int BASECOINSCORE = 10;
 }
