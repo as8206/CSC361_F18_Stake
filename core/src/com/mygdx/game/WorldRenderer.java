@@ -12,6 +12,7 @@ import com.mygdx.game.utils.Constants;
 public class WorldRenderer implements Disposable
 {
 	private OrthographicCamera camera;
+	private OrthographicCamera cameraUI;
 	private SpriteBatch batch;
 	private WorldController worldController;
 	
@@ -31,14 +32,28 @@ public class WorldRenderer implements Disposable
 		camera.position.set(0, 0, 0);
 		camera.update();
 		
+		cameraUI = new OrthographicCamera(Constants.VIEWPORT_UI_WIDTH, Constants.VIEWPORT_UI_HEIGHT);
+		cameraUI.position.set(0,0,0);
+		cameraUI.setToOrtho(true); // flip y-axis
+		cameraUI.update();
+		
 		b2debugRenderer = new Box2DDebugRenderer();
 	}
 	
 	public void render ()
 	{
 		renderLevel();
+		renderUI();
 	}
 	
+	private void renderUI()
+	{
+		batch.setProjectionMatrix(cameraUI.combined);
+		batch.begin();
+		
+		batch.end();
+	}
+
 	/**
 	 * Renders the level and all objects within it
 	 */
@@ -59,6 +74,11 @@ public class WorldRenderer implements Disposable
 	{
 		camera.viewportWidth = (Constants.VIEWPORT_HEIGHT/height) * width;
 		camera.update();
+		
+		cameraUI.viewportHeight = Constants.VIEWPORT_UI_HEIGHT;
+		cameraUI.viewportWidth = Constants.VIEWPORT_UI_HEIGHT / (float)height * (float)width;
+		cameraUI.position.set(cameraUI.viewportWidth/2, cameraUI.viewportHeight/2, 0);
+		cameraUI.update();
 	}
 	
 	@Override public void dispose()
