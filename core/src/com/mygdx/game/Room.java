@@ -39,6 +39,7 @@ public class Room
 		LADDERUP(255,0,255),
 		LADDERDOWN(200,0,200),			//shades of purple
 		CHEST(0,38,255),				//blue
+		GOLDCOIN(255,255,0),			//yellow
 		PLAYER(0,255,0),				//green
 		ERANGED(255,0,0),				//red
 		EMELEE(127,0,0);				//dark red
@@ -71,6 +72,7 @@ public class Room
 	public Array<Rubble> rubbles;
 	public Array<Ladder> ladders;
 	public Array<Chest> chests;
+	public Array<GoldCoin> coins;
 	public Array<EnemyRanged> rangedEnemies;
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
@@ -97,6 +99,7 @@ public class Room
 		rubbles = new Array<Rubble>();
 		ladders = new Array<Ladder>();
 		chests = new Array<Chest>();
+		coins = new Array<GoldCoin>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
 		
@@ -384,6 +387,22 @@ public class Room
 					
 					movementGrid[pixelX][pixelY] = true;
 				}
+				//gold coin
+				else if(BLOCK_TYPE.GOLDCOIN.sameColor(currentPixel))
+				{
+					obj = new GoldCoin(Assets.instance.goldCoin.goldCoin, this, worldController);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
+					coins.add((GoldCoin)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
+				}
 				//player spawn position
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
 				{
@@ -439,7 +458,6 @@ public class Room
 		}
 		
 		//Set enemy targets
-		//TODO make a way to do this when a new room is loaded
 		for(EnemyRanged enemy : rangedEnemies)
 			enemy.setTarget(player);
 		for(EnemyMelee enemy : meleeEnemies)
@@ -475,6 +493,10 @@ public class Room
 		//draw chests
 		for(Chest chest : chests)
 			chest.render(batch);
+		
+		//draw coins
+		for(GoldCoin coin : coins)
+			coin.render(batch);
 		
 		//draw ranged enemies
 		for(EnemyRanged enemy : rangedEnemies)
@@ -512,6 +534,15 @@ public class Room
 			enemy.setTarget(player);
 		for(EnemyMelee enemy : meleeEnemies)
 			enemy.setTarget(player);
+	}
+	
+	public void removeCoin(GoldCoin grabbedCoin)
+	{
+		for(GoldCoin coin : coins)
+		{
+			if(coin == grabbedCoin)
+				coins.removeValue(grabbedCoin, false);
+		}
 	}
 	
 }

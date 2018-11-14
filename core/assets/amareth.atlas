@@ -1,173 +1,180 @@
 
 amareth.png
-size: 256,64
+size: 128,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 barbarian1
   rotate: false
-  xy: 81, 2
+  xy: 51, 100
   size: 27, 27
   orig: 27, 27
   offset: 0, 0
   index: -1
 chest1
   rotate: false
-  xy: 110, 13
+  xy: 51, 81
   size: 18, 17
   orig: 18, 17
   offset: 0, 0
   index: -1
 crate1
   rotate: false
-  xy: 151, 47
+  xy: 88, 63
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorHorizontal
   rotate: false
-  xy: 166, 29
+  xy: 89, 91
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorVertical
   rotate: false
-  xy: 169, 47
+  xy: 98, 111
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 floor1
   rotate: false
-  xy: 51, 31
+  xy: 1, 45
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 floor2
   rotate: false
-  xy: 1, 15
+  xy: 1, 79
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 goblin2
   rotate: false
-  xy: 51, 1
+  xy: 35, 49
   size: 28, 28
   orig: 28, 28
   offset: 0, 0
   index: -1
+goldCoin
+  rotate: false
+  xy: 65, 58
+  size: 21, 21
+  orig: 21, 21
+  offset: 0, 0
+  index: -1
 ladderDown
   rotate: false
-  xy: 148, 13
+  xy: 71, 81
   size: 16, 17
   orig: 16, 17
   offset: 0, 0
   index: -1
 ladderUp
   rotate: false
-  xy: 130, 12
+  xy: 80, 109
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 rubble1
   rotate: false
-  xy: 166, 11
+  xy: 106, 73
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 rubble2
   rotate: false
-  xy: 184, 29
+  xy: 107, 93
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 tiles1
   rotate: false
-  xy: 85, 32
+  xy: 1, 12
   size: 31, 31
   orig: 31, 31
   offset: 0, 0
   index: -1
 wallBotLeft
   rotate: false
-  xy: 187, 47
+  xy: 106, 55
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallBotRight
   rotate: false
-  xy: 184, 11
+  xy: 88, 45
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorBottom
   rotate: false
-  xy: 202, 29
+  xy: 67, 40
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorLeft
   rotate: false
-  xy: 205, 47
+  xy: 106, 37
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorRight
   rotate: false
-  xy: 202, 11
+  xy: 85, 27
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorTop
   rotate: false
-  xy: 220, 29
+  xy: 67, 22
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallHorizontal
   rotate: false
-  xy: 223, 47
+  xy: 103, 19
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopLeft
   rotate: false
-  xy: 238, 29
+  xy: 85, 9
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopRight
   rotate: false
-  xy: 220, 11
+  xy: 67, 4
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallVertical
   rotate: false
-  xy: 238, 11
+  xy: 103, 1
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wizard1
   rotate: false
-  xy: 118, 32
+  xy: 34, 12
   size: 31, 31
   orig: 31, 31
   offset: 0, 0
