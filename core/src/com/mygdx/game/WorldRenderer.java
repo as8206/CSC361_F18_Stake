@@ -51,7 +51,18 @@ public class WorldRenderer implements Disposable
 		batch.setProjectionMatrix(cameraUI.combined);
 		batch.begin();
 		
+		renderScore();
+		
 		batch.end();
+	}
+
+	private void renderScore()
+	{
+		float x = cameraUI.viewportWidth-200;
+		float y = 0;
+		
+		batch.draw(Assets.instance.goldCoin.goldCoin, x, y, 50, 50, 100, 100, 0.5f, -0.5f, 0);
+		Assets.instance.fonts.defaultBig.draw(batch,"" + worldController.getScore(), x+75, y+37);
 	}
 
 	/**
