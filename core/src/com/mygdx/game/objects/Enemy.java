@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.mygdx.game.Level;
+import com.mygdx.game.Room;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.Constants;
@@ -23,13 +23,13 @@ public abstract class Enemy extends AbstractGameObject
 	Character target;
 	
 	//Level the enemy is a part of
-	Level level;
+	Room level;
 	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Enemy(TextureRegion img, Level level)
+	public Enemy(TextureRegion img, Room level)
 	{
 		super(img);
 		
@@ -49,6 +49,7 @@ public abstract class Enemy extends AbstractGameObject
 		box.dispose();
 		
 		body = tempBody;
+		body.setUserData(this);
 		
 		this.level = level;
 	}
@@ -56,7 +57,16 @@ public abstract class Enemy extends AbstractGameObject
 	@Override
 	public void render (SpriteBatch batch)
 	{
-		batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		if(!mirrored)
+		{
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		}
+		else
+		{
+			reg.flip(true, false); //TODO refactor this same as in character
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			reg.flip(true, false);
+		}
 	}
 	
 	@Override
@@ -80,6 +90,11 @@ public abstract class Enemy extends AbstractGameObject
 		{
 			body.setLinearVelocity(0,0);
 		}
+		
+		if(body.getLinearVelocity().x >= 0) //TODO figure out why this only works for barbarian
+			mirror(false);
+		else
+			mirror(true);
 	}
 	
 	/**

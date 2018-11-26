@@ -10,10 +10,10 @@ import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Level 
+public class Room 
 {
-	public static final String TAG = Level.class.getName();
-	
+	public static final String TAG = Room.class.getName();
+		
 	public boolean[][] movementGrid;
 	
 	public enum BLOCK_TYPE
@@ -39,6 +39,7 @@ public class Level
 		LADDERUP(255,0,255),
 		LADDERDOWN(200,0,200),			//shades of purple
 		CHEST(0,38,255),				//blue
+		GOLDCOIN(255,255,0),			//yellow
 		PLAYER(0,255,0),				//green
 		ERANGED(255,0,0),				//red
 		EMELEE(127,0,0);				//dark red
@@ -61,12 +62,17 @@ public class Level
 		}
 	}
 	
+	//room offset
+	public int roomOffsetX;
+	public int roomOffsetY;
+	
 	//objects
 	public Array<Wall> walls;
 	public Array<Door> doors;
 	public Array<Rubble> rubbles;
 	public Array<Ladder> ladders;
 	public Array<Chest> chests;
+	public Array<GoldCoin> coins;
 	public Array<EnemyRanged> rangedEnemies;
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
@@ -74,8 +80,14 @@ public class Level
 	//non-interactable textures
 	public Array<Sprite> grounds;
 	
-	public Level (String filename)
+	//reference to worldController
+	WorldController worldController;
+	
+	public Room (String filename, WorldController wc, int offX, int offY)
 	{
+		worldController = wc;
+		roomOffsetX = offX;
+		roomOffsetY = offY;
 		init(filename);
 	}
 	
@@ -87,6 +99,7 @@ public class Level
 		rubbles = new Array<Rubble>();
 		ladders = new Array<Ladder>();
 		chests = new Array<Chest>();
+		coins = new Array<GoldCoin>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
 		
@@ -110,10 +123,6 @@ public class Level
 				//preparing a super so that the children can be used as if they were the super
 				AbstractGameObject obj = null;
 				Sprite spr = null;
-				float offsetHeight = 0;
-				
-				//height grows from bottom to top
-				float baseHeight = pixmap.getHeight()-pixelY;
 				
 				//get color of current pixels as 32-bit RGBA value
 				int currentPixel = pixmap.getPixel(pixelX, pixelY);
@@ -129,13 +138,25 @@ public class Level
 				//door horizontal
 				else if(BLOCK_TYPE.DOORHOR.sameColor(currentPixel))
 				{
-					obj = new Door(Assets.instance.door.doorHor);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					if(pixelY == 0)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.TOP, worldController);
+					}
+					else if (pixelY == pixmap.getHeight()-1)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM, worldController);
+					}
+					else
+					{
+						System.out.println("ERROR: door location could not be found, defaulting to bottom");
+						obj = new Door(Assets.instance.door.doorHor, Door.BOTTOM, worldController);
+					}
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					doors.add((Door)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -145,13 +166,25 @@ public class Level
 				//door vertical
 				else if(BLOCK_TYPE.DOORVERT.sameColor(currentPixel))
 				{
-					obj = new Door(Assets.instance.door.doorVert);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					if(pixelX == 0)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.LEFT, worldController);
+					}
+					else if(pixelX == pixmap.getWidth()-1)
+					{
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT, worldController);
+					}
+					else
+					{
+						System.out.println("ERROR: door location could not be found, defaulting to right");
+						obj = new Door(Assets.instance.door.doorHor, Door.RIGHT, worldController);
+					}
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					doors.add((Door)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -162,7 +195,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLHOR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wall.wallHorizontal);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -171,7 +204,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLVERT.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wall.wallVertical);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -180,7 +213,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLTOPL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.topLeft);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -189,7 +222,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLTOPR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.topRight);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -198,7 +231,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLBOTL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.bottomLeft);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -207,7 +240,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLBOTR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallCorner.bottomRight);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -216,7 +249,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLENDL.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndLeft);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -225,7 +258,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLENDR.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndRight);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -234,7 +267,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLENDT.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndTop);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -243,7 +276,7 @@ public class Level
 				else if(BLOCK_TYPE.WALLENDB.sameColor(currentPixel))
 				{
 					obj = new Wall(Assets.instance.wallEnd.wallEndBot);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					walls.add((Wall)obj);
 					
 					movementGrid[pixelX][pixelY] = true;
@@ -253,7 +286,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -263,7 +296,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floor.floor);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -273,7 +306,7 @@ public class Level
 				{
 					spr = new Sprite(Assets.instance.floorBig.floorBig);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -282,12 +315,12 @@ public class Level
 				else if(BLOCK_TYPE.RUBBLE.sameColor(currentPixel))
 				{
 					obj = new Rubble(Assets.instance.rubble.rubble);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					rubbles.add((Rubble)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr); //TODO add random broken floors below rubble
@@ -298,12 +331,12 @@ public class Level
 				else if(BLOCK_TYPE.RUBBLEBIG.sameColor(currentPixel))
 				{
 					obj = new Rubble(Assets.instance.rubbleBig.rubbleBig);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					rubbles.add((Rubble)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -313,12 +346,12 @@ public class Level
 				else if(BLOCK_TYPE.LADDERUP.sameColor(currentPixel))
 				{
 					obj = new Ladder(Assets.instance.ladderUp.ladderUp);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					ladders.add((Ladder)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -328,12 +361,12 @@ public class Level
 				else if(BLOCK_TYPE.LADDERDOWN.sameColor(currentPixel))
 				{
 					obj = new Ladder(Assets.instance.ladderDown.ladderDown);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					ladders.add((Ladder)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -342,12 +375,28 @@ public class Level
 				else if(BLOCK_TYPE.CHEST.sameColor(currentPixel))
 				{
 					obj = new Chest(Assets.instance.chest.chest);
-					obj.body.setTransform(pixelX, -pixelY, 0);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					chests.add((Chest)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
+					spr.setSize(1, 1);
+					
+					grounds.add(spr);
+					
+					movementGrid[pixelX][pixelY] = true;
+				}
+				//gold coin
+				else if(BLOCK_TYPE.GOLDCOIN.sameColor(currentPixel))
+				{
+					obj = new GoldCoin(Assets.instance.goldCoin.goldCoin, this, worldController);
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
+					coins.add((GoldCoin)obj);
+					
+					spr = new Sprite(Assets.instance.tile.tile);
+					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -358,12 +407,12 @@ public class Level
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
 				{
 					obj = new Character(Assets.instance.character.character);
-					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					player = (Character)obj;
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -372,12 +421,12 @@ public class Level
 				else if(BLOCK_TYPE.EMELEE.sameColor(currentPixel))
 				{
 					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this);
-					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					meleeEnemies.add((EnemyMelee)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -386,12 +435,12 @@ public class Level
 				else if(BLOCK_TYPE.ERANGED.sameColor(currentPixel))
 				{
 					obj = new EnemyRanged(Assets.instance.goblin.goblin, this);
-					obj.body.setTransform(pixelX, -pixelY - 0.1f, 0); //TODO make character offset for y a constant, will be used for enemies
+					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					rangedEnemies.add((EnemyRanged)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-					spr.setPosition(pixelX - Constants.OFFSET, -pixelY - Constants.OFFSET);
+					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
 					
 					grounds.add(spr);
@@ -409,7 +458,6 @@ public class Level
 		}
 		
 		//Set enemy targets
-		//TODO make a way to do this when a new room is loaded
 		for(EnemyRanged enemy : rangedEnemies)
 			enemy.setTarget(player);
 		for(EnemyMelee enemy : meleeEnemies)
@@ -446,6 +494,10 @@ public class Level
 		for(Chest chest : chests)
 			chest.render(batch);
 		
+		//draw coins
+		for(GoldCoin coin : coins)
+			coin.render(batch);
+		
 		//draw ranged enemies
 		for(EnemyRanged enemy : rangedEnemies)
 			enemy.render(batch);
@@ -459,13 +511,38 @@ public class Level
 	
 	public void update(float deltaTime)
 	{
-		//update ranged enemies
+		if(!worldController.enemiesDisabled)
+		{
+			//update ranged enemies
+			for(EnemyRanged enemy : rangedEnemies)
+				enemy.update(deltaTime);
+			
+			//update melee enemies
+			for(EnemyMelee enemy : meleeEnemies)
+				enemy.update(deltaTime);
+		}
+	}
+	
+	public void setPlayer(Character player)
+	{
+		this.player = player;
+	}
+	
+	public void reassignTarget()
+	{
 		for(EnemyRanged enemy : rangedEnemies)
-			enemy.update(deltaTime);
-		
-		//update melee enemies
+			enemy.setTarget(player);
 		for(EnemyMelee enemy : meleeEnemies)
-			enemy.update(deltaTime);
+			enemy.setTarget(player);
+	}
+	
+	public void removeCoin(GoldCoin grabbedCoin)
+	{
+		for(GoldCoin coin : coins)
+		{
+			if(coin == grabbedCoin)
+				coins.removeValue(grabbedCoin, false);
+		}
 	}
 	
 }

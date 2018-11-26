@@ -12,7 +12,7 @@ import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
 {
-	public final float movementSpeed = 3.0f;
+	public float movementSpeed = 3.0f;
 	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
@@ -38,12 +38,21 @@ public class Character extends AbstractGameObject
 		box.dispose();
 		
 		body = tempBody;
+		
+		body.setUserData(this);
 	}
 	
 	@Override
 	public void render (SpriteBatch batch)
 	{
-		batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		if(!mirrored)
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+		else
+		{
+			reg.flip(true, false); //TODO refactor this so its not flipping every time, maybe just a flipped render
+			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			reg.flip(true, false);
+		}
 	}
 
 }
