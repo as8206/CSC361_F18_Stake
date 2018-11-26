@@ -10,12 +10,15 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
-import com.mygdx.game.Assets.AssetFonts;
+//import com.mygdx.game.Assets.AssetFonts;
 import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
@@ -47,7 +50,8 @@ public static final String TAG = Assets.class.getName();
 	public assetChest chest;
 	public assetCrate crate;
 	public assetCoin goldCoin;
-	public AssetFonts fonts;
+	public assetFonts fonts;
+	public assetHealthBar healthBar;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -90,7 +94,8 @@ public static final String TAG = Assets.class.getName();
 		chest = new assetChest(atlas);
 		crate = new assetCrate(atlas);
 		goldCoin = new assetCoin(atlas);
-		fonts = new AssetFonts();
+		fonts = new assetFonts();
+		healthBar = new assetHealthBar();
 
 	}
 	
@@ -304,13 +309,13 @@ public static final String TAG = Assets.class.getName();
 		}
 	}
 	
-	public class AssetFonts 
+	public class assetFonts 
 	{
 		public final BitmapFont defaultSmall;
 		public final BitmapFont defaultNormal;
 		public final BitmapFont defaultBig;
 		
-		public AssetFonts () 
+		public assetFonts () 
 		{
 			// create three fonts using Libgdx's 15px bitmap font
 			defaultSmall = new BitmapFont(new FileHandle("../core/assets/fonts/arial-15.fnt"), true);
@@ -329,5 +334,20 @@ public static final String TAG = Assets.class.getName();
 			defaultBig.getRegion().getTexture().setFilter(
 			TextureFilter.Linear, TextureFilter.Linear);
 		}
+	}
+	
+	public class assetHealthBar
+	{
+		public NinePatchDrawable healthBarBackground;
+	    public NinePatchDrawable healthBar;
+
+	    public assetHealthBar() 
+	    {
+		    TextureAtlas skinAtlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+		    NinePatch loadingBarBackgroundPatch = new NinePatch(skinAtlas.findRegion("default-round"), 5, 5, 4, 4);
+		    NinePatch loadingBarPatch = new NinePatch(skinAtlas.findRegion("default-round-down"), 5, 5, 4, 4);
+	    	healthBar = new NinePatchDrawable(loadingBarPatch);
+	    	healthBarBackground = new NinePatchDrawable(loadingBarBackgroundPatch);
+	    }
 	}
 }
