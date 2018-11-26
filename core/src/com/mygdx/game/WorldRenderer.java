@@ -65,6 +65,7 @@ public class WorldRenderer implements Disposable
 		renderScore();
 		renderMetrics();
 		
+		
 		if(printText)
 			renderText();
 		
@@ -78,8 +79,8 @@ public class WorldRenderer implements Disposable
 	{
 		float x = 35;
 		float y = 35;
-		float health = 4f; //TODO set these to active players values
-		float totalHealth = 100f;
+		float health = worldController.activeRoom.player.curHealth;
+		float totalHealth = worldController.activeRoom.player.totalHealth;
 		
 		if(health / totalHealth < 0.02f)
 		{

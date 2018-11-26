@@ -41,4 +41,7 @@ public class Constants
 
 	//Base score from a single coin pickup
 	public static final int BASECOINSCORE = 10;
+
+	//Base starting health for the player
+	public static final float STARTINGHEALTH = 100;
 }
