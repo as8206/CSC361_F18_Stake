@@ -27,6 +27,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		//Initialize controller and renderer
 		worldController = new WorldController();
 		worldRenderer = new WorldRenderer(worldController);
+		worldController.setWorldRenderer(worldRenderer);
 		paused = false;
 		
 	}

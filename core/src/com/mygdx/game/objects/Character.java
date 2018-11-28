@@ -14,6 +14,9 @@ public class Character extends AbstractGameObject
 {
 	public float movementSpeed = 3.0f;
 	
+	public float curHealth;
+	public float totalHealth;
+	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
 	 * @param img
@@ -40,6 +43,9 @@ public class Character extends AbstractGameObject
 		body = tempBody;
 		
 		body.setUserData(this);
+		
+		curHealth = Constants.STARTINGHEALTH;
+		totalHealth = curHealth;
 	}
 	
 	@Override

@@ -8,6 +8,11 @@ public class Constants
 	
 	// Visible game world is 5 meters tall
 	public static final float VIEWPORT_HEIGHT = 5.0f;
+	
+	// GUI Width
+	public static final float VIEWPORT_UI_WIDTH = 1600.0f;
+	// GUI Height
+	public static final float VIEWPORT_UI_HEIGHT = 960.0f;
 
 	//Location of description file for the texture atlas
 	public static final String TEXTURE_ATLAS_OBJECTS =  "../core/assets/amareth.atlas";
@@ -34,5 +39,9 @@ public class Constants
 	//max amount of rooms that can be on a floor, n X n grid
 	public static final int MAXROOMS = 51;
 
+	//Base score from a single coin pickup
 	public static final int BASECOINSCORE = 10;
+
+	//Base starting health for the player
+	public static final float STARTINGHEALTH = 100;
 }

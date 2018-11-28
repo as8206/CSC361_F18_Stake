@@ -511,7 +511,7 @@ public class Room
 	
 	public void update(float deltaTime)
 	{
-		if(!worldController.enemiesDisabled)
+		if(!worldController.debugDisabled)
 		{
 			//update ranged enemies
 			for(EnemyRanged enemy : rangedEnemies)
