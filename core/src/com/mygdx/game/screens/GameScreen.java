@@ -1,5 +1,6 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.WorldController;
@@ -35,7 +36,7 @@ public class GameScreen extends AbstractGameScreen
 			worldController.update(deltaTime);
 		
 		//sets the clear screen color to cornflower blue
-		Gdx.gl.glClearColor(0x64/255.0f,  0x95/255.0f,  0xed/255.0f, 0xff/255.0f);
+		Gdx.gl.glClearColor(0,  0,  0, 1);
 		
 		//clears the screen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -63,6 +64,7 @@ public class GameScreen extends AbstractGameScreen
 	{
 		worldController = new WorldController(game);
 		worldRenderer = new WorldRenderer(worldController);
+		worldController.setWorldRenderer(worldRenderer);
 		Gdx.input.setCatchBackKey(true);
 	}
 	
