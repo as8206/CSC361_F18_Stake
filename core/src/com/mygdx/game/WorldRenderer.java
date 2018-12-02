@@ -19,7 +19,7 @@ public class WorldRenderer implements Disposable
 	private WorldController worldController;
 	
 	private Box2DDebugRenderer b2debugRenderer;
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	//Variables for printing text messages
 	private String text;

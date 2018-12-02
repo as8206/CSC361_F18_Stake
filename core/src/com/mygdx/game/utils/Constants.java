@@ -18,7 +18,7 @@ public class Constants
 	public static final String TEXTURE_ATLAS_OBJECTS =  "../core/assets/amareth.atlas";
 	
 	//Location of level 1
-	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png";
+	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png"; //TODO change to real spawn room
 	
 	//Location of level 2
 	public static final String LEVEL_02 = "../core/assets/levels/temp/level02.png";

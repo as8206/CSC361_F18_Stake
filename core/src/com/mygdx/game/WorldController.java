@@ -29,7 +29,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	public static World b2dWorld;
 	public Room activeRoom;
 	private AbstractGameObject touchedObject;
-	public boolean debugDisabled;
+	public boolean debugEnabled;
 	private Room[][] rooms;
 	private Array<String> randomizedRooms;
 	private Array<Body> bodiesToBeRemoved;
@@ -212,15 +212,15 @@ public class WorldController extends InputAdapter implements ContactListener
 		//disable enemies and speeds up player for easier debugging
 		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
-			if(debugDisabled)
+			if(debugEnabled)
 			{
-				debugDisabled = false;
+				debugEnabled = false;
 				activeRoom.player.movementSpeed = 3.0f;
 				worldRenderer.prepText("Debug Disabled");
 			}
 			else
 			{
-				debugDisabled = true;
+				debugEnabled = true;
 				activeRoom.player.movementSpeed = 7.0f;
 				worldRenderer.prepText("Debug Enabled");
 			}
