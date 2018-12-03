@@ -32,6 +32,14 @@ public class MenuScreen extends AbstractGameScreen
 	private Skin skinLibgdx;
 	SpriteBatch batch;
 	
+	private float appearanceTimeClock;
+	private final float wedgeTime = 0.5f;
+	private final float logoTime = 1f;
+	private final float buttonTime = 2f;
+	private boolean wedgeAppeared;
+	private boolean logoAppeared;
+	private boolean buttonAppeared;
+	
 	//menu
 	private Sprite imgBackground;
 	private Image imgLogo;
@@ -46,6 +54,7 @@ public class MenuScreen extends AbstractGameScreen
 	public MenuScreen (Game game)
 	{
 		super(game);
+		appearanceTimeClock = 0;
 	}
 	
 	public void rebuildStage()
@@ -66,8 +75,13 @@ public class MenuScreen extends AbstractGameScreen
 		Stack stack = new Stack();
 		stage.addActor(stack);
 		stack.setSize(Constants.VIEWPORT_UI_WIDTH, Constants.VIEWPORT_UI_HEIGHT);
-		stack.add(layerControls);
-		stack.add(layerLogo);
+		
+		if(appearanceTimeClock > logoTime)
+			stack.add(layerLogo);
+		
+		if(appearanceTimeClock > buttonTime)
+			stack.add(layerControls);
+		
 //		TODO stage.addActor(layerOptionsWindow);
 	}
 	
@@ -163,6 +177,12 @@ public class MenuScreen extends AbstractGameScreen
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		if(appearanceTimeClock < 10)
+		{
+			appearanceTimeClock += deltaTime;
+			rebuildStage();
+		}
+		
 		if(debugEnabled)
 		{
 			debugRebuildStage -= deltaTime;
@@ -172,9 +192,22 @@ public class MenuScreen extends AbstractGameScreen
 				rebuildStage();
 			}
 		}
-		batch.begin();;
+		
+		if(appearanceTimeClock > logoTime && !logoAppeared)
+		{
+			//TODO play particle effect
+			logoAppeared = true;
+		}
+		if(appearanceTimeClock > buttonTime && !buttonAppeared)
+		{
+			//TODO play particle effect
+			buttonAppeared = true;
+		}
+		//draws the background
+		batch.begin();
 		imgBackground.draw(batch);
 		batch.end();
+		
 		stage.act(deltaTime);
 		stage.draw();
 		stage.setDebugAll(debugEnabled); //needs to be variable so debug variable can be used
