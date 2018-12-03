@@ -1,0 +1,41 @@
+
+amareth-ui.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+logo
+  rotate: false
+  xy: 1, 1
+  size: 300, 200
+  orig: 300, 200
+  offset: 0, 0
+  index: -1
+options-dn
+  rotate: false
+  xy: 303, 105
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1
+options-up
+  rotate: false
+  xy: 303, 7
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 605, 105
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 605, 7
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1

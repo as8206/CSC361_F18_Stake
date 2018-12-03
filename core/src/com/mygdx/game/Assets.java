@@ -52,6 +52,7 @@ public static final String TAG = Assets.class.getName();
 	public assetCoin goldCoin;
 	public assetFonts fonts;
 	public assetHealthBar healthBar;
+	public assetUIBackground UIBackground;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -96,6 +97,7 @@ public static final String TAG = Assets.class.getName();
 		goldCoin = new assetCoin(atlas);
 		fonts = new assetFonts();
 		healthBar = new assetHealthBar();
+		UIBackground = new assetUIBackground();
 
 	}
 	
@@ -349,5 +351,16 @@ public static final String TAG = Assets.class.getName();
 	    	healthBar = new NinePatchDrawable(loadingBarPatch);
 	    	healthBarBackground = new NinePatchDrawable(loadingBarBackgroundPatch);
 	    }
+	}
+	
+	public class assetUIBackground
+	{
+		public Texture UIBackground;
+		
+		public assetUIBackground()
+		{
+			UIBackground = new Texture("../desktop/assets-raw/MenuBackground/MenuScreen.png");
+		}
+		
 	}
 }
