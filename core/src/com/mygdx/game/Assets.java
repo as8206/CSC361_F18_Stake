@@ -356,10 +356,12 @@ public static final String TAG = Assets.class.getName();
 	public class assetUIBackground
 	{
 		public Texture UIBackground;
+		public Texture wedge;
 		
 		public assetUIBackground()
 		{
 			UIBackground = new Texture("../desktop/assets-raw/MenuBackground/MenuScreen.png");
+			wedge = new Texture("../desktop/assets-raw/MenuBackground/MenuWedge.png");
 		}
 		
 	}

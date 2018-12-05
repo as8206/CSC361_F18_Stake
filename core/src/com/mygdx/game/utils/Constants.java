@@ -55,4 +55,7 @@ public class Constants
 
 	//Base starting health for the player
 	public static final float STARTINGHEALTH = 100;
+	
+	//Holds the game settings
+	public static final String SETTINGS = "../core/assets/gameSettings.txt";
 }

@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,14 +11,22 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Assets;
+import com.mygdx.game.utils.GamePreferences;
 import com.mygdx.game.utils.Constants;
 
 /**
@@ -36,12 +45,14 @@ public class MenuScreen extends AbstractGameScreen
 	private final float wedgeTime = 0.5f;
 	private final float logoTime = 1f;
 	private final float buttonTime = 2f;
+	private final float finalTime = 2.1f;
 	private boolean wedgeAppeared;
 	private boolean logoAppeared;
 	private boolean buttonAppeared;
 	
 	//menu
 	private Sprite imgBackground;
+	private Sprite wedge;
 	private Image imgLogo;
 	private Button btnMenuPlay;
 	private Button btnMenuOptions;
@@ -50,6 +61,16 @@ public class MenuScreen extends AbstractGameScreen
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
 	private boolean debugEnabled = false;
 	private float debugRebuildStage;
+	
+	//options
+	private Window winOptions;
+	private TextButton btnWinOptSave;
+	private TextButton btnWinOptCancel;
+	private CheckBox chkSound;
+	private Slider sldSound;
+	private CheckBox chkMusic;
+	private Slider sldMusic;
+	private CheckBox chkShowFpsCounter;
 	
 	public MenuScreen (Game game)
 	{
@@ -68,7 +89,7 @@ public class MenuScreen extends AbstractGameScreen
 		buildBackground();
 		Table layerControls = buildControls();
 		Table layerLogo = buildLogo();
-//		TODO Table layerOptionsWindow = buildOptionsWindowLayer();
+		Table layerOptionsWindow = buildOptionsWindowLayer();
 		
 		//assemble stage for menu screen
 		stage.clear();
@@ -82,7 +103,134 @@ public class MenuScreen extends AbstractGameScreen
 		if(appearanceTimeClock > buttonTime)
 			stack.add(layerControls);
 		
-//		TODO stage.addActor(layerOptionsWindow);
+		stage.addActor(layerOptionsWindow);
+	}
+	
+	/**
+	 * Builds the Table for the options window layer of the menu
+	 * @return Options Window Layer Table
+	 */
+	private Table buildOptionsWindowLayer()
+	{
+		winOptions = new Window("Options", skinLibgdx);
+		
+		// + Audio Settings: Sound/Music Checkbox and Volume Slider
+		winOptions.add(buildOptWinAudioSettings()).row();
+		
+		// + Debug: Show FPS Counter
+		winOptions.add(buildOptWinDebug()).row();
+		
+		// + Separator and Buttons (Save, Cancel)
+		winOptions.add(buildOptWinButtons()).pad(10, 0, 10, 0);
+		
+		// Make options window slightly transparent
+		winOptions.setColor(1, 1, 1, 0.8f);
+		// Hide Options window by default
+		winOptions.setVisible(false);
+		if (debugEnabled) winOptions.debug();
+		// Let TableLayout recalculate widget sizes and positions
+		winOptions.pack();
+		// Move options window to bottom right corner
+		winOptions.setPosition(Constants.VIEWPORT_UI_WIDTH - winOptions.getWidth() - 50, 50);
+		return winOptions;
+	}
+	
+	/**
+	 * Builds the table for the audio options
+	 * @return
+	 */
+	private Table buildOptWinAudioSettings()
+	{
+		Table tbl = new Table();
+		// + Title: "Audio"
+		tbl.pad(10, 10, 0, 10);
+		tbl.add(new Label("Audio", skinLibgdx, "default-font", Color.ORANGE)).colspan(3);
+		tbl.row();
+		tbl.columnDefaults(0).padRight(10);
+		tbl.columnDefaults(1).padRight(10);
+		// + Checkbox, "Sound" label, sound volume slider
+		chkSound = new CheckBox("", skinLibgdx);
+		tbl.add(chkSound);
+		tbl.add(new Label("Sound", skinLibgdx));
+		sldSound = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+		tbl.add(sldSound);
+		tbl.row();
+		// + Checkbox, "Music" lable, music volume slider
+		chkMusic = new CheckBox("", skinLibgdx);
+		tbl.add(chkMusic);
+		tbl.add(new Label("Music", skinLibgdx));
+		sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+		tbl.add(sldMusic);
+		tbl.row();
+		return tbl;
+	}
+	
+	/**
+	 * Builds the table for the debug options
+	 * @return
+	 */
+	private Table buildOptWinDebug()
+	{
+		Table tbl = new Table();
+		
+		// + Title: "Debug"
+		tbl.pad(10, 10, 0, 10);
+		tbl.add(new Label("Debug", skinLibgdx, "default-font", Color.RED)).colspan(3);
+		tbl.row();
+		tbl.columnDefaults(0).padRight(10);
+		tbl.columnDefaults(1).padRight(10);
+		
+		// + Checkbox, "Show FPS Counter" label
+		chkShowFpsCounter = new CheckBox("", skinLibgdx);
+		tbl.add(new Label("Show FPS Counter", skinLibgdx));
+		tbl.add(chkShowFpsCounter);
+		tbl.row();
+		
+		return tbl;
+	}
+	
+	/**
+	 * Builds a separator and the save/cancel buttons for the option menu
+	 * @return
+	 */
+	private Table buildOptWinButtons()
+	{
+		Table tbl = new Table();
+		// + Separator
+		Label lbl = null;
+		lbl = new Label("", skinLibgdx);
+		lbl.setColor(0.75f, 0.75f, 0.75f, 1);
+		lbl.setStyle(new LabelStyle(lbl.getStyle()));
+		lbl.getStyle().background = skinLibgdx.newDrawable("white");
+		tbl.add(lbl).colspan(2).height(1).width(220).pad(0, 0, 0, 1);
+		tbl.row();
+		lbl = new Label("", skinLibgdx);
+		lbl.setColor(0.5f, 0.5f, 0.5f, 1);
+		lbl.setStyle(new LabelStyle(lbl.getStyle()));
+		lbl.getStyle().background = skinLibgdx.newDrawable("white");
+		tbl.add(lbl).colspan(2).height(1).width(220).pad(0, 1, 5, 0);
+		tbl.row();
+		// + Save Button with event handler
+		btnWinOptSave = new TextButton("Save", skinLibgdx);
+		tbl.add(btnWinOptSave).padRight(30);
+		btnWinOptSave.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				onSaveClicked();
+			}
+		});
+		// + Cancel Button with event handler
+		btnWinOptCancel = new TextButton("Cancel", skinLibgdx);
+		tbl.add(btnWinOptCancel);
+		btnWinOptCancel.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor)
+			{
+				onCancelClicked();
+			}
+		});
+		return tbl;
 	}
 	
 	/**
@@ -108,7 +256,8 @@ public class MenuScreen extends AbstractGameScreen
 	 */
 	public void buildBackground()
 	{		
-		imgBackground = new Sprite(Assets.instance.UIBackground.UIBackground);	
+		imgBackground = new Sprite(Assets.instance.UIBackground.UIBackground);
+		wedge = new Sprite(Assets.instance.UIBackground.wedge);
 	}
 	
 	/**
@@ -121,10 +270,11 @@ public class MenuScreen extends AbstractGameScreen
 
 		//Set the layer to the bottom right
 		layer.right().bottom();
+		layer.padBottom(150f).padRight(150f);
 		
 		// add play button
 		btnMenuPlay = new Button(skinAmareth, "play");
-		layer.add(btnMenuPlay);
+		layer.add(btnMenuPlay).padBottom(100f);
 		
 		//give the play button something to do
 		btnMenuPlay.addListener(new ChangeListener()
@@ -135,7 +285,6 @@ public class MenuScreen extends AbstractGameScreen
 						onPlayClicked();
 					}
 			});
-		
 		layer.row();
 		
 		//add options button
@@ -148,7 +297,7 @@ public class MenuScreen extends AbstractGameScreen
 				@Override
 				public void changed(ChangeEvent event, Actor actor)
 					{
-						//TODO add options
+						onOptionsClicked();
 					}
 			});
 		
@@ -157,14 +306,6 @@ public class MenuScreen extends AbstractGameScreen
 			layer.debug();
 		
 		return layer;
-	}
-	
-	/**
-	 * Handles what happens when the play button is pressed
-	 */
-	protected void onPlayClicked() 
-	{
-		game.setScreen(new GameScreen(game));
 	}
 
 	/**
@@ -177,7 +318,7 @@ public class MenuScreen extends AbstractGameScreen
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		if(appearanceTimeClock < 10)
+		if(appearanceTimeClock < finalTime)
 		{
 			appearanceTimeClock += deltaTime;
 			rebuildStage();
@@ -206,6 +347,7 @@ public class MenuScreen extends AbstractGameScreen
 		//draws the background
 		batch.begin();
 		imgBackground.draw(batch);
+		wedge.draw(batch);
 		batch.end();
 		
 		stage.act(deltaTime);
@@ -235,4 +377,68 @@ public class MenuScreen extends AbstractGameScreen
 	}
 	@Override public void hide() {}
 	@Override public void pause() {}
+	
+	/**
+	 * Calls the save settings method to retain game settings
+	 * then calls the cancel method to exit options menu
+	 */
+	private void onSaveClicked()
+	{
+		saveSettings();
+		onCancelClicked();
+	}
+	
+	/**
+	 * Makes main menu buttons visible and hides options menu
+	 */
+	private void onCancelClicked()
+	{
+		btnMenuPlay.setVisible(true);
+		btnMenuOptions.setVisible(true);
+		winOptions.setVisible(false);
+	}
+	
+	/**
+	 * Handles what happens when the options button is clicked
+	 */
+	private void onOptionsClicked()
+	{
+		loadSettings();
+		btnMenuPlay.setVisible(false);
+		btnMenuOptions.setVisible(false);
+		winOptions.setVisible(true);
+	}
+	
+	/**
+	 * Handles what happens when the play button is pressed
+	 */
+	protected void onPlayClicked() 
+	{
+		game.setScreen(new GameScreen(game));
+	}
+	
+	private void loadSettings()
+	{
+		GamePreferences prefs = GamePreferences.instance;
+		prefs.load();
+		chkSound.setChecked(prefs.sound);
+		sldSound.setValue(prefs.volSound);
+		chkMusic.setChecked(prefs.music);
+		sldMusic.setValue(prefs.volMusic);
+		chkShowFpsCounter.setChecked(prefs.showFpsCounter);
+	}
+	
+	/**
+	 * Saves the current settings to the GamePreferences
+	 */
+	private void saveSettings()
+	{
+		GamePreferences prefs = GamePreferences.instance;
+		prefs.sound = chkSound.isChecked();
+		prefs.volSound = sldSound.getValue();
+		prefs.music = chkMusic.isChecked();
+		prefs.volMusic = sldMusic.getValue();
+		prefs.showFpsCounter = chkShowFpsCounter.isChecked();
+		prefs.save();
+	}
 }
