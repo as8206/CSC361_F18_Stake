@@ -3,6 +3,7 @@ package com.mygdx.game;
 import java.io.File;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
@@ -23,12 +24,14 @@ public class WorldController extends InputAdapter implements ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
 	private static final int roomArrayOffset = (Constants.MAXROOMS - 1) /2;
+	private WorldRenderer worldRenderer;
+	private Game game;
 	
 	public CameraHelper cameraHelper;
 	public static World b2dWorld;
 	public Room activeRoom;
 	private AbstractGameObject touchedObject;
-	public boolean enemiesDisabled;
+	public boolean debugEnabled;
 	private Room[][] rooms;
 	private Array<String> randomizedRooms;
 	private Array<Body> bodiesToBeRemoved;
@@ -39,6 +42,12 @@ public class WorldController extends InputAdapter implements ContactListener
 	
 	public WorldController()
 	{
+		init();
+	}
+	
+	public WorldController (Game game)
+	{
+		this.game = game;
 		init();
 	}
 	
@@ -59,6 +68,11 @@ public class WorldController extends InputAdapter implements ContactListener
 		initLevel();
 		
 		cameraHelper.setTarget(activeRoom.player);
+	}
+	
+	public void setWorldRenderer(WorldRenderer wr)
+	{
+		worldRenderer = wr;
 	}
 	
 	/**
@@ -206,17 +220,17 @@ public class WorldController extends InputAdapter implements ContactListener
 		//disable enemies and speeds up player for easier debugging
 		if(Gdx.input.isKeyJustPressed(Keys.B)) //TODO remove this
 		{
-			if(enemiesDisabled)
+			if(debugEnabled)
 			{
-				enemiesDisabled = false;
+				debugEnabled = false;
 				activeRoom.player.movementSpeed = 3.0f;
-				System.out.println("Enemies Re-enabled");
+				worldRenderer.prepText("Debug Disabled");
 			}
 			else
 			{
-				enemiesDisabled = true;
+				debugEnabled = true;
 				activeRoom.player.movementSpeed = 7.0f;
-				System.out.println("Enemies Disabled");
+				worldRenderer.prepText("Debug Enabled");
 			}
 		}
 	}

@@ -20,7 +20,12 @@ public class DesktopLauncher
 			 settings.maxHeight = 1024;
 			 settings.duplicatePadding = true;
 			 settings.debug = drawDebugOutline;
+			 
+			 //Builds game atlas
 			 TexturePacker.process(settings, "assets-raw/images","../core/assets","amareth.atlas");
+			 
+			 //Builds UI atlas
+			 TexturePacker.process(settings, "assets-raw/images-ui","../core/assets/ui","amareth-ui.atlas");
 		 }
 	 		LwjglApplicationConfiguration cfg = new
 	 		LwjglApplicationConfiguration();
