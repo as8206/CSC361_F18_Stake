@@ -294,7 +294,7 @@ public class Room
 				//tile broken texture 1
 				else if(BLOCK_TYPE.GBROKEN1.sameColor(currentPixel))
 				{
-					spr = new Sprite(Assets.instance.floor.floor);
+					spr = new Sprite(Assets.instance.floorBig.floorBig); //TODO change back to floor
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
 					spr.setPosition(pixelX - Constants.OFFSET + roomOffsetX, -pixelY - Constants.OFFSET + roomOffsetY); 
 					spr.setSize(1, 1);
@@ -511,7 +511,7 @@ public class Room
 	
 	public void update(float deltaTime)
 	{
-		if(!worldController.debugDisabled)
+		if(!worldController.debugEnabled)
 		{
 			//update ranged enemies
 			for(EnemyRanged enemy : rangedEnemies)

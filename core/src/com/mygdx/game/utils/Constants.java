@@ -1,5 +1,7 @@
 package com.mygdx.game.utils;
 
+import com.badlogic.gdx.Gdx;
+
 public class Constants 
 {
 
@@ -17,8 +19,17 @@ public class Constants
 	//Location of description file for the texture atlas
 	public static final String TEXTURE_ATLAS_OBJECTS =  "../core/assets/amareth.atlas";
 	
+	//Location of the amareth json file
+	public static final String SKIN_AMARETH_UI = "../core/assets/ui/amarethUI.json";
+	
+	//Location of the description file for the ui atlas
+	public static final String TEXTURE_ATLAS_UI = "../core/assets/ui/amareth-ui.atlas";
+	
+	//Location of the UI json file
+	public static final String SKIN_LIBGDX_UI = "../core/assets/ui/uiskin.json";
+	
 	//Location of level 1
-	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png";
+	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png"; //TODO change to real spawn room
 	
 	//Location of level 2
 	public static final String LEVEL_02 = "../core/assets/levels/temp/level02.png";
@@ -44,4 +55,7 @@ public class Constants
 
 	//Base starting health for the player
 	public static final float STARTINGHEALTH = 100;
+	
+	//Holds the game settings
+	public static final String SETTINGS = "../core/assets/gameSettings.txt";
 }
