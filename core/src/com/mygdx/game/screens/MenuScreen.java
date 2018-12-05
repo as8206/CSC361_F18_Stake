@@ -270,7 +270,7 @@ public class MenuScreen extends AbstractGameScreen
 
 		//Set the layer to the bottom right
 		layer.right().bottom();
-		layer.padBottom(150f).padRight(150f);
+		layer.padBottom(150f).padRight(125f);
 		
 		// add play button
 		btnMenuPlay = new Button(skinAmareth, "play");
