@@ -63,16 +63,16 @@ public class Constants
 	public static final float ATTACKMAX = 12;
 	
 	//Base attack velocity
-	public static final float ATTACKSPEED = 1;
+	public static final float ATTACKSPEED = 5;
 	
 	//Base attack sensor body radius
-	public static final float ATTACKSIZE = 1;
+	public static final float ATTACKSIZE = .25f;
 	
 	//Holds the game settings
 	public static final String SETTINGS = "../core/assets/gameSettings.txt";
 
 	//Center screen locations
-	public static final float CENTERX = 900;
+	public static final float CENTERX = 800;
 	public static final float CENTERY = 480;
 
 }

@@ -1,5 +1,7 @@
 package com.mygdx.game.attacks;
 
+import java.sql.Date;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,6 +22,7 @@ public class Attack extends AbstractGameObject
 	private float rotation;
 	private float tarX;
 	private float tarY;
+	private Vector2 target;
 	
 	/**
 	 * Creates the attack object
@@ -37,6 +40,8 @@ public class Attack extends AbstractGameObject
 		super(data.reg);
 		tarX = targetX - Constants.CENTERX;
 		tarY = targetY - Constants.CENTERY;
+		tarY *= -1;
+		this.data = data;
 		
 //		damageMax = max;
 //		damageMin = min;
@@ -62,19 +67,19 @@ public class Attack extends AbstractGameObject
 		circle.dispose();
 		
 		rotation = findRotation();
-		//TODO find and set velocity and direction
+		target = findTarget();
+		
 		body.setTransform(attacker.body.getPosition(), 1);
 		
-		Vector2 target = findTargetVector();
-		
-		body.setLinearVelocity(1, 1);
+		body.setLinearVelocity(target);
 	}
 	
-	private Vector2 findTargetVector()
+private Vector2 findTarget() 
 	{
-		float moveX = MathUtils.clamp(posX - body.getPosition().x, -movementSpeed, movementSpeed);
-		float moveY = MathUtils.clamp(posY - body.getPosition().y, -movementSpeed, movementSpeed);
-		return null;
+		Vector2 tempVector = new Vector2(1,1);
+		tempVector.setLength(data.velocity);
+		tempVector.setAngle(rotation + 90);
+		return tempVector;
 	}
 
 	@Override
@@ -85,15 +90,41 @@ public class Attack extends AbstractGameObject
 	
 	public float findRotation()
 	{
-//		if(tarX > 0)
-//		{
-//			rotation = (float) Math.atan((tarY/tarX));
-//		}
-//		else if(tarX < 0)
-//		{
-//			rotation = 
-//		}
+		//conditionals for all quadrants and axis
+		if(tarX > 0 && tarY > 0)
+		{
+			rotation = (float) Math.atan((tarY/tarX));
+			rotation = (float) ((rotation*180)/Math.PI);
+		}
+		else if(tarX < 0 && tarY > 0)
+		{
+			rotation = (float) Math.atan((tarY/tarX));
+			rotation = (float) ((rotation*180)/Math.PI);
+			rotation = 180 - Math.abs(rotation);
+		}
+		else if(tarX < 0 && tarY < 0)
+		{
+			rotation = (float) Math.atan((tarY/tarX));
+			rotation = (float) ((rotation*180)/Math.PI);
+			rotation = 180 + Math.abs(rotation);
+		}
+		else if(tarX > 0 && tarY < 0)
+		{
+			rotation = (float) Math.atan((tarY/tarX));
+			rotation = (float) ((rotation*180)/Math.PI);
+			rotation = 90 - Math.abs(rotation);
+			rotation = 270 + rotation;
+		}
+		else if(tarX > 0 && tarY == 0)
+			rotation = 0;
+		else if(tarX == 0 && tarY > 0)
+			rotation = 90;
+		else if(tarX < 0 && tarY == 0)
+			rotation =  180;
+		else if(tarX == 0 && tarY < 0)
+			rotation = 270;
 		
-		return 0f;
+		System.out.println("rotation: " + rotation + " drawRotation: " + (rotation-90) + " X: " + tarX + " Y: " + tarY);
+		return (rotation - 90);
 	}
 }

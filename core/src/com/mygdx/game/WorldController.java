@@ -185,9 +185,9 @@ public class WorldController extends InputAdapter implements ContactListener
 		{
 			System.out.println("x position: " + Gdx.input.getX());
 			System.out.println("y position: " + Gdx.input.getY());
-			activeRoom.usePlayerAttack(1, 0, 0);
+			activeRoom.usePlayerAttack(1, Gdx.input.getX(), Gdx.input.getY());
 		}
-		
+		//TODO add other attacks
 	}
 
 	/**
