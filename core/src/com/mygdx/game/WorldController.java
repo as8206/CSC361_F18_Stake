@@ -5,6 +5,7 @@ import java.io.File;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -177,6 +178,14 @@ public class WorldController extends InputAdapter implements ContactListener
 			{
 				touchedObject.activate();
 			}
+		}
+		
+		//attack input
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+		{
+			System.out.println("x position: " + Gdx.input.getX());
+			System.out.println("y position: " + Gdx.input.getY());
+			activeRoom.usePlayerAttack(1, 0, 0);
 		}
 		
 	}

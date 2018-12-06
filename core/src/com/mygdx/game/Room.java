@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.objects.Character;
 import com.mygdx.game.utils.Constants;
@@ -76,6 +77,7 @@ public class Room
 	public Array<EnemyRanged> rangedEnemies;
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
+	public Array<Attack> attacks;
 	
 	//non-interactable textures
 	public Array<Sprite> grounds;
@@ -102,6 +104,7 @@ public class Room
 		coins = new Array<GoldCoin>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
+		attacks = new Array<Attack>();
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
@@ -507,6 +510,9 @@ public class Room
 			enemy.render(batch);
 		
 		player.render(batch);
+		
+		for(Attack attack : attacks)
+			attack.render(batch);
 	}
 	
 	public void update(float deltaTime)
@@ -545,4 +551,15 @@ public class Room
 		}
 	}
 	
+	public void usePlayerAttack(int attackType, float targetX, float targetY)
+	{
+		Attack tempAttack = null;
+		
+		if(attackType == 1)
+		{
+			tempAttack = new Attack(player.attack1, targetX, targetY, player);
+		}
+		
+		attacks.add(tempAttack);
+	}
 }

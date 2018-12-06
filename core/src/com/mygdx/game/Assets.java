@@ -53,6 +53,7 @@ public static final String TAG = Assets.class.getName();
 	public assetFonts fonts;
 	public assetHealthBar healthBar;
 	public assetUIBackground UIBackground;
+	public assetAttacks attacks;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
@@ -98,6 +99,7 @@ public static final String TAG = Assets.class.getName();
 		fonts = new assetFonts();
 		healthBar = new assetHealthBar();
 		UIBackground = new assetUIBackground();
+		attacks = new assetAttacks(atlas);
 
 	}
 	
@@ -364,5 +366,15 @@ public static final String TAG = Assets.class.getName();
 			wedge = new Texture("../desktop/assets-raw/MenuBackground/MenuWedge.png");
 		}
 		
+	}
+	
+	public class assetAttacks
+	{
+		public final AtlasRegion attack1;
+		
+		public assetAttacks(TextureAtlas atlas)
+		{
+			attack1 = atlas.findRegion("attack1");
+		}
 	}
 }

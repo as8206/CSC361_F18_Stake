@@ -7,7 +7,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.attacks.Attack;
+import com.mygdx.game.attacks.AttackData;
 import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
@@ -16,6 +19,8 @@ public class Character extends AbstractGameObject
 	
 	public float curHealth;
 	public float totalHealth;
+	
+	public AttackData attack1, attack2, attackUlt;
 	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
@@ -46,6 +51,8 @@ public class Character extends AbstractGameObject
 		
 		curHealth = Constants.STARTINGHEALTH;
 		totalHealth = curHealth;
+		
+		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE);
 	}
 	
 	@Override
@@ -60,5 +67,4 @@ public class Character extends AbstractGameObject
 			reg.flip(true, false);
 		}
 	}
-
 }
