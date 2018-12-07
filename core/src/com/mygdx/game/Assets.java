@@ -10,10 +10,12 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 //import com.mygdx.game.Assets.AssetFonts;
 import com.mygdx.game.utils.Constants;
@@ -260,10 +262,14 @@ public static final String TAG = Assets.class.getName();
 	public class assetCharacter
 	{
 		public final AtlasRegion character;
+		public final Animation animCharacter;
 		
 		public assetCharacter (TextureAtlas atlas)
 		{
 			character = atlas.findRegion("wizard1");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("wizardWalk");
+			animCharacter = new Animation<AtlasRegion>(1f / 20f, regions);
 		}
 	}
 	
