@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.objects.Character;
 import com.mygdx.game.utils.Constants;
@@ -76,12 +77,18 @@ public class Room
 	public Array<EnemyRanged> rangedEnemies;
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
+	public Array<Attack> attacks;
 	
 	//non-interactable textures
 	public Array<Sprite> grounds;
 	
 	//reference to worldController
 	WorldController worldController;
+	
+	//removal arrays
+	public Array<GoldCoin> coinsToBeRemoved;
+	public Array<Attack> attacksToBeRemoved;
+	public Array<Enemy> enemiesToBeRemoved;
 	
 	public Room (String filename, WorldController wc, int offX, int offY)
 	{
@@ -102,9 +109,15 @@ public class Room
 		coins = new Array<GoldCoin>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
+		attacks = new Array<Attack>();
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
+		
+		//removal arrays
+		coinsToBeRemoved = new Array<GoldCoin>();
+		attacksToBeRemoved = new Array<Attack>();
+		enemiesToBeRemoved = new Array<Enemy>();
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -507,6 +520,9 @@ public class Room
 			enemy.render(batch);
 		
 		player.render(batch);
+		
+		for(Attack attack : attacks)
+			attack.render(batch);
 	}
 	
 	public void update(float deltaTime)
@@ -521,6 +537,8 @@ public class Room
 			for(EnemyMelee enemy : meleeEnemies)
 				enemy.update(deltaTime);
 		}
+		
+		player.update(deltaTime);
 	}
 	
 	public void setPlayer(Character player)
@@ -536,13 +554,66 @@ public class Room
 			enemy.setTarget(player);
 	}
 	
-	public void removeCoin(GoldCoin grabbedCoin)
+	public void activateRemoval()
 	{
-		for(GoldCoin coin : coins)
+		for(GoldCoin grabbedCoin : coinsToBeRemoved)
 		{
-			if(coin == grabbedCoin)
-				coins.removeValue(grabbedCoin, false);
+			for(GoldCoin coin : coins)
+			{
+				if(coin == grabbedCoin)
+					coins.removeValue(grabbedCoin, false);
+			}
+			coinsToBeRemoved.removeValue(grabbedCoin, false);
+		}
+		
+		for(Attack attackHit : attacksToBeRemoved)
+		{
+			for(Attack attack : attacks)
+			{
+				if(attack == attackHit)
+					attacks.removeValue(attackHit, false);
+			}
+			attacksToBeRemoved.removeValue(attackHit, false);
+		}
+		
+		for(Enemy enemyDead : enemiesToBeRemoved)
+		{
+			for(EnemyRanged er : rangedEnemies)
+				if(enemyDead == er)
+					rangedEnemies.removeValue(er, false);
+			for(EnemyMelee em : meleeEnemies)
+				if(enemyDead == em)
+					meleeEnemies.removeValue(em, false);
+			enemiesToBeRemoved.removeValue(enemyDead, false);
 		}
 	}
 	
+	public void removeCoin(GoldCoin grabbedCoin)
+	{
+		coinsToBeRemoved.add(grabbedCoin);
+	}
+	
+	public void removeAttack(Attack attackHit)
+	{
+		attacksToBeRemoved.add(attackHit);
+	}
+	
+	public void usePlayerAttack(int attackType, float targetX, float targetY)
+	{
+		Attack tempAttack = null;
+		
+		if(attackType == 1 && player.cooldown1 == 0)
+		{
+			tempAttack = new Attack(player.attack1, targetX, targetY, player);
+			player.cooldown1 = player.attack1.cooldown;
+		}
+		if(tempAttack != null)
+			attacks.add(tempAttack);
+	}
+
+	public void removeEnemy(Enemy enemy) 
+	{
+		enemiesToBeRemoved.add(enemy);
+		worldController.addToRemoval(enemy.body);
+	}
 }

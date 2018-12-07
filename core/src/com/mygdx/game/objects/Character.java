@@ -5,9 +5,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.attacks.Attack;
+import com.mygdx.game.attacks.AttackData;
 import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
@@ -16,6 +20,9 @@ public class Character extends AbstractGameObject
 	
 	public float curHealth;
 	public float totalHealth;
+	
+	public AttackData attack1, attack2, attackUlt;
+	public float cooldown1, cooldown2, cooldownUlt;
 	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
@@ -40,12 +47,25 @@ public class Character extends AbstractGameObject
 		
 		box.dispose();
 		
+		PolygonShape hitBox = new PolygonShape();
+		hitBox.setAsBox(.5f, .75f, new Vector2(0,.3f), 0);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = hitBox;
+		fixtureDef.isSensor = true;
+		
+		tempBody.createFixture(fixtureDef);
+		
+		hitBox.dispose();
+		
 		body = tempBody;
 		
 		body.setUserData(this);
 		
 		curHealth = Constants.STARTINGHEALTH;
 		totalHealth = curHealth;
+		
+		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE, Constants.COOLDOWN);
 	}
 	
 	@Override
@@ -60,5 +80,32 @@ public class Character extends AbstractGameObject
 			reg.flip(true, false);
 		}
 	}
+	
+	@Override
+	public void update(float deltaTime)
+	{
+		checkCooldowns(deltaTime);
+	}
 
+	/**
+	 * Checks the cooldowns for attacks and resets them if needed
+	 * @param deltaTime
+	 */
+	private void checkCooldowns(float deltaTime) 
+	{
+		if(cooldown1 > 0)
+			cooldown1 -= deltaTime;
+		if(cooldown1 < 0)
+			cooldown1 = 0;
+		
+		if(cooldown2 > 0)
+			cooldown2 -= deltaTime;
+		if(cooldown2 < 0)
+			cooldown2 = 0;
+
+		if(cooldownUlt > 0)
+			cooldownUlt -= deltaTime;
+		if(cooldownUlt < 0)
+			cooldownUlt = 0;		
+	}
 }

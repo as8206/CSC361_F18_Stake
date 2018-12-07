@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -24,6 +25,9 @@ public abstract class Enemy extends AbstractGameObject
 	
 	//Level the enemy is a part of
 	Room level;
+	
+	public float curHealth;
+	public float totalHealth;
 	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
@@ -48,10 +52,24 @@ public abstract class Enemy extends AbstractGameObject
 		
 		box.dispose();
 		
+		PolygonShape hitBox = new PolygonShape();
+		hitBox.setAsBox(.5f, .75f, new Vector2(0,.3f), 0);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = hitBox;
+		fixtureDef.isSensor = true;
+		
+		tempBody.createFixture(fixtureDef);
+		
+		hitBox.dispose();
+		
 		body = tempBody;
 		body.setUserData(this);
 		
 		this.level = level;
+		
+		curHealth = Constants.ENEMYHEALTH;
+		totalHealth = curHealth;
 	}
 	
 	@Override
@@ -73,6 +91,7 @@ public abstract class Enemy extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		move(deltaTime);
+		checkDeath();
 	}
 	
 	/**
@@ -117,6 +136,23 @@ public abstract class Enemy extends AbstractGameObject
 	public void setTarget(Character target)
 	{
 		this.target = target;
+	}
+	
+	/**
+	 * Removes health if hit
+	 * @param damage
+	 */
+	public void takeHit(float damage)
+	{
+		curHealth-=damage;
+	}
+	
+	public void checkDeath()
+	{
+		if(curHealth <= 0)
+		{
+			level.removeEnemy(this);
+		}
 	}
 
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.MenuScreen;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
@@ -23,6 +24,7 @@ public class MyGdxGame extends Game
 		// Load assets
 		Assets.instance.init(new AssetManager());
 		// Start game at menu screen
-		setScreen(new MenuScreen(this));
+//		setScreen(new MenuScreen(this));
+		setScreen(new GameScreen(this));
 	}
 }
