@@ -371,10 +371,12 @@ public static final String TAG = Assets.class.getName();
 	public class assetAttacks
 	{
 		public final AtlasRegion attack1;
+		public final AtlasRegion arrow;
 		
 		public assetAttacks(TextureAtlas atlas)
 		{
 			attack1 = atlas.findRegion("attack1");
+			arrow = atlas.findRegion("arrow");
 		}
 	}
 }

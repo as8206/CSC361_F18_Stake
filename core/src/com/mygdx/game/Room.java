@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.attacks.Attack;
+import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.objects.Character;
 import com.mygdx.game.utils.Constants;
@@ -78,6 +79,7 @@ public class Room
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
 	public Array<Attack> attacks;
+	public Array<AttackEnemy> enemyAttacks;
 	
 	//non-interactable textures
 	public Array<Sprite> grounds;
@@ -110,6 +112,7 @@ public class Room
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
 		attacks = new Array<Attack>();
+		enemyAttacks = new Array<AttackEnemy>();
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
@@ -523,6 +526,9 @@ public class Room
 		
 		for(Attack attack : attacks)
 			attack.render(batch);
+	
+		for(AttackEnemy enemyAttack : enemyAttacks)
+			enemyAttack.render(batch);
 	}
 	
 	public void update(float deltaTime)
@@ -615,5 +621,10 @@ public class Room
 	{
 		enemiesToBeRemoved.add(enemy);
 		worldController.addToRemoval(enemy.body);
+	}
+
+	public void addEnemyAttack(AttackEnemy attackEnemy) 
+	{
+		enemyAttacks.add(attackEnemy);		
 	}
 }
