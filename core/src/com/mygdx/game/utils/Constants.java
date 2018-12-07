@@ -80,5 +80,13 @@ public class Constants
 	
 	//Enemy Base health
 	public static final float ENEMYHEALTH = 30;
+	
+	//Enemy Base Melee damage and cooldown
+	public static final float MELEEDAMAGE = 15;
+	public static final float MELEECOOLDOWN = 1;
+	
+	//Enemy Base Ranged damage and cooldown
+	public static final float RANGEDDAMAGE = 8;
+	public static final float RANGEDCOOLDOWN = 1;
 
 }

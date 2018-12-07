@@ -108,4 +108,11 @@ public class Character extends AbstractGameObject
 		if(cooldownUlt < 0)
 			cooldownUlt = 0;		
 	}
+
+	public void takeHit(float damage) 
+	{
+		curHealth -= damage;
+		if(curHealth < 0)
+			curHealth = 0;
+	}
 }
