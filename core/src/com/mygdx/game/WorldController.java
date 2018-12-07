@@ -386,8 +386,8 @@ public class WorldController extends InputAdapter implements ContactListener
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			
-//			activeRoom.removeAttack((Attack) contact.getFixtureA().getBody().getUserData());
-//			addToRemoval(contact.getFixtureA().getBody());
+			activeRoom.removeEnemyAttack((AttackEnemy) contact.getFixtureA().getBody().getUserData());
+			addToRemoval(contact.getFixtureA().getBody());
 		}
 		else if(contact.getFixtureB().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureA().isSensor())
 		{
@@ -400,8 +400,8 @@ public class WorldController extends InputAdapter implements ContactListener
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			
-//			activeRoom.removeAttack((Attack) contact.getFixtureB().getBody().getUserData());
-//			addToRemoval(contact.getFixtureB().getBody());
+			activeRoom.removeEnemyAttack((AttackEnemy) contact.getFixtureB().getBody().getUserData());
+			addToRemoval(contact.getFixtureB().getBody());
 		}
 
 	}

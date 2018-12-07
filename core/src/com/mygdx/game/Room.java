@@ -91,6 +91,7 @@ public class Room
 	public Array<GoldCoin> coinsToBeRemoved;
 	public Array<Attack> attacksToBeRemoved;
 	public Array<Enemy> enemiesToBeRemoved;
+	public Array<AttackEnemy> enemyAttacksToBeRemoved;
 	
 	public Room (String filename, WorldController wc, int offX, int offY)
 	{
@@ -121,6 +122,7 @@ public class Room
 		coinsToBeRemoved = new Array<GoldCoin>();
 		attacksToBeRemoved = new Array<Attack>();
 		enemiesToBeRemoved = new Array<Enemy>();
+		enemyAttacksToBeRemoved = new Array<AttackEnemy>();
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -592,6 +594,16 @@ public class Room
 					meleeEnemies.removeValue(em, false);
 			enemiesToBeRemoved.removeValue(enemyDead, false);
 		}
+		
+		for(AttackEnemy attackHit : enemyAttacksToBeRemoved)
+		{
+			for(AttackEnemy attack : enemyAttacks)
+			{
+				if(attack == attackHit)
+					enemyAttacks.removeValue(attackHit, false);
+			}
+			enemyAttacksToBeRemoved.removeValue(attackHit, false);
+		}
 	}
 	
 	public void removeCoin(GoldCoin grabbedCoin)
@@ -626,5 +638,10 @@ public class Room
 	public void addEnemyAttack(AttackEnemy attackEnemy) 
 	{
 		enemyAttacks.add(attackEnemy);		
+	}
+	
+	public void removeEnemyAttack(AttackEnemy attackEnemy)
+	{
+		enemyAttacksToBeRemoved.add(attackEnemy);
 	}
 }
