@@ -2,6 +2,8 @@ package com.mygdx.game.attacks;
 
 import java.sql.Date;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -23,6 +25,7 @@ public class Attack extends AbstractGameObject
 	private float tarX;
 	private float tarY;
 	private Vector2 target;
+	private ParticleEffect particleEffect;
 	
 	/**
 	 * Creates the attack object
@@ -66,6 +69,17 @@ public class Attack extends AbstractGameObject
 		body.setTransform(attacker.body.getPosition(), 1);
 		
 		body.setLinearVelocity(target);
+		
+		particleEffect = new ParticleEffect();
+		particleEffect.load(Gdx.files.internal(data.effectLocation), Gdx.files.internal(data.particleLocation));
+	}
+	
+	@Override
+	public void update(float deltaTime)
+	{
+		particleEffect.setPosition(body.getPosition().x, body.getPosition().y);
+		particleEffect.start();
+		particleEffect.update(deltaTime);
 	}
 	
 	/**
@@ -84,6 +98,7 @@ public class Attack extends AbstractGameObject
 	public void render(SpriteBatch batch)
 	{
 		batch.draw(reg, body.getPosition().x - Constants.OFFSET, body.getPosition().y - Constants.OFFSET, 0.5f, 0.5f, 1, 1, 1, 1, rotation, false);
+		particleEffect.draw(batch);
 	}
 	
 	/**
