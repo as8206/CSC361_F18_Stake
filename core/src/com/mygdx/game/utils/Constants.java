@@ -85,8 +85,10 @@ public class Constants
 	public static final float MELEEDAMAGE = 15;
 	public static final float MELEECOOLDOWN = 1;
 	
-	//Enemy Base Ranged damage and cooldown
+	//Enemy Base Ranged damage, range, speed, and cooldown
 	public static final float RANGEDDAMAGE = 8;
+	public static final float RANGEDRANGE = 5;
 	public static final float RANGEDCOOLDOWN = 1;
+	public static final float RANGEDSPEED = 10;
 
 }

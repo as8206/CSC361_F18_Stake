@@ -23,15 +23,10 @@ public class Attack extends AbstractGameObject
 	private float tarX;
 	private float tarY;
 	private Vector2 target;
-	public Class<?> attacker;
 	
 	/**
 	 * Creates the attack object
-	 * @param img
-	 * @param max
-	 * @param min
-	 * @param speed
-	 * @param radius
+	 * @param data
 	 * @param targetX
 	 * @param targetY
 	 * @param attacker
@@ -39,6 +34,8 @@ public class Attack extends AbstractGameObject
 	public Attack(AttackData data, float targetX, float targetY, Character attacker)
 	{
 		super(data.reg);
+		body.getWorld().destroyBody(body);
+		
 		tarX = targetX - Constants.CENTERX;
 		tarY = targetY - Constants.CENTERY;
 		tarY *= -1;
@@ -69,10 +66,12 @@ public class Attack extends AbstractGameObject
 		body.setTransform(attacker.body.getPosition(), 1);
 		
 		body.setLinearVelocity(target);
-		
-		this.attacker = attacker.getClass();
 	}
 	
+	/**
+	 * Finds the velocity vector for the projectile
+	 * @return
+	 */
 	private Vector2 findTarget() 
 	{
 		Vector2 tempVector = new Vector2(1,1);
@@ -87,6 +86,10 @@ public class Attack extends AbstractGameObject
 		batch.draw(reg, body.getPosition().x - Constants.OFFSET, body.getPosition().y - Constants.OFFSET, 0.5f, 0.5f, 1, 1, 1, 1, rotation, false);
 	}
 	
+	/**
+	 * Finds the angle of rotation for the projectile
+	 * @return
+	 */
 	private float findRotation()
 	{
 		//conditionals for all quadrants and axis

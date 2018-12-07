@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.attacks.Attack;
+import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
@@ -319,7 +320,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		//collisions for player attacks
 		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player || contact.getFixtureB().getBody().getUserData() == activeRoom.player)
 		{
-			
+			//Do nothing
 		}
 		else if(contact.getFixtureA().getBody().getUserData().getClass() == Attack.class && !contact.getFixtureB().isSensor())
 		{
@@ -368,6 +369,41 @@ public class WorldController extends InputAdapter implements ContactListener
 			enemy.touchingTarget = true;
 		}
 		
+		//collisions for enemy attacks
+		if(contact.getFixtureA().getBody().getUserData().getClass() == EnemyRanged.class || contact.getFixtureB().getBody().getUserData().getClass() == EnemyRanged.class || 
+				contact.getFixtureA().getBody().getUserData().getClass() == EnemyMelee.class || contact.getFixtureB().getBody().getUserData().getClass() == EnemyMelee.class)
+		{
+			//Do nothing
+		}
+		else if(contact.getFixtureA().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureB().isSensor())
+		{
+			System.out.println("attack collision detected");
+			AttackEnemy attack = (AttackEnemy) contact.getFixtureA().getBody().getUserData();
+			
+			if(contact.getFixtureB().getBody().getUserData() == activeRoom.player)
+			{
+				System.out.println("Player hit");
+				activeRoom.player.takeHit(attack.genDamage());
+			}
+			
+			activeRoom.removeEnemyAttack((AttackEnemy) contact.getFixtureA().getBody().getUserData());
+			addToRemoval(contact.getFixtureA().getBody());
+		}
+		else if(contact.getFixtureB().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureA().isSensor())
+		{
+			System.out.println("attack collision detected");
+			AttackEnemy attack = (AttackEnemy) contact.getFixtureB().getBody().getUserData();
+
+			if(contact.getFixtureA().getBody().getUserData() == activeRoom.player)
+			{
+				System.out.println("Player hit");
+				activeRoom.player.takeHit(attack.genDamage());
+			}
+			
+			activeRoom.removeEnemyAttack((AttackEnemy) contact.getFixtureB().getBody().getUserData());
+			addToRemoval(contact.getFixtureB().getBody());
+		}
+
 	}
 
 	@Override
