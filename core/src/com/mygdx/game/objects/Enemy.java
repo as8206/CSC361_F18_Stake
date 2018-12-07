@@ -1,7 +1,9 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -33,8 +35,15 @@ public abstract class Enemy extends AbstractGameObject
 	protected float damage;
 	protected float cooldown;
 	
+	//Animation
+	public float stateTime;
+	public Animation<TextureRegion> animation;
+	protected Animation<AtlasRegion> walkingAnim;
+	protected TextureRegion drawnReg;
+	protected boolean standingStill;
+	
 	/**
-	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
+	 * Creates the object for the enemy, and changes abstract constructed static body to a dynamic body.
 	 * @param img
 	 */
 	public Enemy(TextureRegion img, Room level)
@@ -81,15 +90,20 @@ public abstract class Enemy extends AbstractGameObject
 	@Override
 	public void render (SpriteBatch batch)
 	{
+		if(!standingStill)
+		{
+			drawnReg = animation.getKeyFrame(stateTime, true);
+		}
+		
 		if(!mirrored)
 		{
-			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			batch.draw(drawnReg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
 		}
 		else
 		{
-			reg.flip(true, false); //TODO refactor this same as in character
-			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
-			reg.flip(true, false);
+			drawnReg.flip(true, false); //TODO refactor this same as in character
+			batch.draw(drawnReg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			drawnReg.flip(true, false);
 		}
 	}
 	
@@ -108,6 +122,18 @@ public abstract class Enemy extends AbstractGameObject
 		}
 		if(cooldown == 0 && touchingTarget)
 			performAttack();
+		
+		stateTime += deltaTime;
+		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0 && standingStill == false)
+		{
+			drawnReg = reg;
+			standingStill = true;
+		}
+		else if((body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0) && standingStill == true)
+		{
+			setAnimation(walkingAnim);
+			standingStill = false;
+		}
 		
 		checkDeath();
 	}
@@ -174,5 +200,11 @@ public abstract class Enemy extends AbstractGameObject
 	}
 
 	public abstract void performAttack();
+	
+	public void setAnimation(Animation animation)
+	{
+		this.animation = animation;
+		stateTime = 0;
+	}
 
 }
