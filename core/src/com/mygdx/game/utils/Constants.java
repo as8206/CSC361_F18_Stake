@@ -68,11 +68,17 @@ public class Constants
 	//Base attack sensor body radius
 	public static final float ATTACKSIZE = .25f;
 	
+	//cooldown time for attack 1, in seconds
+	public static final float COOLDOWN = .3f;
+	
 	//Holds the game settings
 	public static final String SETTINGS = "../core/assets/gameSettings.txt";
 
 	//Center screen locations
 	public static final float CENTERX = 800;
 	public static final float CENTERY = 480;
+	
+	//Enemy Base health
+	public static final float ENEMYHEALTH = 30;
 
 }

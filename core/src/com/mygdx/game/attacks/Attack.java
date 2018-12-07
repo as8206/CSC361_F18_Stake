@@ -23,6 +23,7 @@ public class Attack extends AbstractGameObject
 	private float tarX;
 	private float tarY;
 	private Vector2 target;
+	public Class<?> attacker;
 	
 	/**
 	 * Creates the attack object
@@ -43,12 +44,8 @@ public class Attack extends AbstractGameObject
 		tarY *= -1;
 		this.data = data;
 		
-//		damageMax = max;
-//		damageMin = min;
-//		velocity = speed;
-		
 		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.KinematicBody;
+		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(0, 0));
 		
 		body = WorldController.b2dWorld.createBody(bodyDef);
@@ -72,9 +69,11 @@ public class Attack extends AbstractGameObject
 		body.setTransform(attacker.body.getPosition(), 1);
 		
 		body.setLinearVelocity(target);
+		
+		this.attacker = attacker.getClass();
 	}
 	
-private Vector2 findTarget() 
+	private Vector2 findTarget() 
 	{
 		Vector2 tempVector = new Vector2(1,1);
 		tempVector.setLength(data.velocity);
@@ -88,7 +87,7 @@ private Vector2 findTarget()
 		batch.draw(reg, body.getPosition().x - Constants.OFFSET, body.getPosition().y - Constants.OFFSET, 0.5f, 0.5f, 1, 1, 1, 1, rotation, false);
 	}
 	
-	public float findRotation()
+	private float findRotation()
 	{
 		//conditionals for all quadrants and axis
 		if(tarX > 0 && tarY > 0)
@@ -124,7 +123,11 @@ private Vector2 findTarget()
 		else if(tarX == 0 && tarY < 0)
 			rotation = 270;
 		
-		System.out.println("rotation: " + rotation + " drawRotation: " + (rotation-90) + " X: " + tarX + " Y: " + tarY);
 		return (rotation - 90);
+	}
+
+	public float genDamage() 
+	{
+		return (float) ((Math.random() * (data.damageMax - data.damageMin)) + data.damageMin);
 	}
 }

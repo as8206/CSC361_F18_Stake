@@ -85,6 +85,11 @@ public class Room
 	//reference to worldController
 	WorldController worldController;
 	
+	//removal arrays
+	public Array<GoldCoin> coinsToBeRemoved;
+	public Array<Attack> attacksToBeRemoved;
+	public Array<Enemy> enemiesToBeRemoved;
+	
 	public Room (String filename, WorldController wc, int offX, int offY)
 	{
 		worldController = wc;
@@ -108,6 +113,11 @@ public class Room
 		
 		//non-interactable textures
 		grounds = new Array<Sprite>();
+		
+		//removal arrays
+		coinsToBeRemoved = new Array<GoldCoin>();
+		attacksToBeRemoved = new Array<Attack>();
+		enemiesToBeRemoved = new Array<Enemy>();
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -527,6 +537,8 @@ public class Room
 			for(EnemyMelee enemy : meleeEnemies)
 				enemy.update(deltaTime);
 		}
+		
+		player.update(deltaTime);
 	}
 	
 	public void setPlayer(Character player)
@@ -542,24 +554,66 @@ public class Room
 			enemy.setTarget(player);
 	}
 	
+	public void activateRemoval()
+	{
+		for(GoldCoin grabbedCoin : coinsToBeRemoved)
+		{
+			for(GoldCoin coin : coins)
+			{
+				if(coin == grabbedCoin)
+					coins.removeValue(grabbedCoin, false);
+			}
+			coinsToBeRemoved.removeValue(grabbedCoin, false);
+		}
+		
+		for(Attack attackHit : attacksToBeRemoved)
+		{
+			for(Attack attack : attacks)
+			{
+				if(attack == attackHit)
+					attacks.removeValue(attackHit, false);
+			}
+			attacksToBeRemoved.removeValue(attackHit, false);
+		}
+		
+		for(Enemy enemyDead : enemiesToBeRemoved)
+		{
+			for(EnemyRanged er : rangedEnemies)
+				if(enemyDead == er)
+					rangedEnemies.removeValue(er, false);
+			for(EnemyMelee em : meleeEnemies)
+				if(enemyDead == em)
+					meleeEnemies.removeValue(em, false);
+			enemiesToBeRemoved.removeValue(enemyDead, false);
+		}
+	}
+	
 	public void removeCoin(GoldCoin grabbedCoin)
 	{
-		for(GoldCoin coin : coins)
-		{
-			if(coin == grabbedCoin)
-				coins.removeValue(grabbedCoin, false);
-		}
+		coinsToBeRemoved.add(grabbedCoin);
+	}
+	
+	public void removeAttack(Attack attackHit)
+	{
+		attacksToBeRemoved.add(attackHit);
 	}
 	
 	public void usePlayerAttack(int attackType, float targetX, float targetY)
 	{
 		Attack tempAttack = null;
 		
-		if(attackType == 1)
+		if(attackType == 1 && player.cooldown1 == 0)
 		{
 			tempAttack = new Attack(player.attack1, targetX, targetY, player);
+			player.cooldown1 = player.attack1.cooldown;
 		}
-		
-		attacks.add(tempAttack);
+		if(tempAttack != null)
+			attacks.add(tempAttack);
+	}
+
+	public void removeEnemy(Enemy enemy) 
+	{
+		enemiesToBeRemoved.add(enemy);
+		worldController.addToRemoval(enemy.body);
 	}
 }
