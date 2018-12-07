@@ -244,6 +244,7 @@ public static final String TAG = Assets.class.getName();
 	{
 		public final AtlasRegion barbarian;
 		public final Animation<AtlasRegion> animBarbarian;
+		public final Animation<AtlasRegion> animAttack;
 		
 		public assetBarbarian (TextureAtlas atlas)
 		{
@@ -251,6 +252,9 @@ public static final String TAG = Assets.class.getName();
 			
 			Array<AtlasRegion> regions = atlas.findRegions("barbarianWalk");
 			animBarbarian = new Animation<AtlasRegion>(1f / 13f, regions);
+			
+			Array<AtlasRegion> regions2 = atlas.findRegions("barbarianAttack");
+			animAttack = new Animation<AtlasRegion>(1f/13f, regions2, Animation.PlayMode.NORMAL);
 		}
 	}
 	
