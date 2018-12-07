@@ -24,6 +24,10 @@ public class EnemyRanged extends Enemy
 		fixtureDef.isSensor = true;
 		
 		body.createFixture(fixtureDef);
+		
+		walkingAnim = Assets.instance.goblin.animGoblin;
+		drawnReg = reg;
+		standingStill = true;
 	}
 
 	@Override

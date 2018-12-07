@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Disposable;
 //import com.mygdx.game.Assets.AssetFonts;
 import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -242,34 +243,42 @@ public static final String TAG = Assets.class.getName();
 	public class assetBarbarian
 	{
 		public final AtlasRegion barbarian;
+		public final Animation<AtlasRegion> animBarbarian;
 		
 		public assetBarbarian (TextureAtlas atlas)
 		{
 			barbarian = atlas.findRegion("barbarian1");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("barbarianWalk");
+			animBarbarian = new Animation<AtlasRegion>(1f / 13f, regions);
 		}
 	}
 	
 	public class assetGoblin
 	{
 		public final AtlasRegion goblin;
+		public final Animation<AtlasRegion> animGoblin;
 		
 		public assetGoblin (TextureAtlas atlas)
 		{
 			goblin = atlas.findRegion("goblin2");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("goblinWalk");
+			animGoblin = new Animation<AtlasRegion>(1f / 13f, regions);
 		}
 	}
 	
 	public class assetCharacter
 	{
 		public final AtlasRegion character;
-		public final Animation animCharacter;
+		public final Animation<AtlasRegion> animCharacter;
 		
 		public assetCharacter (TextureAtlas atlas)
 		{
 			character = atlas.findRegion("wizard1");
 			
 			Array<AtlasRegion> regions = atlas.findRegions("wizardWalk");
-			animCharacter = new Animation<AtlasRegion>(1f / 20f, regions);
+			animCharacter = new Animation<AtlasRegion>(1f / 13f, regions);
 		}
 	}
 	

@@ -1,6 +1,6 @@
 
 amareth.png
-size: 512,64
+size: 1024,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -20,35 +20,91 @@ attack1
   index: -1
 barbarian1
   rotate: false
-  xy: 81, 2
+  xy: 444, 36
   size: 27, 27
   orig: 27, 27
   offset: 0, 0
   index: -1
+barbarianWalk
+  rotate: false
+  xy: 473, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 1
+barbarianWalk
+  rotate: false
+  xy: 473, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 5
+barbarianWalk
+  rotate: false
+  xy: 502, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 2
+barbarianWalk
+  rotate: false
+  xy: 502, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 4
+barbarianWalk
+  rotate: false
+  xy: 531, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 3
+barbarianWalk
+  rotate: false
+  xy: 560, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 6
+barbarianWalk
+  rotate: false
+  xy: 560, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 8
+barbarianWalk
+  rotate: false
+  xy: 589, 36
+  size: 27, 27
+  orig: 27, 27
+  offset: 0, 0
+  index: 7
 chest1
   rotate: false
-  xy: 110, 12
+  xy: 641, 46
   size: 18, 17
   orig: 18, 17
   offset: 0, 0
   index: -1
 crate1
   rotate: false
-  xy: 260, 47
+  xy: 679, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorHorizontal
   rotate: false
-  xy: 278, 47
+  xy: 189, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 doorVertical
   rotate: false
-  xy: 296, 47
+  xy: 697, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -74,37 +130,93 @@ goblin2
   orig: 28, 28
   offset: 0, 0
   index: -1
+goblinWalk
+  rotate: false
+  xy: 81, 1
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 1
+goblinWalk
+  rotate: false
+  xy: 81, 1
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 5
+goblinWalk
+  rotate: false
+  xy: 111, 1
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 2
+goblinWalk
+  rotate: false
+  xy: 111, 1
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 4
+goblinWalk
+  rotate: false
+  xy: 141, 1
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 3
+goblinWalk
+  rotate: false
+  xy: 384, 35
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 6
+goblinWalk
+  rotate: false
+  xy: 384, 35
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 8
+goblinWalk
+  rotate: false
+  xy: 414, 35
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: 7
 goldCoin
   rotate: false
-  xy: 219, 42
+  xy: 618, 42
   size: 21, 21
   orig: 21, 21
   offset: 0, 0
   index: -1
 ladderDown
   rotate: false
-  xy: 130, 12
+  xy: 661, 46
   size: 16, 17
   orig: 16, 17
   offset: 0, 0
   index: -1
 ladderUp
   rotate: false
-  xy: 242, 45
+  xy: 171, 12
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 rubble1
   rotate: false
-  xy: 314, 47
+  xy: 207, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 rubble2
   rotate: false
-  xy: 332, 47
+  xy: 715, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -118,70 +230,70 @@ tiles1
   index: -1
 wallBotLeft
   rotate: false
-  xy: 350, 47
+  xy: 225, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallBotRight
   rotate: false
-  xy: 368, 47
+  xy: 733, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorBottom
   rotate: false
-  xy: 386, 47
+  xy: 243, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorLeft
   rotate: false
-  xy: 404, 47
+  xy: 751, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorRight
   rotate: false
-  xy: 422, 47
+  xy: 261, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallDoorTop
   rotate: false
-  xy: 440, 47
+  xy: 769, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallHorizontal
   rotate: false
-  xy: 458, 47
+  xy: 279, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopLeft
   rotate: false
-  xy: 476, 47
+  xy: 787, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallTopRight
   rotate: false
-  xy: 494, 47
+  xy: 297, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallVertical
   rotate: false
-  xy: 219, 24
+  xy: 805, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -193,3 +305,59 @@ wizard1
   orig: 31, 31
   offset: 0, 0
   index: -1
+wizardWalk
+  rotate: false
+  xy: 219, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 1
+wizardWalk
+  rotate: false
+  xy: 219, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 5
+wizardWalk
+  rotate: false
+  xy: 252, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 2
+wizardWalk
+  rotate: false
+  xy: 252, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 4
+wizardWalk
+  rotate: false
+  xy: 285, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 3
+wizardWalk
+  rotate: false
+  xy: 318, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 6
+wizardWalk
+  rotate: false
+  xy: 318, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 8
+wizardWalk
+  rotate: false
+  xy: 351, 32
+  size: 31, 31
+  orig: 31, 31
+  offset: 0, 0
+  index: 7
