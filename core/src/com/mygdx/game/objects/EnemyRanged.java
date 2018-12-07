@@ -11,4 +11,10 @@ public class EnemyRanged extends Enemy
 		super(img, level);
 	}
 
+	@Override
+	public void performAttack() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

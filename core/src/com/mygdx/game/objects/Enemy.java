@@ -22,12 +22,16 @@ public abstract class Enemy extends AbstractGameObject
 	
 	//target for attack and pathfinding
 	Character target;
+	public boolean touchingTarget;
 	
 	//Level the enemy is a part of
 	Room level;
 	
+	//Health and damage variables
 	public float curHealth;
 	public float totalHealth;
+	protected float damage;
+	protected float cooldown;
 	
 	/**
 	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
@@ -70,6 +74,8 @@ public abstract class Enemy extends AbstractGameObject
 		
 		curHealth = Constants.ENEMYHEALTH;
 		totalHealth = curHealth;
+		
+		cooldown = 0;
 	}
 	
 	@Override
@@ -91,6 +97,18 @@ public abstract class Enemy extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		move(deltaTime);
+		
+		if(cooldown != 0)
+		{
+			cooldown -= deltaTime;
+			if(cooldown < 0)
+			{
+				cooldown = 0;
+			}
+		}
+		if(cooldown == 0 && touchingTarget)
+			performAttack();
+		
 		checkDeath();
 	}
 	
@@ -110,7 +128,7 @@ public abstract class Enemy extends AbstractGameObject
 			body.setLinearVelocity(0,0);
 		}
 		
-		if(body.getLinearVelocity().x >= 0) //TODO figure out why this only works for barbarian
+		if(body.getLinearVelocity().x >= 0)
 			mirror(false);
 		else
 			mirror(true);
@@ -154,5 +172,7 @@ public abstract class Enemy extends AbstractGameObject
 			level.removeEnemy(this);
 		}
 	}
+
+	public abstract void performAttack();
 
 }

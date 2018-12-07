@@ -83,12 +83,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	private void initLevel()
 	{
 		rooms[roomArrayOffset][roomArrayOffset] = new Room(Constants.STARTROOM, this, 0, 0);
-		activeRoom = rooms[roomArrayOffset][roomArrayOffset];
-		if(activeRoom.player.mirrored)
-		{
-			System.out.println("settings saved? how?");
-		}
-		
+		activeRoom = rooms[roomArrayOffset][roomArrayOffset];		
 	}
 	
 	public void update(float deltaTime)
@@ -98,9 +93,21 @@ public class WorldController extends InputAdapter implements ContactListener
 		handlePlayerInput(deltaTime);
 		cameraHelper.update(deltaTime);
 		activeRoom.update(deltaTime);
+		checkGameOver();
+		
 		removeBodies();
 	}
 	
+	private void checkGameOver() 
+	{
+		if(activeRoom.player.curHealth <= 0)
+		{
+			//TODO change to a game over state
+			init();
+			Gdx.app.debug(TAG, "Player death");
+		}
+	}
+
 	/**
 	 * Removes all bodies in bodiesToBeRemoved from the Box2d World
 	 */
@@ -298,6 +305,7 @@ public class WorldController extends InputAdapter implements ContactListener
 			touchedObject = null;
 			
 		}
+		
 		//collisions for button activated objects
 		else if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().isSensor()) //TODO may need to check that this isn't an enemy object
 		{
@@ -308,7 +316,7 @@ public class WorldController extends InputAdapter implements ContactListener
 			touchedObject = (AbstractGameObject) contact.getFixtureA().getBody().getUserData();
 		}
 		
-		
+		//collisions for player attacks
 		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player || contact.getFixtureB().getBody().getUserData() == activeRoom.player)
 		{
 			
@@ -346,11 +354,26 @@ public class WorldController extends InputAdapter implements ContactListener
 			addToRemoval(contact.getFixtureB().getBody());
 		}
 		
+		//collisions for enemies to attack
+		if((contact.getFixtureA().getBody().getUserData().getClass() == EnemyMelee.class || contact.getFixtureA().getBody().getUserData().getClass() == EnemyRanged.class) &&
+				contact.getFixtureB().getBody().getUserData() == activeRoom.player)
+		{
+			Enemy enemy = (Enemy) contact.getFixtureA().getBody().getUserData();
+			enemy.touchingTarget = true;
+		}
+		else if((contact.getFixtureB().getBody().getUserData().getClass() == EnemyMelee.class || contact.getFixtureB().getBody().getUserData().getClass() == EnemyRanged.class) &&
+				contact.getFixtureA().getBody().getUserData() == activeRoom.player)
+		{
+			Enemy enemy = (Enemy) contact.getFixtureB().getBody().getUserData();
+			enemy.touchingTarget = true;
+		}
+		
 	}
 
 	@Override
 	public void endContact(Contact contact)
 	{
+		//leaving collision with button activated object
 		if(contact.getFixtureA().getBody().getUserData() == touchedObject)
 		{
 			touchedObject = null;	
@@ -358,6 +381,20 @@ public class WorldController extends InputAdapter implements ContactListener
 		else if(contact.getFixtureB().getBody().getUserData() == touchedObject)
 		{
 			touchedObject = null;
+		}
+		
+		//stops enemies attacking
+		if((contact.getFixtureA().getBody().getUserData().getClass() == EnemyMelee.class || contact.getFixtureA().getBody().getUserData().getClass() == EnemyRanged.class) && 
+				contact.getFixtureB().getBody().getUserData() == activeRoom.player)
+		{
+			Enemy enemy = (Enemy) contact.getFixtureA().getBody().getUserData();
+			enemy.touchingTarget = false;
+		}
+		else if((contact.getFixtureB().getBody().getUserData().getClass() == EnemyMelee.class || contact.getFixtureB().getBody().getUserData().getClass() == EnemyRanged.class) &&
+				contact.getFixtureA().getBody().getUserData() == activeRoom.player)
+		{
+			Enemy enemy = (Enemy) contact.getFixtureB().getBody().getUserData();
+			enemy.touchingTarget = false;
 		}
 	}
 
