@@ -1,6 +1,8 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -74,13 +76,22 @@ public class Character extends AbstractGameObject
 		curHealth = Constants.STARTINGHEALTH;
 		totalHealth = curHealth;
 		
-		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE, Constants.COOLDOWN);
+		initAttacks();
 	
 		walkingAnim = Assets.instance.character.animCharacter;
 		drawnReg = reg;
 		standingStill = true;
 	}
 	
+	/**
+	 * Prepares the attack data objects for the default attacks
+	 */
+	private void initAttacks() 
+	{
+		//attack 1
+		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE, Constants.COOLDOWN, "../core/assets/particles/fireballEffect.pfx", "../core/assets/particles");		
+	}
+
 	@Override
 	public void render (SpriteBatch batch)
 	{		

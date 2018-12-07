@@ -546,6 +546,9 @@ public class Room
 				enemy.update(deltaTime);
 		}
 		
+		for(Attack attack : attacks)
+			attack.update(deltaTime);
+		
 		player.update(deltaTime);
 	}
 	
