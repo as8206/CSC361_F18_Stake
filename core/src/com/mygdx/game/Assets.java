@@ -425,7 +425,7 @@ public static final String TAG = Assets.class.getName();
 		
 		public assetSounds(AssetManager am)
 		{
-			coinPickup = am.get("../core/asset/sounds/coinPickup.wav", Sound.class); //TODO add sounds
+			coinPickup = am.get("../core/assets/sounds/coinPickup.wav", Sound.class); //TODO add sounds
 		}
 	}
 	

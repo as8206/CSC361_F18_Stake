@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.screens.MenuScreen;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.GamePreferences;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Application;

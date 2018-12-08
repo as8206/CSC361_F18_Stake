@@ -91,4 +91,7 @@ public class Constants
 	public static final float RANGEDCOOLDOWN = 1;
 	public static final float RANGEDSPEED = 10;
 
+	//The number of dungeon songs that will be looped
+	public static final int NUMOFDUNGEONSONGS = 2;
+
 }

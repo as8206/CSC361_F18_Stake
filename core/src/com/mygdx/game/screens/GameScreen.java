@@ -7,6 +7,7 @@ import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.WorldRenderer;
 import com.mygdx.game.utils.AudioManager;
+import com.mygdx.game.utils.Constants;
 
 public class GameScreen extends AbstractGameScreen
 {
@@ -43,7 +44,7 @@ public class GameScreen extends AbstractGameScreen
 				AudioManager.instance.playNoLoop(Assets.instance.music.dungeonLoop2);
 			
 			nextSong++;
-			if(nextSong > 2)
+			if(nextSong > Constants.NUMOFDUNGEONSONGS)
 				nextSong = 1;
 				
 		}
@@ -52,7 +53,7 @@ public class GameScreen extends AbstractGameScreen
 			//Update the game world by the time that has passed since last rendered frame
 			worldController.update(deltaTime);
 		
-		//sets the clear screen color to cornflower blue
+		//sets the clear screen color to black
 		Gdx.gl.glClearColor(0,  0,  0, 1);
 		
 		//clears the screen
@@ -81,6 +82,7 @@ public class GameScreen extends AbstractGameScreen
 	{
 		//start music
 		AudioManager.instance.playNoLoop(Assets.instance.music.dungeonLoop1);
+		nextSong++;
 		
 		worldController = new WorldController(game);
 		worldRenderer = new WorldRenderer(worldController);
@@ -96,6 +98,7 @@ public class GameScreen extends AbstractGameScreen
 	{
 		//stops music
 		AudioManager.instance.stopMusic();
+		nextSong = 2;
 		
 		worldRenderer.dispose();
 		Gdx.input.setCatchBackKey(false);
