@@ -9,6 +9,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -58,14 +60,29 @@ public static final String TAG = Assets.class.getName();
 	public assetUIBackground UIBackground;
 	public assetAttacks attacks;
 	
+	//music assets
+	public assetSounds sounds;
+	public assetMusic music;
+	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
 	{
 		this.assetManager = assetManager;
+		
 		//set assent manager error handler
 		assetManager.setErrorListener(this);
+		
 		//load texture atlas
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		
+		//load sounds
+		assetManager.load("../core/assets/sounds/coinPickup.wav", Sound.class);
+		
+		//load music
+		assetManager.load("../core/assets/music/menuLoop.mp3", Music.class);
+		assetManager.load("../core/assets/music/dungeonLoop1.mp3", Music.class);
+		assetManager.load("../core/assets/music/dungeonLoop2.mp3", Music.class);
+		
 		//start loading assets and wait until finished
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames());
@@ -103,7 +120,10 @@ public static final String TAG = Assets.class.getName();
 		healthBar = new assetHealthBar();
 		UIBackground = new assetUIBackground();
 		attacks = new assetAttacks(atlas);
-
+		
+		//music and sounds
+		sounds = new assetSounds(assetManager);
+		music = new assetMusic(assetManager);
 	}
 	
 	@Override
@@ -396,6 +416,30 @@ public static final String TAG = Assets.class.getName();
 		{
 			attack1 = atlas.findRegion("attack1");
 			arrow = atlas.findRegion("arrow");
+		}
+	}
+	
+	public class assetSounds
+	{
+		public final Sound coinPickup;
+		
+		public assetSounds(AssetManager am)
+		{
+			coinPickup = am.get("../core/asset/sounds/coinPickup.wav", Sound.class); //TODO add sounds
+		}
+	}
+	
+	public class assetMusic
+	{
+		public final Music menuLoop;
+		public final Music dungeonLoop1;
+		public final Music dungeonLoop2;
+		
+		public assetMusic(AssetManager am)
+		{
+			menuLoop = am.get("../core/assets/music/menuLoop.mp3", Music.class);
+			dungeonLoop1 = am.get("../core/assets/music/dungeonLoop1.mp3", Music.class);
+			dungeonLoop2 = am.get("../core/assets/music/dungeonLoop2.mp3", Music.class);
 		}
 	}
 }

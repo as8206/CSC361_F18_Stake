@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.Room;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.AmarethMain;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.Constants;
 
