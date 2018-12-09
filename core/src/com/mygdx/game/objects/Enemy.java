@@ -195,8 +195,15 @@ public abstract class Enemy extends AbstractGameObject
 	{
 		if(curHealth <= 0)
 		{
+			deathAction();
 			level.removeEnemy(this);
 		}
+	}
+
+	private void deathAction()
+	{
+		// TODO add death sound and drops
+		
 	}
 
 	public abstract void performAttack();
