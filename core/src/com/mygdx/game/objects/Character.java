@@ -46,9 +46,10 @@ public class Character extends AbstractGameObject
 	private TextureRegion drawnReg;
 	private boolean standingStill;
 	
-	//inventory
+	//potions
 	public int numHealthPotions;
 	public int numDamagePotions;
+	public float damagePotionDuration;
 	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
@@ -135,6 +136,7 @@ public class Character extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		checkCooldowns(deltaTime);
+		checkStatusEffects(deltaTime);
 		stateTime += deltaTime;
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0 && standingStill == false)
@@ -169,6 +171,16 @@ public class Character extends AbstractGameObject
 			cooldownUlt -= deltaTime;
 		if(cooldownUlt < 0)
 			cooldownUlt = 0;		
+	}
+	
+	private void checkStatusEffects(float deltaTime)
+	{
+		if(damagePotionDuration > 0)
+		{
+			damagePotionDuration -= deltaTime;
+			if(damagePotionDuration <= 0)
+				damageModifier -= Constants.DAMAGEPOTIONINCREASE;
+		}
 	}
 
 	/**
@@ -249,7 +261,13 @@ public class Character extends AbstractGameObject
 		{
 			if(numDamagePotions > 0)
 			{
-				worldController.prepText("Would use damage Potion");
+				if(damagePotionDuration > 0)
+				{
+					worldController.prepText("Potion already active");
+					return;
+				}
+				damageModifier += Constants.DAMAGEPOTIONINCREASE;
+				damagePotionDuration = Constants.DAMAGEPOTIONDURATION;
 				numDamagePotions--;
 			}
 			else

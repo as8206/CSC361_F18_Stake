@@ -348,14 +348,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureA().getBody().getUserData().getClass() == Attack.class && !contact.getFixtureB().isSensor())
 		{
-			System.out.println("attack collision detected");
 			Attack attack = (Attack) contact.getFixtureA().getBody().getUserData();
 			
 			if(contact.getFixtureB().getBody().getUserData().getClass() == EnemyMelee.class || 
 					contact.getFixtureB().getBody().getUserData().getClass() == EnemyRanged.class)
 			{
 				Enemy enemy = (Enemy) contact.getFixtureB().getBody().getUserData();
-				System.out.println("Enemy hit");
 				enemy.takeHit(attack.genDamage());
 			}
 			
@@ -364,14 +362,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureB().getBody().getUserData().getClass() == Attack.class && !contact.getFixtureA().isSensor())
 		{
-			System.out.println("attack collision detected");
 			Attack attack = (Attack) contact.getFixtureB().getBody().getUserData();
 
 			if(contact.getFixtureA().getBody().getUserData().getClass() == EnemyMelee.class || 
 					contact.getFixtureA().getBody().getUserData().getClass() == EnemyRanged.class)
 			{
 				Enemy enemy = (Enemy) contact.getFixtureA().getBody().getUserData();
-				System.out.println("Enemy hit");
 				enemy.takeHit(attack.genDamage());
 			}
 			
@@ -401,12 +397,10 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureA().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureB().isSensor())
 		{
-			System.out.println("attack collision detected");
 			AttackEnemy attack = (AttackEnemy) contact.getFixtureA().getBody().getUserData();
 			
 			if(contact.getFixtureB().getBody().getUserData() == activeRoom.player)
 			{
-				System.out.println("Player hit");
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			
@@ -415,12 +409,10 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureB().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureA().isSensor())
 		{
-			System.out.println("attack collision detected");
 			AttackEnemy attack = (AttackEnemy) contact.getFixtureB().getBody().getUserData();
 
 			if(contact.getFixtureA().getBody().getUserData() == activeRoom.player)
 			{
-				System.out.println("Player hit");
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			

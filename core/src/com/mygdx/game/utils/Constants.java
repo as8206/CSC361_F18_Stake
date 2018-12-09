@@ -101,9 +101,11 @@ public class Constants
 	public static final int MAXHEALTHPOTIONS = 3;
 	public static final int MAXDAMAGEPOTIONS = 2;
 	
-	//Health Potion healing amounnt
+	//Health Potion healing amount
 	public static final int HEALTHPOTIONHEALING = 50;
 	
-	//Damage Potion damage increase amount
-	public static final int DAMAGEPOTIONINCREASE = 2;
+	//Damage Potion damage increase amount (added to damage multiplier, 1 is base plus 1, ie doubled)
+	//and modifier time length in seconds
+	public static final int DAMAGEPOTIONINCREASE = 1;
+	public static final int DAMAGEPOTIONDURATION = 5;
 }
