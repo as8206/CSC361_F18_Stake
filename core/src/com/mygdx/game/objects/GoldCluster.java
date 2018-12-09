@@ -17,23 +17,6 @@ public class GoldCluster extends GoldCoin
 	{
 		super(img, room, wc);
 		
-		body.destroyFixture(body.getFixtureList().first());
-		
-		CircleShape circle = new CircleShape();
-		circle.setRadius(0.3f);
-		
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
-		fixtureDef.isSensor = true;
-		
-		body.createFixture(fixtureDef);
-		
-		body.setUserData(this);
-		
-		circle.dispose();
-		
-		this.room = room;
-		this.worldController = wc;
 		this.numOfCoins = numOfCoins;
 	}
 
@@ -44,7 +27,7 @@ public class GoldCluster extends GoldCoin
 		{
 			AudioManager.instance.play(Assets.instance.sounds.coinPickup);
 			worldController.addScore((Constants.BASECOINSCORE * numOfCoins) * worldController.goldModifier);
-			room.removeCoin(this);
+			room.removeCollectedObject(this);
 			worldController.addToRemoval(body);
 			System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
 			

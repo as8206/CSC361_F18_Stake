@@ -21,6 +21,7 @@ import com.mygdx.game.utils.Constants;
 
 public abstract class Enemy extends AbstractGameObject
 {
+	protected WorldController worldController;
 	//maximum movement speed
 	public final float movementSpeed = 3.0f;
 	
@@ -29,7 +30,7 @@ public abstract class Enemy extends AbstractGameObject
 	public boolean touchingTarget;
 	
 	//Level the enemy is a part of
-	Room level;
+	Room room;
 	
 	//Health and damage variables
 	public float curHealth;
@@ -48,7 +49,7 @@ public abstract class Enemy extends AbstractGameObject
 	 * Creates the object for the enemy, and changes abstract constructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Enemy(TextureRegion img, Room level)
+	public Enemy(TextureRegion img, Room level, WorldController wc)
 	{
 		super(img);
 		
@@ -81,7 +82,8 @@ public abstract class Enemy extends AbstractGameObject
 		body = tempBody;
 		body.setUserData(this);
 		
-		this.level = level;
+		this.room = level;
+		this.worldController = wc;
 		
 		curHealth = Constants.ENEMYHEALTH;
 		totalHealth = curHealth;
@@ -200,14 +202,17 @@ public abstract class Enemy extends AbstractGameObject
 		if(curHealth <= 0)
 		{
 			deathAction();
-			level.removeEnemy(this);
+			room.removeEnemy(this);
+			worldController.addToRemoval(body);
 		}
 	}
 
 	private void deathAction()
 	{
 		// TODO add death sound and drops
-		
+		Potion tempPotion = new Potion(Assets.instance.potions.healthPotion, room, worldController, Character.PotionType.HEALTH);
+		tempPotion.body.setTransform(body.getPosition(), 0);
+		room.addCollectedObject(tempPotion);
 	}
 
 	public abstract void performAttack();

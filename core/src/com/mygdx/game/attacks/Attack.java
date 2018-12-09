@@ -27,6 +27,7 @@ public class Attack extends AbstractGameObject
 	private float tarY;
 	private Vector2 target;
 	private ParticleEffect particleEffect;
+	private float activeModifier;
 	
 	/**
 	 * Creates the attack object
@@ -73,6 +74,8 @@ public class Attack extends AbstractGameObject
 		
 		particleEffect = new ParticleEffect();
 		particleEffect.load(Gdx.files.internal(data.effectLocation), Gdx.files.internal(data.particleLocation));
+		
+		activeModifier = attacker.damageModifier;
 		
 		AudioManager.instance.play(data.soundEffect);
 	}
@@ -149,6 +152,6 @@ public class Attack extends AbstractGameObject
 
 	public float genDamage() 
 	{
-		return (float) ((Math.random() * (data.damageMax - data.damageMin)) + data.damageMin);
+		return (float) ((Math.random() * (data.damageMax - data.damageMin)) + data.damageMin) * activeModifier;
 	}
 }

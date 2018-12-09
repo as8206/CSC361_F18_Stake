@@ -20,6 +20,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
+import com.mygdx.game.objects.Character;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
@@ -300,14 +301,16 @@ public class WorldController extends InputAdapter implements ContactListener
 	public void beginContact(Contact contact)
 	{
 		//collisions for gold coin, non-button activated
-		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor()) //TODO needs refactoring
+		boolean isCollectedObjectA = AbstractCollectedObject.class.isAssignableFrom(contact.getFixtureA().getBody().getUserData().getClass());
+		boolean isCollectedObjectB = AbstractCollectedObject.class.isAssignableFrom(contact.getFixtureB().getBody().getUserData().getClass());
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && isCollectedObjectB && contact.getFixtureB().isSensor()) //TODO needs refactoring
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
 			touchedObject = null;
 			
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor())
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && isCollectedObjectA && contact.getFixtureB().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
@@ -618,6 +621,15 @@ public class WorldController extends InputAdapter implements ContactListener
 	        if (files[i].isFile())
 	            randomizedRooms.add(files[i].toString());
 	    randomizedRooms.shuffle();
+	}
+	
+	/**
+	 * Allows objects that only hold a reference to worldController to print centered text
+	 * @param text
+	 */
+	public void prepText(String text)
+	{
+		worldRenderer.prepText(text);
 	}
 	
 }

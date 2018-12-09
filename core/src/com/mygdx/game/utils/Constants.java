@@ -93,5 +93,9 @@ public class Constants
 
 	//The number of dungeon songs that will be looped
 	public static final int NUMOFDUNGEONSONGS = 2;
+	
+	//Max number of potions that can be held
+	public static final int MAXHEALTHPOTIONS = 3;
+	public static final int MAXDAMAGEPOTIONS = 2;
 
 }

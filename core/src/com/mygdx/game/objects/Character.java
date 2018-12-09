@@ -21,13 +21,23 @@ import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
 {
+	public enum PotionType 
+	{
+		HEALTH, DAMAGE;
+	}
+
 	public float movementSpeed = 3.0f;
 	
+	private WorldController worldController;
+	
+	//health
 	public float curHealth;
 	public float totalHealth;
 	
+	//attacks
 	public AttackData attack1, attack2, attackUlt;
 	public float cooldown1, cooldown2, cooldownUlt;
+	public float damageModifier;
 
 	//Animation
 	public float stateTime;
@@ -36,11 +46,15 @@ public class Character extends AbstractGameObject
 	private TextureRegion drawnReg;
 	private boolean standingStill;
 	
+	//inventory
+	public int numHealthPotions;
+	public int numDamagePotions;
+	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Character(TextureRegion img)
+	public Character(TextureRegion img, WorldController wc)
 	{
 		super(img);
 		
@@ -78,10 +92,16 @@ public class Character extends AbstractGameObject
 		totalHealth = curHealth;
 		
 		initAttacks();
+		damageModifier = 1;
 	
 		walkingAnim = Assets.instance.character.animCharacter;
 		drawnReg = reg;
 		standingStill = true;
+		
+		numHealthPotions = 0;
+		numDamagePotions = 0;
+		
+		worldController = wc;
 	}
 	
 	/**
@@ -151,6 +171,10 @@ public class Character extends AbstractGameObject
 			cooldownUlt = 0;		
 	}
 
+	/**
+	 * Applies damage to the player
+	 * @param damage
+	 */
 	public void takeHit(float damage) 
 	{
 		AudioManager.instance.play(Assets.instance.sounds.hitTaken);
@@ -158,6 +182,48 @@ public class Character extends AbstractGameObject
 		curHealth -= damage;
 		if(curHealth < 0)
 			curHealth = 0;
+	}
+	
+	/**
+	 * Given the potion type, will add the potion to inventory if the player has space
+	 * @param type
+	 * @return
+	 */
+	public boolean grabPotion(PotionType type)
+	{
+		if(type == PotionType.HEALTH)
+		{
+			if(numHealthPotions < Constants.MAXHEALTHPOTIONS)
+			{
+				numHealthPotions++;
+				return true;
+			}
+			else
+			{
+				worldController.prepText("Health Potions Full");
+				return false;
+			}
+				
+		}
+		else if(type == PotionType.DAMAGE)
+		{
+			if(numDamagePotions < Constants.MAXDAMAGEPOTIONS)
+			{
+				numDamagePotions++;
+				return true;
+			}
+			else
+			{
+				worldController.prepText("Damage Increase Potions Full");
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public void usePotion(PotionType type)
+	{
+		
 	}
 	
 	public void setAnimation(Animation animation)

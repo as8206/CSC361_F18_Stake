@@ -59,6 +59,7 @@ public static final String TAG = Assets.class.getName();
 	public assetHealthBar healthBar;
 	public assetUIBackground UIBackground;
 	public assetAttacks attacks;
+	public assetPotions potions;
 	
 	//music assets
 	public assetSounds sounds;
@@ -125,6 +126,7 @@ public static final String TAG = Assets.class.getName();
 		healthBar = new assetHealthBar();
 		UIBackground = new assetUIBackground();
 		attacks = new assetAttacks(atlas);
+		potions = new assetPotions(atlas);
 		
 		//music and sounds
 		sounds = new assetSounds(assetManager);
@@ -426,6 +428,19 @@ public static final String TAG = Assets.class.getName();
 		}
 	}
 	
+	public class assetPotions
+	{
+		public final AtlasRegion healthPotion;
+		public final AtlasRegion damagePotion;
+		
+		public assetPotions(TextureAtlas atlas)
+		{
+			healthPotion = atlas.findRegion("potionHealth");
+			damagePotion = atlas.findRegion("potionDamage");
+		}
+	}
+	
+	//Asset classes for sounds and music
 	public class assetSounds
 	{
 		public final Sound coinPickup;
