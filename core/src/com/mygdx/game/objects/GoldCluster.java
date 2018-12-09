@@ -9,14 +9,13 @@ import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
-public class GoldCluster extends AbstractGameObject
+public class GoldCluster extends GoldCoin
 {
-	private Room room;
-	private WorldController worldController;
-
-	public GoldCluster(TextureRegion img, Room room, WorldController wc)
+	private int numOfCoins;
+	
+	public GoldCluster(TextureRegion img, Room room, WorldController wc, int numOfCoins)
 	{
-		super(img);
+		super(img, room, wc);
 		
 		body.destroyFixture(body.getFixtureList().first());
 		
@@ -35,15 +34,21 @@ public class GoldCluster extends AbstractGameObject
 		
 		this.room = room;
 		this.worldController = wc;
+		this.numOfCoins = numOfCoins;
 	}
 
 	@Override
 	public void activate()
 	{	
-		AudioManager.instance.play(Assets.instance.sounds.coinPickup);
-		worldController.addScore(Constants.BASECOINSCORE + worldController.goldModifier);
-		room.removeCoin(this);
-		worldController.addToRemoval(body);
-		System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+		if(!collected)
+		{
+			AudioManager.instance.play(Assets.instance.sounds.coinPickup);
+			worldController.addScore((Constants.BASECOINSCORE * numOfCoins) * worldController.goldModifier);
+			room.removeCoin(this);
+			worldController.addToRemoval(body);
+			System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+			
+			collected = true;
+		}
 	}
 }

@@ -11,8 +11,9 @@ import com.mygdx.game.utils.Constants;
 
 public class GoldCoin extends AbstractGameObject
 {
-	private Room room;
-	private WorldController worldController;
+	protected Room room;
+	protected WorldController worldController;
+	protected boolean collected;
 
 	public GoldCoin(TextureRegion img, Room room, WorldController wc)
 	{
@@ -35,15 +36,21 @@ public class GoldCoin extends AbstractGameObject
 		
 		this.room = room;
 		this.worldController = wc;
+		collected = false;
 	}
 
 	@Override
 	public void activate()
 	{	
-		AudioManager.instance.play(Assets.instance.sounds.coinPickup);
-		worldController.addScore(Constants.BASECOINSCORE + worldController.goldModifier);
-		room.removeCoin(this);
-		worldController.addToRemoval(body);
-		System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+		if(!collected)
+		{
+			AudioManager.instance.play(Assets.instance.sounds.coinPickup);
+			worldController.addScore(Constants.BASECOINSCORE * worldController.goldModifier);
+			room.removeCoin(this);
+			worldController.addToRemoval(body);
+			System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+			
+			collected = true;
+		}
 	}
 }

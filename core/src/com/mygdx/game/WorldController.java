@@ -67,6 +67,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		rooms = new Room[Constants.MAXROOMS][Constants.MAXROOMS];
 		bodiesToBeRemoved = new Array<Body>();
 		score = 0;
+		goldModifier = 1;
 		prepRoomFiles();
 		
 		initLevel();
@@ -299,14 +300,14 @@ public class WorldController extends InputAdapter implements ContactListener
 	public void beginContact(Contact contact)
 	{
 		//collisions for gold coin, non-button activated
-		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().getBody().getUserData().getClass() == GoldCoin.class && contact.getFixtureB().isSensor())
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor()) //TODO needs refactoring
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
 			touchedObject = null;
 			
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().getBody().getUserData().getClass() == GoldCoin.class && contact.getFixtureB().isSensor())
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
