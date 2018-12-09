@@ -349,10 +349,12 @@ public static final String TAG = Assets.class.getName();
 	public class assetCoin
 	{
 		public final AtlasRegion goldCoin;
+		public final AtlasRegion goldCluster;
 		
 		public assetCoin (TextureAtlas atlas)
 		{
 			goldCoin = atlas.findRegion("goldCoin");
+			goldCluster = atlas.findRegion("goldCluster");
 		}
 	}
 	
