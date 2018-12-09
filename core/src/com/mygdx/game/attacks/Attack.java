@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.objects.AbstractGameObject;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 import com.mygdx.game.objects.Character;
 
@@ -72,6 +73,8 @@ public class Attack extends AbstractGameObject
 		
 		particleEffect = new ParticleEffect();
 		particleEffect.load(Gdx.files.internal(data.effectLocation), Gdx.files.internal(data.particleLocation));
+		
+		AudioManager.instance.play(data.soundEffect);
 	}
 	
 	@Override

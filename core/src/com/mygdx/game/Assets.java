@@ -81,6 +81,7 @@ public static final String TAG = Assets.class.getName();
 		assetManager.load("../core/assets/sounds/enemyHit.wav", Sound.class);
 		assetManager.load("../core/assets/sounds/hitTaken.wav", Sound.class);
 		assetManager.load("../core/assets/sounds/openChest.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/fireballCast.wav", Sound.class);
 		
 		//load music
 		assetManager.load("../core/assets/music/menuLoop.mp3", Music.class);
@@ -432,6 +433,7 @@ public static final String TAG = Assets.class.getName();
 		public final Sound enemyHit;
 		public final Sound hitTaken;
 		public final Sound openChest;
+		public final Sound fireballCast;
 		
 		public assetSounds(AssetManager am)
 		{
@@ -440,6 +442,7 @@ public static final String TAG = Assets.class.getName();
 			enemyHit = am.get("../core/assets/sounds/enemyHit.wav", Sound.class);
 			hitTaken = am.get("../core/assets/sounds/hitTaken.wav", Sound.class);
 			openChest = am.get("../core/assets/sounds/openChest.wav", Sound.class);
+			fireballCast = am.get("../core/assets/sounds/fireballCast.wav", Sound.class);
 		}
 	}
 	
