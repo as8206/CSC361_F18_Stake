@@ -160,7 +160,7 @@ public class MenuScreen extends AbstractGameScreen
 		chkMusic = new CheckBox("", skinLibgdx);
 		tbl.add(chkMusic);
 		tbl.add(new Label("Music", skinLibgdx));
-		sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+		sldMusic = new Slider(0.0f, 0.6f, 0.06f, false, skinLibgdx);
 		tbl.add(sldMusic);
 		tbl.row();
 		return tbl;
