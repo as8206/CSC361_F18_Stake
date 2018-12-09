@@ -16,6 +16,7 @@ import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.attacks.AttackData;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
@@ -152,6 +153,8 @@ public class Character extends AbstractGameObject
 
 	public void takeHit(float damage) 
 	{
+		AudioManager.instance.play(Assets.instance.sounds.hitTaken);
+		
 		curHealth -= damage;
 		if(curHealth < 0)
 			curHealth = 0;

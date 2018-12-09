@@ -7,6 +7,8 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mygdx.game.Assets;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public class Chest extends AbstractGameObject
@@ -33,6 +35,8 @@ public class Chest extends AbstractGameObject
 	@Override
 	public void activate()
 	{
+		AudioManager.instance.play(Assets.instance.sounds.openChest);
+		
 		System.out.println("Chest touched");
 	}
 

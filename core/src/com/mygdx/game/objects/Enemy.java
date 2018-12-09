@@ -14,7 +14,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.Room;
 import com.mygdx.game.AmarethMain;
+import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public abstract class Enemy extends AbstractGameObject
@@ -188,6 +190,8 @@ public abstract class Enemy extends AbstractGameObject
 	 */
 	public void takeHit(float damage)
 	{
+		AudioManager.instance.play(Assets.instance.sounds.enemyHit);
+		
 		curHealth-=damage;
 	}
 	
