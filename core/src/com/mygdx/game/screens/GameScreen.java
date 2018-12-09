@@ -3,8 +3,11 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.WorldRenderer;
+import com.mygdx.game.utils.AudioManager;
+import com.mygdx.game.utils.Constants;
 
 public class GameScreen extends AbstractGameScreen
 {
@@ -17,10 +20,12 @@ public class GameScreen extends AbstractGameScreen
 	private WorldRenderer worldRenderer;
 	
 	private boolean paused;
+	private int nextSong;
 	
 	public GameScreen(Game game)
 	{
 		super(game);
+		nextSong = 1;
 	}
 	
 	/**
@@ -30,12 +35,25 @@ public class GameScreen extends AbstractGameScreen
 	@Override
 	public void render(float deltaTime)
 	{
+		//checks and updates music
+		if(AudioManager.instance.isMusicPlaying() == false)
+		{
+			if(nextSong == 1)
+				AudioManager.instance.playNoLoop(Assets.instance.music.dungeonLoop1);
+			else if (nextSong == 2)
+				AudioManager.instance.playNoLoop(Assets.instance.music.dungeonLoop2);
+			
+			nextSong++;
+			if(nextSong > Constants.NUMOFDUNGEONSONGS)
+				nextSong = 1;
+				
+		}
 		//Do not update the game world when paused
 		if (!paused)
 			//Update the game world by the time that has passed since last rendered frame
 			worldController.update(deltaTime);
 		
-		//sets the clear screen color to cornflower blue
+		//sets the clear screen color to black
 		Gdx.gl.glClearColor(0,  0,  0, 1);
 		
 		//clears the screen
@@ -62,6 +80,10 @@ public class GameScreen extends AbstractGameScreen
 	@Override
 	public void show()
 	{
+		//start music
+		AudioManager.instance.playNoLoop(Assets.instance.music.dungeonLoop1);
+		nextSong++;
+		
 		worldController = new WorldController(game);
 		worldRenderer = new WorldRenderer(worldController);
 		worldController.setWorldRenderer(worldRenderer);
@@ -74,6 +96,10 @@ public class GameScreen extends AbstractGameScreen
 	@Override
 	public void hide()
 	{
+		//stops music
+		AudioManager.instance.stopMusic();
+		nextSong = 2;
+		
 		worldRenderer.dispose();
 		Gdx.input.setCatchBackKey(false);
 	}

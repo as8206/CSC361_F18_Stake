@@ -20,6 +20,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
+import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
 
@@ -283,6 +284,12 @@ public class WorldController extends InputAdapter implements ContactListener
 			cameraHelper.setTarget(cameraHelper.hasTarget() ? null : 
 				activeRoom.player);
 			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+		}
+		//return to menu
+		//TODO changed to a pause menu
+		else if (keycode == Keys.ESCAPE)
+		{
+			game.setScreen(new MenuScreen(game));
 		}
 		
 		return false;

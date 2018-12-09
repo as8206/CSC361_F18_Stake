@@ -7,8 +7,10 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mygdx.game.Assets;
 import com.mygdx.game.Room;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public class Door extends AbstractGameObject
@@ -53,6 +55,8 @@ public class Door extends AbstractGameObject
 	@Override
 	public void activate()
 	{
+		AudioManager.instance.play(Assets.instance.sounds.doorOpen);
+		
 		if(linkedRoom != null)
 			worldController.swapRoom(linkedRoom, this);
 		else
