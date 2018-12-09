@@ -19,7 +19,7 @@ public class WorldRenderer implements Disposable
 	private WorldController worldController;
 	
 	private Box2DDebugRenderer b2debugRenderer;
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	//Variables for printing text messages
 	private String text;
@@ -82,7 +82,11 @@ public class WorldRenderer implements Disposable
 		float health = worldController.activeRoom.player.curHealth;
 		float totalHealth = worldController.activeRoom.player.totalHealth;
 		
-		if(health / totalHealth < 0.02f)
+		if(health <= 0)
+		{
+			Assets.instance.healthBar.healthBarBackground.draw(batch, x, y, 400, 30);
+		}
+		else if(health / totalHealth < 0.02f)
 		{
 			Assets.instance.healthBar.healthBarBackground.draw(batch, x, y, 400, 30);
 			if(flashOn)

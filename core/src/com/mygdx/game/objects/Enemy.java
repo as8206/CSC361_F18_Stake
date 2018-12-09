@@ -1,17 +1,22 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.Room;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.AmarethMain;
+import com.mygdx.game.Assets;
 import com.mygdx.game.WorldController;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public abstract class Enemy extends AbstractGameObject
@@ -21,12 +26,26 @@ public abstract class Enemy extends AbstractGameObject
 	
 	//target for attack and pathfinding
 	Character target;
+	public boolean touchingTarget;
 	
 	//Level the enemy is a part of
 	Room level;
 	
+	//Health and damage variables
+	public float curHealth;
+	public float totalHealth;
+	protected float damage;
+	protected float cooldown;
+	
+	//Animation
+	public float stateTime;
+	public Animation<TextureRegion> animation;
+	protected Animation<AtlasRegion> walkingAnim;
+	protected TextureRegion drawnReg;
+	protected boolean standingStill;
+	
 	/**
-	 * Creates the object for the enemy, and changes abstract contructed static body to a dynamic body.
+	 * Creates the object for the enemy, and changes abstract constructed static body to a dynamic body.
 	 * @param img
 	 */
 	public Enemy(TextureRegion img, Room level)
@@ -48,24 +67,45 @@ public abstract class Enemy extends AbstractGameObject
 		
 		box.dispose();
 		
+		PolygonShape hitBox = new PolygonShape();
+		hitBox.setAsBox(.5f, .75f, new Vector2(0,.3f), 0);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = hitBox;
+		fixtureDef.isSensor = true;
+		
+		tempBody.createFixture(fixtureDef);
+		
+		hitBox.dispose();
+		
 		body = tempBody;
 		body.setUserData(this);
 		
 		this.level = level;
+		
+		curHealth = Constants.ENEMYHEALTH;
+		totalHealth = curHealth;
+		
+		cooldown = 0;
 	}
 	
 	@Override
 	public void render (SpriteBatch batch)
 	{
+		if(!standingStill)
+		{
+			drawnReg = animation.getKeyFrame(stateTime, true);
+		}
+		
 		if(!mirrored)
 		{
-			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			batch.draw(drawnReg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
 		}
 		else
 		{
-			reg.flip(true, false); //TODO refactor this same as in character
-			batch.draw(reg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
-			reg.flip(true, false);
+			drawnReg.flip(true, false); //TODO refactor this same as in character
+			batch.draw(drawnReg, body.getPosition().x - Constants.OFFSET - 0.25f, body.getPosition().y - Constants.OFFSET + 0.1f, 1.5f, 1.5f);
+			drawnReg.flip(true, false);
 		}
 	}
 	
@@ -73,6 +113,31 @@ public abstract class Enemy extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		move(deltaTime);
+		
+		if(cooldown != 0)
+		{
+			cooldown -= deltaTime;
+			if(cooldown < 0)
+			{
+				cooldown = 0;
+			}
+		}
+		if(cooldown == 0 && touchingTarget)
+			performAttack();
+		
+		stateTime += deltaTime;
+		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0 && standingStill == false)
+		{
+			drawnReg = reg;
+			standingStill = true;
+		}
+		else if((body.getLinearVelocity().x != 0 || body.getLinearVelocity().y != 0) && standingStill == true)
+		{
+			setAnimation(walkingAnim);
+			standingStill = false;
+		}
+		
+		checkDeath();
 	}
 	
 	/**
@@ -91,7 +156,7 @@ public abstract class Enemy extends AbstractGameObject
 			body.setLinearVelocity(0,0);
 		}
 		
-		if(body.getLinearVelocity().x >= 0) //TODO figure out why this only works for barbarian
+		if(body.getLinearVelocity().x >= 0)
 			mirror(false);
 		else
 			mirror(true);
@@ -117,6 +182,40 @@ public abstract class Enemy extends AbstractGameObject
 	public void setTarget(Character target)
 	{
 		this.target = target;
+	}
+	
+	/**
+	 * Removes health if hit
+	 * @param damage
+	 */
+	public void takeHit(float damage)
+	{
+		AudioManager.instance.play(Assets.instance.sounds.enemyHit);
+		
+		curHealth-=damage;
+	}
+	
+	public void checkDeath()
+	{
+		if(curHealth <= 0)
+		{
+			deathAction();
+			level.removeEnemy(this);
+		}
+	}
+
+	private void deathAction()
+	{
+		// TODO add death sound and drops
+		
+	}
+
+	public abstract void performAttack();
+	
+	public void setAnimation(Animation animation)
+	{
+		this.animation = animation;
+		stateTime = 0;
 	}
 
 }

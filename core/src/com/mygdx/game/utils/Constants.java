@@ -56,6 +56,42 @@ public class Constants
 	//Base starting health for the player
 	public static final float STARTINGHEALTH = 100;
 	
+	//Base attack damage min
+	public static final float ATTACKMIN = 8;
+	
+	//Base attack damage max
+	public static final float ATTACKMAX = 12;
+	
+	//Base attack velocity
+	public static final float ATTACKSPEED = 5;
+	
+	//Base attack sensor body radius
+	public static final float ATTACKSIZE = .25f;
+	
+	//cooldown time for attack 1, in seconds
+	public static final float COOLDOWN = .3f;
+	
 	//Holds the game settings
 	public static final String SETTINGS = "../core/assets/gameSettings.txt";
+
+	//Center screen locations
+	public static final float CENTERX = 800;
+	public static final float CENTERY = 480;
+	
+	//Enemy Base health
+	public static final float ENEMYHEALTH = 30;
+	
+	//Enemy Base Melee damage and cooldown
+	public static final float MELEEDAMAGE = 15;
+	public static final float MELEECOOLDOWN = 1;
+	
+	//Enemy Base Ranged damage, range, speed, and cooldown
+	public static final float RANGEDDAMAGE = 8;
+	public static final float RANGEDRANGE = 5;
+	public static final float RANGEDCOOLDOWN = 1;
+	public static final float RANGEDSPEED = 10;
+
+	//The number of dungeon songs that will be looped
+	public static final int NUMOFDUNGEONSONGS = 2;
+
 }

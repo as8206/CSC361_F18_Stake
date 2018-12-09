@@ -2,7 +2,7 @@ package com.mygdx.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.AmarethMain;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
@@ -32,7 +32,7 @@ public class DesktopLauncher
 	 		cfg.title = "Amareth";
 	 		cfg.width = 1600;
 	 		cfg.height = 960;
-	 		new LwjglApplication(new MyGdxGame(), cfg);
+	 		new LwjglApplication(new AmarethMain(), cfg);
 	 	
 	}
 }

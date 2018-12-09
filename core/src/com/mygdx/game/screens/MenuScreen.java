@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Assets;
 import com.mygdx.game.utils.GamePreferences;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 /**
@@ -159,7 +160,7 @@ public class MenuScreen extends AbstractGameScreen
 		chkMusic = new CheckBox("", skinLibgdx);
 		tbl.add(chkMusic);
 		tbl.add(new Label("Music", skinLibgdx));
-		sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+		sldMusic = new Slider(0.0f, 0.6f, 0.06f, false, skinLibgdx);
 		tbl.add(sldMusic);
 		tbl.row();
 		return tbl;
@@ -370,12 +371,20 @@ public class MenuScreen extends AbstractGameScreen
 	 */	
 	@Override public void show()
 	{
+		//start music
+		AudioManager.instance.play(Assets.instance.music.menuLoop);
+		
 		batch = new SpriteBatch();
 		stage = new Stage(new StretchViewport(Constants.VIEWPORT_UI_WIDTH, Constants.VIEWPORT_UI_HEIGHT));
 		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 	}
-	@Override public void hide() {}
+	
+	@Override public void hide() 
+	{
+		AudioManager.instance.stopMusic();
+	}
+	
 	@Override public void pause() {}
 	
 	/**
@@ -386,6 +395,7 @@ public class MenuScreen extends AbstractGameScreen
 	{
 		saveSettings();
 		onCancelClicked();
+		AudioManager.instance.onSettingsUpdated();
 	}
 	
 	/**
@@ -396,6 +406,7 @@ public class MenuScreen extends AbstractGameScreen
 		btnMenuPlay.setVisible(true);
 		btnMenuOptions.setVisible(true);
 		winOptions.setVisible(false);
+		AudioManager.instance.onSettingsUpdated();
 	}
 	
 	/**

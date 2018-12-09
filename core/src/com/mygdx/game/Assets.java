@@ -9,15 +9,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 //import com.mygdx.game.Assets.AssetFonts;
 import com.mygdx.game.utils.Constants;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -53,15 +58,35 @@ public static final String TAG = Assets.class.getName();
 	public assetFonts fonts;
 	public assetHealthBar healthBar;
 	public assetUIBackground UIBackground;
+	public assetAttacks attacks;
+	
+	//music assets
+	public assetSounds sounds;
+	public assetMusic music;
 	
 	//initializes the assets class and all of its inner classes
 	public void init(AssetManager assetManager)
 	{
 		this.assetManager = assetManager;
+		
 		//set assent manager error handler
 		assetManager.setErrorListener(this);
+		
 		//load texture atlas
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		
+		//load sounds
+		assetManager.load("../core/assets/sounds/coinPickup.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/doorOpen.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/enemyHit.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/hitTaken.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/openChest.wav", Sound.class);
+		
+		//load music
+		assetManager.load("../core/assets/music/menuLoop.mp3", Music.class);
+		assetManager.load("../core/assets/music/dungeonLoop1.mp3", Music.class);
+		assetManager.load("../core/assets/music/dungeonLoop2.mp3", Music.class);
+		
 		//start loading assets and wait until finished
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames());
@@ -98,7 +123,11 @@ public static final String TAG = Assets.class.getName();
 		fonts = new assetFonts();
 		healthBar = new assetHealthBar();
 		UIBackground = new assetUIBackground();
-
+		attacks = new assetAttacks(atlas);
+		
+		//music and sounds
+		sounds = new assetSounds(assetManager);
+		music = new assetMusic(assetManager);
 	}
 	
 	@Override
@@ -238,30 +267,46 @@ public static final String TAG = Assets.class.getName();
 	public class assetBarbarian
 	{
 		public final AtlasRegion barbarian;
+		public final Animation<AtlasRegion> animBarbarian;
+		public final Animation<AtlasRegion> animAttack;
 		
 		public assetBarbarian (TextureAtlas atlas)
 		{
 			barbarian = atlas.findRegion("barbarian1");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("barbarianWalk");
+			animBarbarian = new Animation<AtlasRegion>(1f / 13f, regions);
+			
+			Array<AtlasRegion> regions2 = atlas.findRegions("barbarianAttack");
+			animAttack = new Animation<AtlasRegion>(1f/13f, regions2, Animation.PlayMode.NORMAL);
 		}
 	}
 	
 	public class assetGoblin
 	{
 		public final AtlasRegion goblin;
+		public final Animation<AtlasRegion> animGoblin;
 		
 		public assetGoblin (TextureAtlas atlas)
 		{
 			goblin = atlas.findRegion("goblin2");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("goblinWalk");
+			animGoblin = new Animation<AtlasRegion>(1f / 13f, regions);
 		}
 	}
 	
 	public class assetCharacter
 	{
 		public final AtlasRegion character;
+		public final Animation<AtlasRegion> animCharacter;
 		
 		public assetCharacter (TextureAtlas atlas)
 		{
 			character = atlas.findRegion("wizard1");
+			
+			Array<AtlasRegion> regions = atlas.findRegions("wizardWalk");
+			animCharacter = new Animation<AtlasRegion>(1f / 13f, regions);
 		}
 	}
 	
@@ -364,5 +409,49 @@ public static final String TAG = Assets.class.getName();
 			wedge = new Texture("../desktop/assets-raw/MenuBackground/MenuWedge.png");
 		}
 		
+	}
+	
+	public class assetAttacks
+	{
+		public final AtlasRegion attack1;
+		public final AtlasRegion arrow;
+		
+		public assetAttacks(TextureAtlas atlas)
+		{
+			attack1 = atlas.findRegion("attack1");
+			arrow = atlas.findRegion("arrow");
+		}
+	}
+	
+	public class assetSounds
+	{
+		public final Sound coinPickup;
+		public final Sound doorOpen;
+		public final Sound enemyHit;
+		public final Sound hitTaken;
+		public final Sound openChest;
+		
+		public assetSounds(AssetManager am)
+		{
+			coinPickup = am.get("../core/assets/sounds/coinPickup.wav", Sound.class); //TODO add sounds
+			doorOpen = am.get("../core/assets/sounds/doorOpen.wav", Sound.class);
+			enemyHit = am.get("../core/assets/sounds/enemyHit.wav", Sound.class);
+			hitTaken = am.get("../core/assets/sounds/hitTaken.wav", Sound.class);
+			openChest = am.get("../core/assets/sounds/openChest.wav", Sound.class);
+		}
+	}
+	
+	public class assetMusic
+	{
+		public final Music menuLoop;
+		public final Music dungeonLoop1;
+		public final Music dungeonLoop2;
+		
+		public assetMusic(AssetManager am)
+		{
+			menuLoop = am.get("../core/assets/music/menuLoop.mp3", Music.class);
+			dungeonLoop1 = am.get("../core/assets/music/dungeonLoop1.mp3", Music.class);
+			dungeonLoop2 = am.get("../core/assets/music/dungeonLoop2.mp3", Music.class);
+		}
 	}
 }
