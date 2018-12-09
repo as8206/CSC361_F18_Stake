@@ -90,7 +90,7 @@ public class Character extends AbstractGameObject
 	private void initAttacks() 
 	{
 		//attack 1
-		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE, Constants.COOLDOWN, "../core/assets/particles/fireballEffect.pfx", "../core/assets/particles");		
+		attack1 = new AttackData(Assets.instance.attacks.attack1, Constants.ATTACKMAX, Constants.ATTACKMIN, Constants.ATTACKSPEED, Constants.ATTACKSIZE, Constants.COOLDOWN, "../core/assets/particles/fireballEffect.pfx", "../core/assets/particles", Assets.instance.sounds.fireballCast);		
 	}
 
 	@Override
