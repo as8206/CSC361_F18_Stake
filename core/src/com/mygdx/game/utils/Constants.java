@@ -90,6 +90,9 @@ public class Constants
 	public static final float RANGEDRANGE = 5;
 	public static final float RANGEDCOOLDOWN = 1;
 	public static final float RANGEDSPEED = 10;
+	
+	//Chance that an enemy will drop a potion in percent
+	public static final float POTIONCHANCE = 30;
 
 	//The number of dungeon songs that will be looped
 	public static final int NUMOFDUNGEONSONGS = 2;
@@ -97,5 +100,10 @@ public class Constants
 	//Max number of potions that can be held
 	public static final int MAXHEALTHPOTIONS = 3;
 	public static final int MAXDAMAGEPOTIONS = 2;
-
+	
+	//Health Potion healing amounnt
+	public static final int HEALTHPOTIONHEALING = 50;
+	
+	//Damage Potion damage increase amount
+	public static final int DAMAGEPOTIONINCREASE = 2;
 }

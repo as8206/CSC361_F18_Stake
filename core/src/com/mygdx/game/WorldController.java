@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import java.io.File;
+import java.util.stream.Collector.Characteristics;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -41,6 +42,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	private Array<String> randomizedRooms;
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
+	private Character.PotionType activePotion;
 	
 	//increases with each deeper level of the dungeon
 	public int goldModifier;
@@ -69,6 +71,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		bodiesToBeRemoved = new Array<Body>();
 		score = 0;
 		goldModifier = 1;
+		activePotion = Character.PotionType.HEALTH;
 		prepRoomFiles();
 		
 		initLevel();
@@ -192,6 +195,16 @@ public class WorldController extends InputAdapter implements ContactListener
 			{
 				touchedObject.activate();
 			}
+		}
+		
+		//potion use
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
+		{
+			activeRoom.player.usePotion(activePotion);
+		}
+		if(Gdx.input.isKeyJustPressed(Keys.TAB))
+		{
+			changeActivePotion();
 		}
 		
 		//attack input
@@ -632,6 +645,22 @@ public class WorldController extends InputAdapter implements ContactListener
 		worldRenderer.prepText(text);
 	}
 	
+	/**
+	 * Cycles through the types of potions
+	 */
+	public void changeActivePotion()
+	{
+		if(activePotion == Character.PotionType.HEALTH)
+		{
+			activePotion = Character.PotionType.DAMAGE;
+			worldRenderer.prepText("Damage Increase Potion Selected");
+		}
+		else if(activePotion == Character.PotionType.DAMAGE)
+		{
+			activePotion = Character.PotionType.HEALTH;
+			worldRenderer.prepText("Health Potion Selected");
+		}
+	}
 }
 
 

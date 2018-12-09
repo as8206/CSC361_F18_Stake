@@ -221,9 +221,40 @@ public class Character extends AbstractGameObject
 		return false;
 	}
 	
+	/**
+	 * Uses a potion based on its type and the amount the player has
+	 * @param type
+	 */
 	public void usePotion(PotionType type)
 	{
-		
+		if(type == PotionType.HEALTH)
+		{
+			if(numHealthPotions > 0)
+			{
+				if(curHealth == totalHealth)
+				{
+					worldController.prepText("Health Full");
+					return;
+				}
+				curHealth += Constants.HEALTHPOTIONHEALING;
+				if(curHealth > totalHealth)
+					curHealth = totalHealth;
+				numHealthPotions--;
+				//TODO add sound effect
+			}
+			else
+				worldController.prepText("No Health Potions");
+		}
+		else if(type == PotionType.DAMAGE)
+		{
+			if(numDamagePotions > 0)
+			{
+				worldController.prepText("Would use damage Potion");
+				numDamagePotions--;
+			}
+			else
+				worldController.prepText("No Damage Increase Potions");
+		}
 	}
 	
 	public void setAnimation(Animation animation)

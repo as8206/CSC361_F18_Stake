@@ -46,7 +46,7 @@ public class Chest extends AbstractGameObject
 		AudioManager.instance.play(Assets.instance.sounds.openChest);
 		
 		//Spawn loot
-		int randomNumOfCoins = (int) (Math.random() * ((5 - 2) + 1)) + 2;
+		int randomNumOfCoins = (int) (Math.random() * ((12 - 4) + 1)) + 4; //TODO create constants for easy changes
 		GoldCluster tempCluster = new GoldCluster(Assets.instance.goldCoin.goldCluster, room, worldController, randomNumOfCoins);
 		tempCluster.body.setTransform(body.getPosition().x, body.getPosition().y, 0);
 		room.addCollectedObject(tempCluster);
