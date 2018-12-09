@@ -8,13 +8,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.game.Assets;
+import com.mygdx.game.Room;
+import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
 public class Chest extends AbstractGameObject
 {
-
-	public Chest(TextureRegion img)
+	private Room room;
+	private WorldController worldController;
+	
+	public Chest(TextureRegion img, Room room, WorldController wc)
 	{
 		super(img);
 		
@@ -30,14 +34,27 @@ public class Chest extends AbstractGameObject
 		body.setUserData(this);
 		
 		circle.dispose();
+		
+		this.room = room;
+		this.worldController = wc;
 	}
 	
 	@Override
 	public void activate()
 	{
+		//Play sound clip
 		AudioManager.instance.play(Assets.instance.sounds.openChest);
 		
-		System.out.println("Chest touched");
+		//Spawn loot
+		int randomNumOfCoins = (int) (Math.random() * ((5 - 2) + 1)) + 2;
+		GoldCluster tempCluster = new GoldCluster(Assets.instance.goldCoin.goldCluster, room, worldController, randomNumOfCoins);
+//		GoldCoin tempCluster = new GoldCoin(Assets.instance.goldCoin.goldCluster, room, worldController);
+		tempCluster.body.setTransform(body.getPosition().x, body.getPosition().y, 0);
+		room.addGold(tempCluster);
+		
+		//Remove the chest
+		room.removeChest(this);
+		worldController.addToRemoval(body);
 	}
 
 }

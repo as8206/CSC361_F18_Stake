@@ -89,6 +89,7 @@ public class Room
 	
 	//removal arrays
 	public Array<GoldCoin> coinsToBeRemoved;
+	public Array<Chest> chestsToBeRemoved;
 	public Array<Attack> attacksToBeRemoved;
 	public Array<Enemy> enemiesToBeRemoved;
 	public Array<AttackEnemy> enemyAttacksToBeRemoved;
@@ -120,6 +121,7 @@ public class Room
 		
 		//removal arrays
 		coinsToBeRemoved = new Array<GoldCoin>();
+		chestsToBeRemoved = new Array<Chest>();
 		attacksToBeRemoved = new Array<Attack>();
 		enemiesToBeRemoved = new Array<Enemy>();
 		enemyAttacksToBeRemoved = new Array<AttackEnemy>();
@@ -392,7 +394,7 @@ public class Room
 				//chest object
 				else if(BLOCK_TYPE.CHEST.sameColor(currentPixel))
 				{
-					obj = new Chest(Assets.instance.chest.chest);
+					obj = new Chest(Assets.instance.chest.chest, this, worldController);
 					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
 					chests.add((Chest)obj);
 					
@@ -577,6 +579,15 @@ public class Room
 			coinsToBeRemoved.removeValue(grabbedCoin, false);
 		}
 		
+		for(Chest openedChest: chestsToBeRemoved)
+		{
+			for(Chest chest : chests)
+			{
+				if(chest == openedChest)
+					chests.removeValue(openedChest, false);
+			}
+		}
+		
 		for(Attack attackHit : attacksToBeRemoved)
 		{
 			for(Attack attack : attacks)
@@ -614,6 +625,11 @@ public class Room
 		coinsToBeRemoved.add(grabbedCoin);
 	}
 	
+	public void removeChest(Chest openedChest)
+	{
+		chestsToBeRemoved.add(openedChest);
+	}
+	
 	public void removeAttack(Attack attackHit)
 	{
 		attacksToBeRemoved.add(attackHit);
@@ -646,5 +662,10 @@ public class Room
 	public void removeEnemyAttack(AttackEnemy attackEnemy)
 	{
 		enemyAttacksToBeRemoved.add(attackEnemy);
+	}
+
+	public void addGold(GoldCoin gold) 
+	{
+		coins.add(gold);
 	}
 }
