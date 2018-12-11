@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.screens.GameOverScreen;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.GamePreferences;
@@ -23,6 +24,6 @@ public class AmarethMain extends Game
 		GamePreferences.instance.load();
 		
 		// Start game at menu screen
-		setScreen(new MenuScreen(this));
+		setScreen(new GameOverScreen(this,0));
 	}
 }
