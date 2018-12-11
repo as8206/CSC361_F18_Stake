@@ -5,15 +5,16 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.game.Assets;
 import com.mygdx.game.Room;
+import com.mygdx.game.WorldController;
 import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.utils.Constants;
 
 public class EnemyRanged extends Enemy
 {
 
-	public EnemyRanged(TextureRegion img, Room level)
+	public EnemyRanged(TextureRegion img, Room level, WorldController wc)
 	{
-		super(img, level);
+		super(img, level, wc);
 		damage = Constants.RANGEDDAMAGE;
 		
 		CircleShape circle = new CircleShape();
@@ -33,7 +34,7 @@ public class EnemyRanged extends Enemy
 	@Override
 	public void performAttack() 
 	{
-		level.addEnemyAttack(new AttackEnemy(Assets.instance.attacks.arrow, target.body.getPosition().x, target.body.getPosition().y, this));
+		room.addEnemyAttack(new AttackEnemy(Assets.instance.attacks.arrow, target.body.getPosition().x, target.body.getPosition().y, this));
 		cooldown = Constants.RANGEDCOOLDOWN;		
 	}
 

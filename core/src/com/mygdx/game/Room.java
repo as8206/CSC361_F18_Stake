@@ -74,7 +74,7 @@ public class Room
 	public Array<Rubble> rubbles;
 	public Array<Ladder> ladders;
 	public Array<Chest> chests;
-	public Array<GoldCoin> coins;
+	public Array<AbstractCollectedObject> collectedObjects;
 	public Array<EnemyRanged> rangedEnemies;
 	public Array<EnemyMelee> meleeEnemies;
 	public Character player;
@@ -88,7 +88,7 @@ public class Room
 	WorldController worldController;
 	
 	//removal arrays
-	public Array<GoldCoin> coinsToBeRemoved;
+	public Array<AbstractCollectedObject> collectedToBeRemoved;
 	public Array<Chest> chestsToBeRemoved;
 	public Array<Attack> attacksToBeRemoved;
 	public Array<Enemy> enemiesToBeRemoved;
@@ -110,7 +110,7 @@ public class Room
 		rubbles = new Array<Rubble>();
 		ladders = new Array<Ladder>();
 		chests = new Array<Chest>();
-		coins = new Array<GoldCoin>();
+		collectedObjects = new Array<AbstractCollectedObject>();
 		rangedEnemies = new Array<EnemyRanged>();
 		meleeEnemies = new Array<EnemyMelee>();
 		attacks = new Array<Attack>();
@@ -120,7 +120,7 @@ public class Room
 		grounds = new Array<Sprite>();
 		
 		//removal arrays
-		coinsToBeRemoved = new Array<GoldCoin>();
+		collectedToBeRemoved = new Array<AbstractCollectedObject>();
 		chestsToBeRemoved = new Array<Chest>();
 		attacksToBeRemoved = new Array<Attack>();
 		enemiesToBeRemoved = new Array<Enemy>();
@@ -412,7 +412,7 @@ public class Room
 				{
 					obj = new GoldCoin(Assets.instance.goldCoin.goldCoin, this, worldController);
 					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0);
-					coins.add((GoldCoin)obj);
+					collectedObjects.add((GoldCoin)obj);
 					
 					spr = new Sprite(Assets.instance.tile.tile);
 					spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
@@ -426,7 +426,7 @@ public class Room
 				//player spawn position
 				else if(BLOCK_TYPE.PLAYER.sameColor(currentPixel))
 				{
-					obj = new Character(Assets.instance.character.character);
+					obj = new Character(Assets.instance.character.character, worldController);
 					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					player = (Character)obj;
 					
@@ -440,7 +440,7 @@ public class Room
 				//melee enemy spawn positions
 				else if(BLOCK_TYPE.EMELEE.sameColor(currentPixel))
 				{
-					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this);
+					obj = new EnemyMelee(Assets.instance.barbarian.barbarian, this, worldController);
 					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					meleeEnemies.add((EnemyMelee)obj);
 					
@@ -454,7 +454,7 @@ public class Room
 				//ranged enemy spawn positions
 				else if(BLOCK_TYPE.ERANGED.sameColor(currentPixel))
 				{
-					obj = new EnemyRanged(Assets.instance.goblin.goblin, this);
+					obj = new EnemyRanged(Assets.instance.goblin.goblin, this, worldController);
 					obj.body.setTransform(pixelX + roomOffsetX, -pixelY + roomOffsetY, 0); //TODO make character offset for y a constant, will be used for enemies
 					rangedEnemies.add((EnemyRanged)obj);
 					
@@ -515,8 +515,8 @@ public class Room
 			chest.render(batch);
 		
 		//draw coins
-		for(GoldCoin coin : coins)
-			coin.render(batch);
+		for(AbstractCollectedObject object : collectedObjects)
+			object.render(batch);
 		
 		//draw ranged enemies
 		for(EnemyRanged enemy : rangedEnemies)
@@ -569,14 +569,14 @@ public class Room
 	
 	public void activateRemoval()
 	{
-		for(GoldCoin grabbedCoin : coinsToBeRemoved)
+		for(AbstractCollectedObject collectedObject : collectedToBeRemoved)
 		{
-			for(GoldCoin coin : coins)
+			for(AbstractCollectedObject object : collectedObjects)
 			{
-				if(coin == grabbedCoin)
-					coins.removeValue(grabbedCoin, false);
+				if(object == collectedObject)
+					collectedObjects.removeValue(collectedObject, false);
 			}
-			coinsToBeRemoved.removeValue(grabbedCoin, false);
+			collectedToBeRemoved.removeValue(collectedObject, false);
 		}
 		
 		for(Chest openedChest: chestsToBeRemoved)
@@ -620,9 +620,9 @@ public class Room
 		}
 	}
 	
-	public void removeCoin(GoldCoin grabbedCoin)
+	public void removeCollectedObject(AbstractCollectedObject collectedObject)
 	{
-		coinsToBeRemoved.add(grabbedCoin);
+		collectedToBeRemoved.add(collectedObject);
 	}
 	
 	public void removeChest(Chest openedChest)
@@ -651,7 +651,6 @@ public class Room
 	public void removeEnemy(Enemy enemy) 
 	{
 		enemiesToBeRemoved.add(enemy);
-		worldController.addToRemoval(enemy.body);
 	}
 
 	public void addEnemyAttack(AttackEnemy attackEnemy) 
@@ -664,8 +663,8 @@ public class Room
 		enemyAttacksToBeRemoved.add(attackEnemy);
 	}
 
-	public void addGold(GoldCoin gold) 
+	public void addCollectedObject(AbstractCollectedObject collectedObject) 
 	{
-		coins.add(gold);
+		collectedObjects.add(collectedObject);
 	}
 }

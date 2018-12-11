@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import java.io.File;
+import java.util.stream.Collector.Characteristics;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
+import com.mygdx.game.objects.Character;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
@@ -40,6 +42,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	private Array<String> randomizedRooms;
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
+	private Character.PotionType activePotion;
 	
 	//increases with each deeper level of the dungeon
 	public int goldModifier;
@@ -68,6 +71,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		bodiesToBeRemoved = new Array<Body>();
 		score = 0;
 		goldModifier = 1;
+		activePotion = Character.PotionType.HEALTH;
 		prepRoomFiles();
 		
 		initLevel();
@@ -193,6 +197,16 @@ public class WorldController extends InputAdapter implements ContactListener
 			}
 		}
 		
+		//potion use
+		if (Gdx.input.isKeyJustPressed(Keys.Q))
+		{
+			activeRoom.player.usePotion(activePotion);
+		}
+		if(Gdx.input.isKeyJustPressed(Keys.TAB))
+		{
+			changeActivePotion();
+		}
+		
 		//attack input
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT))
 		{
@@ -300,14 +314,16 @@ public class WorldController extends InputAdapter implements ContactListener
 	public void beginContact(Contact contact)
 	{
 		//collisions for gold coin, non-button activated
-		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && contact.getFixtureB().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor()) //TODO needs refactoring
+		boolean isCollectedObjectA = AbstractCollectedObject.class.isAssignableFrom(contact.getFixtureA().getBody().getUserData().getClass());
+		boolean isCollectedObjectB = AbstractCollectedObject.class.isAssignableFrom(contact.getFixtureB().getBody().getUserData().getClass());
+		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && isCollectedObjectB && contact.getFixtureB().isSensor()) //TODO needs refactoring
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
 			touchedObject = null;
 			
 		}
-		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && contact.getFixtureA().getBody().getUserData().getClass().isAssignableFrom(GoldCluster.class) && contact.getFixtureB().isSensor())
+		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && isCollectedObjectA && contact.getFixtureB().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
 			touchedObject.activate();
@@ -332,14 +348,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureA().getBody().getUserData().getClass() == Attack.class && !contact.getFixtureB().isSensor())
 		{
-			System.out.println("attack collision detected");
 			Attack attack = (Attack) contact.getFixtureA().getBody().getUserData();
 			
 			if(contact.getFixtureB().getBody().getUserData().getClass() == EnemyMelee.class || 
 					contact.getFixtureB().getBody().getUserData().getClass() == EnemyRanged.class)
 			{
 				Enemy enemy = (Enemy) contact.getFixtureB().getBody().getUserData();
-				System.out.println("Enemy hit");
 				enemy.takeHit(attack.genDamage());
 			}
 			
@@ -348,14 +362,12 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureB().getBody().getUserData().getClass() == Attack.class && !contact.getFixtureA().isSensor())
 		{
-			System.out.println("attack collision detected");
 			Attack attack = (Attack) contact.getFixtureB().getBody().getUserData();
 
 			if(contact.getFixtureA().getBody().getUserData().getClass() == EnemyMelee.class || 
 					contact.getFixtureA().getBody().getUserData().getClass() == EnemyRanged.class)
 			{
 				Enemy enemy = (Enemy) contact.getFixtureA().getBody().getUserData();
-				System.out.println("Enemy hit");
 				enemy.takeHit(attack.genDamage());
 			}
 			
@@ -385,12 +397,10 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureA().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureB().isSensor())
 		{
-			System.out.println("attack collision detected");
 			AttackEnemy attack = (AttackEnemy) contact.getFixtureA().getBody().getUserData();
 			
 			if(contact.getFixtureB().getBody().getUserData() == activeRoom.player)
 			{
-				System.out.println("Player hit");
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			
@@ -399,12 +409,10 @@ public class WorldController extends InputAdapter implements ContactListener
 		}
 		else if(contact.getFixtureB().getBody().getUserData().getClass() == AttackEnemy.class && !contact.getFixtureA().isSensor())
 		{
-			System.out.println("attack collision detected");
 			AttackEnemy attack = (AttackEnemy) contact.getFixtureB().getBody().getUserData();
 
 			if(contact.getFixtureA().getBody().getUserData() == activeRoom.player)
 			{
-				System.out.println("Player hit");
 				activeRoom.player.takeHit(attack.genDamage());
 			}
 			
@@ -620,6 +628,31 @@ public class WorldController extends InputAdapter implements ContactListener
 	    randomizedRooms.shuffle();
 	}
 	
+	/**
+	 * Allows objects that only hold a reference to worldController to print centered text
+	 * @param text
+	 */
+	public void prepText(String text)
+	{
+		worldRenderer.prepText(text);
+	}
+	
+	/**
+	 * Cycles through the types of potions
+	 */
+	public void changeActivePotion()
+	{
+		if(activePotion == Character.PotionType.HEALTH)
+		{
+			activePotion = Character.PotionType.DAMAGE;
+			worldRenderer.prepText("Damage Increase Potion Selected");
+		}
+		else if(activePotion == Character.PotionType.DAMAGE)
+		{
+			activePotion = Character.PotionType.HEALTH;
+			worldRenderer.prepText("Health Potion Selected");
+		}
+	}
 }
 
 

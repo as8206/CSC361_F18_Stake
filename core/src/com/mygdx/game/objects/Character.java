@@ -21,13 +21,23 @@ import com.mygdx.game.utils.Constants;
 
 public class Character extends AbstractGameObject
 {
+	public enum PotionType 
+	{
+		HEALTH, DAMAGE;
+	}
+
 	public float movementSpeed = 3.0f;
 	
+	private WorldController worldController;
+	
+	//health
 	public float curHealth;
 	public float totalHealth;
 	
+	//attacks
 	public AttackData attack1, attack2, attackUlt;
 	public float cooldown1, cooldown2, cooldownUlt;
+	public float damageModifier;
 
 	//Animation
 	public float stateTime;
@@ -36,11 +46,16 @@ public class Character extends AbstractGameObject
 	private TextureRegion drawnReg;
 	private boolean standingStill;
 	
+	//potions
+	public int numHealthPotions;
+	public int numDamagePotions;
+	public float damagePotionDuration;
+	
 	/**
 	 * Creates the object for the player character, and changes abstract contructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Character(TextureRegion img)
+	public Character(TextureRegion img, WorldController wc)
 	{
 		super(img);
 		
@@ -78,10 +93,16 @@ public class Character extends AbstractGameObject
 		totalHealth = curHealth;
 		
 		initAttacks();
+		damageModifier = 1;
 	
 		walkingAnim = Assets.instance.character.animCharacter;
 		drawnReg = reg;
 		standingStill = true;
+		
+		numHealthPotions = 0;
+		numDamagePotions = 0;
+		
+		worldController = wc;
 	}
 	
 	/**
@@ -115,6 +136,7 @@ public class Character extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		checkCooldowns(deltaTime);
+		checkStatusEffects(deltaTime);
 		stateTime += deltaTime;
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0 && standingStill == false)
@@ -150,7 +172,21 @@ public class Character extends AbstractGameObject
 		if(cooldownUlt < 0)
 			cooldownUlt = 0;		
 	}
+	
+	private void checkStatusEffects(float deltaTime)
+	{
+		if(damagePotionDuration > 0)
+		{
+			damagePotionDuration -= deltaTime;
+			if(damagePotionDuration <= 0)
+				damageModifier -= Constants.DAMAGEPOTIONINCREASE;
+		}
+	}
 
+	/**
+	 * Applies damage to the player
+	 * @param damage
+	 */
 	public void takeHit(float damage) 
 	{
 		AudioManager.instance.play(Assets.instance.sounds.hitTaken);
@@ -158,6 +194,85 @@ public class Character extends AbstractGameObject
 		curHealth -= damage;
 		if(curHealth < 0)
 			curHealth = 0;
+	}
+	
+	/**
+	 * Given the potion type, will add the potion to inventory if the player has space
+	 * @param type
+	 * @return
+	 */
+	public boolean grabPotion(PotionType type)
+	{
+		if(type == PotionType.HEALTH)
+		{
+			if(numHealthPotions < Constants.MAXHEALTHPOTIONS)
+			{
+				numHealthPotions++;
+				return true;
+			}
+			else
+			{
+				worldController.prepText("Health Potions Full");
+				return false;
+			}
+				
+		}
+		else if(type == PotionType.DAMAGE)
+		{
+			if(numDamagePotions < Constants.MAXDAMAGEPOTIONS)
+			{
+				numDamagePotions++;
+				return true;
+			}
+			else
+			{
+				worldController.prepText("Damage Increase Potions Full");
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Uses a potion based on its type and the amount the player has
+	 * @param type
+	 */
+	public void usePotion(PotionType type)
+	{
+		if(type == PotionType.HEALTH)
+		{
+			if(numHealthPotions > 0)
+			{
+				if(curHealth == totalHealth)
+				{
+					worldController.prepText("Health Full");
+					return;
+				}
+				curHealth += Constants.HEALTHPOTIONHEALING;
+				if(curHealth > totalHealth)
+					curHealth = totalHealth;
+				numHealthPotions--;
+				//TODO add sound effect
+			}
+			else
+				worldController.prepText("No Health Potions");
+		}
+		else if(type == PotionType.DAMAGE)
+		{
+			if(numDamagePotions > 0)
+			{
+				if(damagePotionDuration > 0)
+				{
+					worldController.prepText("Potion already active");
+					return;
+				}
+				damageModifier += Constants.DAMAGEPOTIONINCREASE;
+				damagePotionDuration = Constants.DAMAGEPOTIONDURATION;
+				numDamagePotions--;
+			}
+			else
+				worldController.prepText("No Damage Increase Potions");
+		}
 	}
 	
 	public void setAnimation(Animation animation)
