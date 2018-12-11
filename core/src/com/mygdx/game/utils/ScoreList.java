@@ -58,7 +58,14 @@ public class ScoreList
 	 */
 	public boolean checkScore(int testScore)
 	{
-		return false;
+		boolean validScore = false;
+		
+		for(int i = 0; i < MAXSCORES; i++)
+		{
+			if(testScore > scores[i])
+				validScore = true;
+		}
+		return validScore;
 	}
 	
 	/**
@@ -69,6 +76,30 @@ public class ScoreList
 	 */
 	public void insertScore(int newScore, String newName)
 	{
+		int rank = -1;
 		
+		for(int i = 0; i < MAXSCORES; i++)
+		{
+			if(newScore > scores[i])
+				rank = i;
+		}
+		
+		if(rank == -1)
+			return;
+		
+		int tempScore = scores[rank];
+		String tempName = names[rank];
+		scores[rank] = newScore;
+		names[rank] = newName;
+		
+		for(int i = rank+1; i < MAXSCORES; i++)
+		{
+			int tempScore2 = scores[i];
+			String tempName2 = names[i];
+			scores[i] = tempScore;
+			names[i] = tempName;
+			tempScore = tempScore2;
+			tempName = tempName2;
+		}
 	}
 }
