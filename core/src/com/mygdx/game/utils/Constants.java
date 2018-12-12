@@ -72,7 +72,10 @@ public class Constants
 	public static final float COOLDOWN = .3f;
 	
 	//Holds the game settings
-	public static final String SETTINGS = "../core/assets/gameSettings.txt";
+	public static final String SETTINGS = "gameSettings.txt";
+	
+	//Holds the highscore list
+	public static final String SCORELIST = "scorelist.txt";
 
 	//Center screen locations
 	public static final float CENTERX = 800;

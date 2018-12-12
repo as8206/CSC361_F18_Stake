@@ -2,7 +2,8 @@
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle:
 	{
 		play: {down: play-dn, up: play-up},
-		options: {down: options-dn, up: options-up}
+		options: {down: options-dn, up: options-up},
+		highscore: {down: highscore-dn, up: highscore-up}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Image:

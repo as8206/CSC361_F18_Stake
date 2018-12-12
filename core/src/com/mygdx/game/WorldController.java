@@ -22,6 +22,7 @@ import com.mygdx.game.attacks.Attack;
 import com.mygdx.game.attacks.AttackEnemy;
 import com.mygdx.game.objects.*;
 import com.mygdx.game.objects.Character;
+import com.mygdx.game.screens.GameOverScreen;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.utils.CameraHelper;
 import com.mygdx.game.utils.Constants;
@@ -109,9 +110,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	{
 		if(activeRoom.player.curHealth <= 0)
 		{
-			//TODO change to a game over state
-			init();
-			Gdx.app.debug(TAG, "Player death");
+			game.setScreen(new GameOverScreen(game, score));
 		}
 	}
 
