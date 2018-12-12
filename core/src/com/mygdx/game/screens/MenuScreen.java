@@ -57,9 +57,9 @@ public class MenuScreen extends AbstractGameScreen
 	private Sprite imgBackground;
 	private Sprite wedge;
 	private Image imgLogo;
-	private Button btnMenuPlay;
-	private Button btnMenuOptions;
-	private Button btnHighscores;
+	private TextButton btnMenuPlay;
+	private TextButton btnMenuOptions;
+	private TextButton btnHighscores;
 	
 	//debug
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
@@ -326,7 +326,7 @@ public class MenuScreen extends AbstractGameScreen
 	private Table buildLogo() 
 	{
 		Table layer = new Table();
-		layer.center().top();
+		layer.center().top().padTop(50f).padRight(200f);
 		
 		// + Game Logo
 		imgLogo = new Image(skinAmareth, "logo");
@@ -356,10 +356,11 @@ public class MenuScreen extends AbstractGameScreen
 
 		//Set the layer to the bottom right
 		layer.right().bottom();
-		layer.padBottom(150f).padRight(125f);
+		layer.padBottom(150f).padRight(80f);
 		
 		// add play button
-		btnMenuPlay = new Button(skinAmareth, "play");
+//		btnMenuPlay = new Button(skinAmareth, "play");
+		btnMenuPlay = new TextButton("Play", skinPixthulhu);
 		layer.add(btnMenuPlay).padBottom(100f);
 		
 		//give the play button something to do
@@ -374,7 +375,7 @@ public class MenuScreen extends AbstractGameScreen
 		layer.row();
 		
 		//add options button
-		btnMenuOptions = new Button(skinAmareth, "options");
+		btnMenuOptions = new TextButton("Options", skinPixthulhu);
 		layer.add(btnMenuOptions).padBottom(100f);
 		
 		//give the options button something to do
@@ -389,7 +390,7 @@ public class MenuScreen extends AbstractGameScreen
 		layer.row();
 		
 		//add highscores button
-		btnHighscores = new Button(skinAmareth, "highscore");
+		btnHighscores = new TextButton("Highscores", skinPixthulhu);
 		layer.add(btnHighscores);
 		
 		//give the options button something to do

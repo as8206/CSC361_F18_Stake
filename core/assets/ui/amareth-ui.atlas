@@ -6,50 +6,64 @@ filter: Nearest,Nearest
 repeat: none
 highscore-dn
   rotate: false
-  xy: 1, 99
+  xy: 1, 1
   size: 300, 96
   orig: 300, 96
   offset: 0, 0
   index: -1
 highscore-up
   rotate: false
-  xy: 1, 99
+  xy: 1, 1
   size: 300, 96
   orig: 300, 96
   offset: 0, 0
   index: -1
 logo
   rotate: false
-  xy: 1, 197
-  size: 300, 200
-  orig: 300, 200
+  xy: 1, 399
+  size: 796, 106
+  orig: 796, 106
+  offset: 0, 0
+  index: -1
+logoOriginal
+  rotate: false
+  xy: 1, 301
+  size: 786, 96
+  orig: 786, 96
   offset: 0, 0
   index: -1
 options-dn
-  rotate: false
-  xy: 303, 301
-  size: 300, 96
-  orig: 300, 96
-  offset: 0, 0
-  index: -1
-options-up
-  rotate: false
-  xy: 1, 1
-  size: 300, 96
-  orig: 300, 96
-  offset: 0, 0
-  index: -1
-play-dn
   rotate: false
   xy: 303, 203
   size: 300, 96
   orig: 300, 96
   offset: 0, 0
   index: -1
-play-up
+options-up
   rotate: false
-  xy: 605, 301
+  xy: 303, 105
   size: 300, 96
   orig: 300, 96
+  offset: 0, 0
+  index: -1
+play-dn
+  rotate: false
+  xy: 303, 7
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1
+play-up
+  rotate: false
+  xy: 605, 203
+  size: 300, 96
+  orig: 300, 96
+  offset: 0, 0
+  index: -1
+templogo
+  rotate: false
+  xy: 1, 99
+  size: 300, 200
+  orig: 300, 200
   offset: 0, 0
   index: -1
