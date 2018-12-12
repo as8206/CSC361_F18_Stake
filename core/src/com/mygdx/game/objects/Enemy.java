@@ -158,12 +158,17 @@ public abstract class Enemy extends AbstractGameObject
 			body.setLinearVelocity(0,0);
 		}
 		
-		if(body.getLinearVelocity().x >= 0)
+		checkMirror(target.body.getPosition().x, target.body.getPosition().y);
+	}
+	
+	private void checkMirror(float posX, float posY) 
+	{
+		if(posX - body.getPosition().x > 0)
 			mirror(false);
 		else
 			mirror(true);
 	}
-	
+
 	/**
 	 * Moves the enemy towards the position passed in
 	 * @param posX
