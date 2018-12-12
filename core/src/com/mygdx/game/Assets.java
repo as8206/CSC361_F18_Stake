@@ -432,11 +432,13 @@ public static final String TAG = Assets.class.getName();
 	{
 		public final AtlasRegion healthPotion;
 		public final AtlasRegion damagePotion;
+		public final AtlasRegion highlight;
 		
 		public assetPotions(TextureAtlas atlas)
 		{
 			healthPotion = atlas.findRegion("potionHealth");
 			damagePotion = atlas.findRegion("potionDamage");
+			highlight = atlas.findRegion("potionHighlight");
 		}
 	}
 	
