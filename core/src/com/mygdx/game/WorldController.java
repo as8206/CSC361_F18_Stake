@@ -45,6 +45,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
 	private Character.PotionType activePotion;
+	public Boolean playerIsDead;
 	
 	//increases with each deeper level of the dungeon
 	public int goldModifier;
@@ -74,6 +75,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		score = 0;
 		goldModifier = 1;
 		activePotion = Character.PotionType.HEALTH;
+		playerIsDead = false;
 		prepRoomFiles();
 		
 		initLevel();
@@ -97,21 +99,33 @@ public class WorldController extends InputAdapter implements ContactListener
 	
 	public void update(float deltaTime)
 	{
-		b2dWorld.step(deltaTime, 5, 3);
-		handleDebugInput(deltaTime);
-		handlePlayerInput(deltaTime);
-		cameraHelper.update(deltaTime);
-		activeRoom.update(deltaTime);
-		checkGameOver();
-		
-		removeBodies();
+		if(!playerIsDead)
+		{
+			b2dWorld.step(deltaTime, 5, 3);
+			handleDebugInput(deltaTime);
+			handlePlayerInput(deltaTime);
+			cameraHelper.update(deltaTime);
+			activeRoom.update(deltaTime);
+			
+			checkGameOver();
+			removeBodies();
+		}
+		else
+			endGame();
 	}
 	
+	private void endGame() 
+	{
+		b2dWorld.dispose();
+		game.setScreen(new GameOverScreen(game, score));
+		worldRenderer.dispose();
+	}
+
 	private void checkGameOver() 
 	{
 		if(activeRoom.player.curHealth <= 0)
 		{
-			game.setScreen(new GameOverScreen(game, score));
+			playerIsDead = true;
 		}
 	}
 
