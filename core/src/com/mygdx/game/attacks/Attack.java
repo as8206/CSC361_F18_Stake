@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.game.WorldController;
 import com.mygdx.game.objects.AbstractGameObject;
+import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 import com.mygdx.game.objects.Character;
 
@@ -26,6 +27,7 @@ public class Attack extends AbstractGameObject
 	private float tarY;
 	private Vector2 target;
 	private ParticleEffect particleEffect;
+	private float activeModifier;
 	
 	/**
 	 * Creates the attack object
@@ -72,6 +74,10 @@ public class Attack extends AbstractGameObject
 		
 		particleEffect = new ParticleEffect();
 		particleEffect.load(Gdx.files.internal(data.effectLocation), Gdx.files.internal(data.particleLocation));
+		
+		activeModifier = attacker.damageModifier;
+		
+		AudioManager.instance.play(data.soundEffect);
 	}
 	
 	@Override
@@ -146,6 +152,6 @@ public class Attack extends AbstractGameObject
 
 	public float genDamage() 
 	{
-		return (float) ((Math.random() * (data.damageMax - data.damageMin)) + data.damageMin);
+		return (float) ((Math.random() * (data.damageMax - data.damageMin)) + data.damageMin) * activeModifier;
 	}
 }

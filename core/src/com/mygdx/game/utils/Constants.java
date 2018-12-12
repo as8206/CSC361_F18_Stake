@@ -29,13 +29,13 @@ public class Constants
 	public static final String SKIN_LIBGDX_UI = "../core/assets/ui/uiskin.json";
 	
 	//Location of level 1
-	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png"; //TODO change to real spawn room
-	
-	//Location of level 2
-	public static final String LEVEL_02 = "../core/assets/levels/temp/level02.png";
+	public static final String STARTROOM = "../core/assets/levels/start/startingRoom.png";
 	
 	//Location of room png's
-	public static final String ROOMFILES = "../core/assets/levels/temp"; //TODO break into various door entry point folders
+	public static final String ROOMFILES = "../core/assets/levels/rooms"; //TODO break into various door entry point folders
+	
+	//Location of looped rooms
+	public static final String LOOPROOMS = "../core/assets/levels/loopedRooms";
 	
 	//offset of render vs collision box
 	public static final float OFFSET = 0.5f;
@@ -72,7 +72,10 @@ public class Constants
 	public static final float COOLDOWN = .3f;
 	
 	//Holds the game settings
-	public static final String SETTINGS = "../core/assets/gameSettings.txt";
+	public static final String SETTINGS = "gameSettings.txt";
+	
+	//Holds the highscore list
+	public static final String SCORELIST = "scorelist.txt";
 
 	//Center screen locations
 	public static final float CENTERX = 800;
@@ -90,8 +93,25 @@ public class Constants
 	public static final float RANGEDRANGE = 5;
 	public static final float RANGEDCOOLDOWN = 1;
 	public static final float RANGEDSPEED = 10;
+	
+	//Chance that an enemy will drop a potion in percent
+	public static final float POTIONCHANCE = 20;
+	
+	//if a potion drops, this chance it well be damage, else it is health
+	public static final float DAMAGEPOTIONCHANCE = 20;
 
 	//The number of dungeon songs that will be looped
 	public static final int NUMOFDUNGEONSONGS = 2;
-
+	
+	//Max number of potions that can be held
+	public static final int MAXHEALTHPOTIONS = 3;
+	public static final int MAXDAMAGEPOTIONS = 2;
+	
+	//Health Potion healing amount
+	public static final int HEALTHPOTIONHEALING = 50;
+	
+	//Damage Potion damage increase amount (added to damage multiplier, 1 is base plus 1, ie doubled)
+	//and modifier time length in seconds
+	public static final int DAMAGEPOTIONINCREASE = 1;
+	public static final int DAMAGEPOTIONDURATION = 5;
 }

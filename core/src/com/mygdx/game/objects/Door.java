@@ -61,6 +61,8 @@ public class Door extends AbstractGameObject
 			worldController.swapRoom(linkedRoom, this);
 		else
 			worldController.createNewRoom(this);
+		
+		activated = false;
 	}
 
 	public void setLinkedRoom(Room room)

@@ -9,41 +9,25 @@ import com.mygdx.game.WorldController;
 import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
-public class GoldCoin extends AbstractGameObject
+public class GoldCoin extends AbstractCollectedObject
 {
-	private Room room;
-	private WorldController worldController;
-
 	public GoldCoin(TextureRegion img, Room room, WorldController wc)
 	{
-		super(img);
-		
-		body.destroyFixture(body.getFixtureList().first());
-		
-		CircleShape circle = new CircleShape();
-		circle.setRadius(0.3f);
-		
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
-		fixtureDef.isSensor = true;
-		
-		body.createFixture(fixtureDef);
-		
-		body.setUserData(this);
-		
-		circle.dispose();
-		
-		this.room = room;
-		this.worldController = wc;
+		super(img, room, wc);
 	}
 
 	@Override
 	public void activate()
 	{	
-		AudioManager.instance.play(Assets.instance.sounds.coinPickup);
-		worldController.addScore(Constants.BASECOINSCORE + worldController.goldModifier);
-		room.removeCoin(this);
-		worldController.addToRemoval(body);
-		System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+		if(!collected)
+		{
+			AudioManager.instance.play(Assets.instance.sounds.coinPickup);
+			worldController.addScore(Constants.BASECOINSCORE * worldController.goldModifier);
+			room.removeCollectedObject(this);
+			worldController.addToRemoval(body);
+			System.out.println("Gold Coin touched, +10 gold. Score: " + worldController.getScore());
+			
+			collected = true;
+		}
 	}
 }

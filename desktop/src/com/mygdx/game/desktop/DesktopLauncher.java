@@ -1,5 +1,6 @@
 package com.mygdx.game.desktop;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.AmarethMain;
@@ -27,11 +28,14 @@ public class DesktopLauncher
 			 //Builds UI atlas
 			 TexturePacker.process(settings, "assets-raw/images-ui","../core/assets/ui","amareth-ui.atlas");
 		 }
-	 		LwjglApplicationConfiguration cfg = new
-	 		LwjglApplicationConfiguration();
+	 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 	 		cfg.title = "Amareth";
 	 		cfg.width = 1600;
 	 		cfg.height = 960;
+	 		cfg.resizable = false; //TODO update mouse based aiming logic to allow resize
+	 		cfg.addIcon("../core/assets/icons/amarethIcon128.png", FileType.Internal);
+	 		cfg.addIcon("../core/assets/icons/amarethIcon32.png", FileType.Internal);
+	 		cfg.addIcon("../core/assets/icons/amarethIcon16.png", FileType.Internal);
 	 		new LwjglApplication(new AmarethMain(), cfg);
 	 	
 	}

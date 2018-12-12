@@ -21,6 +21,7 @@ import com.mygdx.game.utils.Constants;
 
 public abstract class Enemy extends AbstractGameObject
 {
+	protected WorldController worldController;
 	//maximum movement speed
 	public final float movementSpeed = 3.0f;
 	
@@ -29,7 +30,7 @@ public abstract class Enemy extends AbstractGameObject
 	public boolean touchingTarget;
 	
 	//Level the enemy is a part of
-	Room level;
+	Room room;
 	
 	//Health and damage variables
 	public float curHealth;
@@ -48,7 +49,7 @@ public abstract class Enemy extends AbstractGameObject
 	 * Creates the object for the enemy, and changes abstract constructed static body to a dynamic body.
 	 * @param img
 	 */
-	public Enemy(TextureRegion img, Room level)
+	public Enemy(TextureRegion img, Room level, WorldController wc)
 	{
 		super(img);
 		
@@ -81,7 +82,8 @@ public abstract class Enemy extends AbstractGameObject
 		body = tempBody;
 		body.setUserData(this);
 		
-		this.level = level;
+		this.room = level;
+		this.worldController = wc;
 		
 		curHealth = Constants.ENEMYHEALTH;
 		totalHealth = curHealth;
@@ -156,12 +158,17 @@ public abstract class Enemy extends AbstractGameObject
 			body.setLinearVelocity(0,0);
 		}
 		
-		if(body.getLinearVelocity().x >= 0)
+		checkMirror(target.body.getPosition().x, target.body.getPosition().y);
+	}
+	
+	private void checkMirror(float posX, float posY) 
+	{
+		if(posX - body.getPosition().x > 0)
 			mirror(false);
 		else
 			mirror(true);
 	}
-	
+
 	/**
 	 * Moves the enemy towards the position passed in
 	 * @param posX
@@ -200,7 +207,8 @@ public abstract class Enemy extends AbstractGameObject
 		if(curHealth <= 0)
 		{
 			deathAction();
-			level.removeEnemy(this);
+			room.removeEnemy(this);
+			worldController.addToRemoval(body);
 		}
 	}
 
@@ -208,6 +216,32 @@ public abstract class Enemy extends AbstractGameObject
 	{
 		// TODO add death sound and drops
 		
+		int random = (int) (Math.random() * 100) + 1;
+		if(random <= Constants.POTIONCHANCE) //TODO create constants for different potion chances in case they are needed elsewhere
+		{
+			int random2 = (int) (Math.random() * 100) + 1;
+			
+			if(random2 <= Constants.DAMAGEPOTIONCHANCE)
+			{
+				Potion tempPotion = new Potion(Assets.instance.potions.damagePotion, room, worldController, Character.PotionType.DAMAGE);
+				tempPotion.body.setTransform(body.getPosition(), 0);
+				room.addCollectedObject(tempPotion);
+			}
+			else
+			{
+				Potion tempPotion = new Potion(Assets.instance.potions.healthPotion, room, worldController, Character.PotionType.HEALTH);
+				tempPotion.body.setTransform(body.getPosition(), 0);
+				room.addCollectedObject(tempPotion);
+			}
+				
+		}
+		else
+		{
+			int randomNumOfCoins = (int) (Math.random() * ((5 - 2) + 1)) + 2; //TODO create constants for easy changes
+			GoldCluster tempCluster = new GoldCluster(Assets.instance.goldCoin.goldCluster, room, worldController, randomNumOfCoins);
+			tempCluster.body.setTransform(body.getPosition().x, body.getPosition().y, 0);
+			room.addCollectedObject(tempCluster);
+		}
 	}
 
 	public abstract void performAttack();

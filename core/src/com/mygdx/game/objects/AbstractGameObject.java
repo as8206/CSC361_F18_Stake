@@ -16,6 +16,7 @@ public abstract class AbstractGameObject
 	public Body body;
 	protected TextureRegion reg;
 	public boolean mirrored;
+	protected boolean activated;
 	
 	/**
 	 * Provides a default box2d body for the object if a differencet constructor is not used.
@@ -38,10 +39,23 @@ public abstract class AbstractGameObject
 		box.dispose();
 		
 		this.reg = img;
+		activated = false;
 	}
 	
 	public void update (float deltaTime) {}
 	
+	/**
+	 * Prevents double activation,
+	 * Be sure to reset activated if object can be activated more than onc
+	 */
+	public void tryActivation()
+	{
+		if(!activated)
+		{
+			activated = true;
+			activate();
+		}
+	}
 	public void activate() {}
 	
 	/**

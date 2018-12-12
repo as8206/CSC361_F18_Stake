@@ -59,6 +59,7 @@ public static final String TAG = Assets.class.getName();
 	public assetHealthBar healthBar;
 	public assetUIBackground UIBackground;
 	public assetAttacks attacks;
+	public assetPotions potions;
 	
 	//music assets
 	public assetSounds sounds;
@@ -81,6 +82,7 @@ public static final String TAG = Assets.class.getName();
 		assetManager.load("../core/assets/sounds/enemyHit.wav", Sound.class);
 		assetManager.load("../core/assets/sounds/hitTaken.wav", Sound.class);
 		assetManager.load("../core/assets/sounds/openChest.wav", Sound.class);
+		assetManager.load("../core/assets/sounds/fireballCast.wav", Sound.class);
 		
 		//load music
 		assetManager.load("../core/assets/music/menuLoop.mp3", Music.class);
@@ -124,6 +126,7 @@ public static final String TAG = Assets.class.getName();
 		healthBar = new assetHealthBar();
 		UIBackground = new assetUIBackground();
 		attacks = new assetAttacks(atlas);
+		potions = new assetPotions(atlas);
 		
 		//music and sounds
 		sounds = new assetSounds(assetManager);
@@ -349,10 +352,12 @@ public static final String TAG = Assets.class.getName();
 	public class assetCoin
 	{
 		public final AtlasRegion goldCoin;
+		public final AtlasRegion goldCluster;
 		
 		public assetCoin (TextureAtlas atlas)
 		{
 			goldCoin = atlas.findRegion("goldCoin");
+			goldCluster = atlas.findRegion("goldCluster");
 		}
 	}
 	
@@ -423,6 +428,21 @@ public static final String TAG = Assets.class.getName();
 		}
 	}
 	
+	public class assetPotions
+	{
+		public final AtlasRegion healthPotion;
+		public final AtlasRegion damagePotion;
+		public final AtlasRegion highlight;
+		
+		public assetPotions(TextureAtlas atlas)
+		{
+			healthPotion = atlas.findRegion("potionHealth");
+			damagePotion = atlas.findRegion("potionDamage");
+			highlight = atlas.findRegion("potionHighlight");
+		}
+	}
+	
+	//Asset classes for sounds and music
 	public class assetSounds
 	{
 		public final Sound coinPickup;
@@ -430,6 +450,7 @@ public static final String TAG = Assets.class.getName();
 		public final Sound enemyHit;
 		public final Sound hitTaken;
 		public final Sound openChest;
+		public final Sound fireballCast;
 		
 		public assetSounds(AssetManager am)
 		{
@@ -438,6 +459,7 @@ public static final String TAG = Assets.class.getName();
 			enemyHit = am.get("../core/assets/sounds/enemyHit.wav", Sound.class);
 			hitTaken = am.get("../core/assets/sounds/hitTaken.wav", Sound.class);
 			openChest = am.get("../core/assets/sounds/openChest.wav", Sound.class);
+			fireballCast = am.get("../core/assets/sounds/fireballCast.wav", Sound.class);
 		}
 	}
 	

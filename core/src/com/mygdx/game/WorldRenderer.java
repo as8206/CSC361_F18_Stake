@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Ladder;
 import com.mygdx.game.utils.Constants;
+import com.mygdx.game.objects.Character;
 
 public class WorldRenderer implements Disposable
 {
@@ -19,7 +20,7 @@ public class WorldRenderer implements Disposable
 	private WorldController worldController;
 	
 	private Box2DDebugRenderer b2debugRenderer;
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	//Variables for printing text messages
 	private String text;
@@ -53,8 +54,11 @@ public class WorldRenderer implements Disposable
 	
 	public void render ()
 	{
-		renderLevel();
-		renderUI();
+		if(!worldController.playerIsDead)
+		{
+			renderLevel();
+			renderUI();
+		}
 	}
 	
 	private void renderUI()
@@ -79,6 +83,8 @@ public class WorldRenderer implements Disposable
 	{
 		float x = 35;
 		float y = 35;
+		
+		//Render health bar
 		float health = worldController.activeRoom.player.curHealth;
 		float totalHealth = worldController.activeRoom.player.totalHealth;
 		
@@ -108,6 +114,22 @@ public class WorldRenderer implements Disposable
 			Assets.instance.healthBar.healthBarBackground.draw(batch, x, y, 400, 30);
 	        Assets.instance.healthBar.healthBar.draw(batch, x+3, y+3, health / totalHealth * 394, 24);
 		}
+		
+		//Render potion inventory
+		int numHealthPotions = worldController.activeRoom.player.numHealthPotions;
+		int numDamagePotions = worldController.activeRoom.player.numDamagePotions;
+		
+		batch.draw(Assets.instance.potions.healthPotion, x + 5, y + 40, 25, 25, 50, 50, 1f, 1f, 180);
+		Assets.instance.fonts.defaultNormal.draw(batch, "X  " + numHealthPotions, x + 65, y + 55);
+		
+		batch.draw(Assets.instance.potions.damagePotion, x + 145, y + 40, 25, 25, 50, 50, 1f, 1f, 180);
+		Assets.instance.fonts.defaultNormal.draw(batch, "X  " + numDamagePotions, x + 205, y + 55);
+		
+		if(worldController.activePotion == Character.PotionType.HEALTH)
+			batch.draw(Assets.instance.potions.highlight, x + 5, y + 40, 25, 25, 50, 50, 1f, 1f, 180);
+		else if(worldController.activePotion == Character.PotionType.DAMAGE)
+			batch.draw(Assets.instance.potions.highlight, x + 145, y + 40, 25, 25, 50, 50, 1f, 1f, 180);
+			
 	}
 
 	private void renderText()
