@@ -95,7 +95,10 @@ public class Constants
 	public static final float RANGEDSPEED = 10;
 	
 	//Chance that an enemy will drop a potion in percent
-	public static final float POTIONCHANCE = 30;
+	public static final float POTIONCHANCE = 20;
+	
+	//if a potion drops, this chance it well be damage, else it is health
+	public static final float DAMAGEPOTIONCHANCE = 20;
 
 	//The number of dungeon songs that will be looped
 	public static final int NUMOFDUNGEONSONGS = 2;

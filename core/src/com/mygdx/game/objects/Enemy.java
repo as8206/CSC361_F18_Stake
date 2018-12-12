@@ -220,15 +220,16 @@ public abstract class Enemy extends AbstractGameObject
 		if(random <= Constants.POTIONCHANCE) //TODO create constants for different potion chances in case they are needed elsewhere
 		{
 			int random2 = (int) (Math.random() * 100) + 1;
-			if(random2 <= 70)
+			
+			if(random2 <= Constants.DAMAGEPOTIONCHANCE)
 			{
-				Potion tempPotion = new Potion(Assets.instance.potions.healthPotion, room, worldController, Character.PotionType.HEALTH);
+				Potion tempPotion = new Potion(Assets.instance.potions.damagePotion, room, worldController, Character.PotionType.DAMAGE);
 				tempPotion.body.setTransform(body.getPosition(), 0);
 				room.addCollectedObject(tempPotion);
 			}
 			else
 			{
-				Potion tempPotion = new Potion(Assets.instance.potions.damagePotion, room, worldController, Character.PotionType.DAMAGE);
+				Potion tempPotion = new Potion(Assets.instance.potions.healthPotion, room, worldController, Character.PotionType.HEALTH);
 				tempPotion.body.setTransform(body.getPosition(), 0);
 				room.addCollectedObject(tempPotion);
 			}
