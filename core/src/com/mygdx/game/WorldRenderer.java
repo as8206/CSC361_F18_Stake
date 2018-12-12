@@ -53,8 +53,11 @@ public class WorldRenderer implements Disposable
 	
 	public void render ()
 	{
-		renderLevel();
-		renderUI();
+		if(!worldController.playerIsDead)
+		{
+			renderLevel();
+			renderUI();
+		}
 	}
 	
 	private void renderUI()

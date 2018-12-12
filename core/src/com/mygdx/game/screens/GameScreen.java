@@ -100,7 +100,6 @@ public class GameScreen extends AbstractGameScreen
 		AudioManager.instance.stopMusic();
 		nextSong = 2;
 		
-		worldRenderer.dispose();
 		Gdx.input.setCatchBackKey(false);
 	}
 	
