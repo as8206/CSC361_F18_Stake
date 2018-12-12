@@ -41,9 +41,11 @@ public class WorldController extends InputAdapter implements ContactListener
 	public boolean debugEnabled;
 	private Room[][] rooms;
 	private Array<String> randomizedRooms;
+	private Array<String> loopedRooms;
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
 	public Character.PotionType activePotion;
+	public Boolean playerIsDead;
 	
 	//increases with each deeper level of the dungeon
 	public int goldModifier;
@@ -73,6 +75,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		score = 0;
 		goldModifier = 1;
 		activePotion = Character.PotionType.HEALTH;
+		playerIsDead = false;
 		prepRoomFiles();
 		
 		initLevel();
@@ -96,21 +99,33 @@ public class WorldController extends InputAdapter implements ContactListener
 	
 	public void update(float deltaTime)
 	{
-		b2dWorld.step(deltaTime, 5, 3);
-		handleDebugInput(deltaTime);
-		handlePlayerInput(deltaTime);
-		cameraHelper.update(deltaTime);
-		activeRoom.update(deltaTime);
-		checkGameOver();
-		
-		removeBodies();
+		if(!playerIsDead)
+		{
+			b2dWorld.step(deltaTime, 5, 3);
+			handleDebugInput(deltaTime);
+			handlePlayerInput(deltaTime);
+			cameraHelper.update(deltaTime);
+			activeRoom.update(deltaTime);
+			
+			checkGameOver();
+			removeBodies();
+		}
+		else
+			endGame();
 	}
 	
+	private void endGame() 
+	{
+		b2dWorld.dispose();
+		game.setScreen(new GameOverScreen(game, score));
+		worldRenderer.dispose();
+	}
+
 	private void checkGameOver() 
 	{
 		if(activeRoom.player.curHealth <= 0)
 		{
-			game.setScreen(new GameOverScreen(game, score));
+			playerIsDead = true;
 		}
 	}
 
@@ -501,12 +516,14 @@ public class WorldController extends InputAdapter implements ContactListener
 		//Checks that the room isn't outside the bounds
 		if((roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset < 0 )
 		{
-			return; //TODO trigger a message here "door is jammed"
+			worldRenderer.prepText("This door seems jammed");
+			return;
 		}
 		
 		if((roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset >= Constants.MAXROOMS || (roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset < 0)
 		{
-			return; //TODO also trigger same message here
+			worldRenderer.prepText("This door seems jammed");
+			return;
 		}
 		
 		if(rooms[(roomOffsetX / Constants.ROOMOFFSET) + roomArrayOffset][(roomOffsetY / Constants.ROOMOFFSET) + roomArrayOffset] != null)
@@ -516,13 +533,12 @@ public class WorldController extends InputAdapter implements ContactListener
 			return;
 		}
 			
-		//checks that a new room is available //TODO if a new unique room isnt available, use a random non treasure room
+		Room newRoom;
+		//checks that a new room is available, if a new unique room isnt available, use a random looped room
 		if(randomizedRooms.size == 0)
-		{
-			return; //TODO trigger message here "this door seems locked"
-		}
-		
-		Room newRoom = new Room(randomizedRooms.pop(), this, roomOffsetX, roomOffsetY);
+			newRoom = new Room(loopedRooms.random() , this, roomOffsetX, roomOffsetY);
+		else
+			newRoom = new Room(randomizedRooms.pop(), this, roomOffsetX, roomOffsetY);
 		
 		Door newDoor = newRoom.doors.first();
 		for (Door tempDoor : newRoom.doors)
@@ -625,6 +641,14 @@ public class WorldController extends InputAdapter implements ContactListener
 	        if (files[i].isFile())
 	            randomizedRooms.add(files[i].toString());
 	    randomizedRooms.shuffle();
+	    
+	    loopedRooms = new Array<String>();
+	    File pathLooped = new File(Constants.LOOPROOMS);
+
+	    File [] filesLooped = pathLooped.listFiles();
+	    for (int i = 0; i < filesLooped.length; i++)
+	        if (filesLooped[i].isFile())
+	            loopedRooms.add(filesLooped[i].toString());
 	}
 	
 	/**
