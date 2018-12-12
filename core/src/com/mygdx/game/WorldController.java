@@ -43,7 +43,7 @@ public class WorldController extends InputAdapter implements ContactListener
 	private Array<String> randomizedRooms;
 	private Array<Body> bodiesToBeRemoved;
 	private int score;
-	private Character.PotionType activePotion;
+	public Character.PotionType activePotion;
 	
 	//increases with each deeper level of the dungeon
 	public int goldModifier;
@@ -192,7 +192,7 @@ public class WorldController extends InputAdapter implements ContactListener
 		{
 			if(touchedObject != null)
 			{
-				touchedObject.activate();
+				touchedObject.tryActivation();
 			}
 		}
 		
@@ -318,14 +318,14 @@ public class WorldController extends InputAdapter implements ContactListener
 		if(contact.getFixtureA().getBody().getUserData() == activeRoom.player && isCollectedObjectB && contact.getFixtureB().isSensor()) //TODO needs refactoring
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
-			touchedObject.activate();
+			touchedObject.tryActivation();
 			touchedObject = null;
 			
 		}
 		else if(contact.getFixtureB().getBody().getUserData() == activeRoom.player && isCollectedObjectA && contact.getFixtureB().isSensor())
 		{
 			touchedObject = (AbstractGameObject) contact.getFixtureB().getBody().getUserData();
-			touchedObject.activate();
+			touchedObject.tryActivation();
 			touchedObject = null;
 			
 		}
