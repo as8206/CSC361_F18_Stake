@@ -24,6 +24,7 @@ public class AmarethMain extends Game
 		GamePreferences.instance.load();
 		
 		// Start game at menu screen
-		setScreen(new GameOverScreen(this,0));
+		setScreen(new MenuScreen(this));
+//		setScreen(new GameOverScreen(this,0));
 	}
 }

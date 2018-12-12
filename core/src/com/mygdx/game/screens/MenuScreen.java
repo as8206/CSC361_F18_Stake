@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Assets;
 import com.mygdx.game.utils.GamePreferences;
+import com.mygdx.game.utils.ScoreList;
 import com.mygdx.game.utils.AudioManager;
 import com.mygdx.game.utils.Constants;
 
@@ -40,6 +41,7 @@ public class MenuScreen extends AbstractGameScreen
 	private Stage stage;
 	private Skin skinAmareth;
 	private Skin skinLibgdx;
+	private Skin skinPixthulhu;
 	SpriteBatch batch;
 	
 	private float appearanceTimeClock;
@@ -57,6 +59,7 @@ public class MenuScreen extends AbstractGameScreen
 	private Image imgLogo;
 	private Button btnMenuPlay;
 	private Button btnMenuOptions;
+	private Button btnHighscores;
 	
 	//debug
 	private final float DEBUG_REBUILD_INTERVAL = 5.0f;
@@ -73,6 +76,12 @@ public class MenuScreen extends AbstractGameScreen
 	private Slider sldMusic;
 	private CheckBox chkShowFpsCounter;
 	
+	//Highscore
+	private Window winHighscore;
+	private TextButton exitHighscore;
+	private Label[] highscores;
+	private Label highscoreTitle;
+	
 	public MenuScreen (Game game)
 	{
 		super(game);
@@ -85,12 +94,16 @@ public class MenuScreen extends AbstractGameScreen
 				new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
 		skinLibgdx = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI),
 				new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+		skinPixthulhu = new Skin(Gdx.files.internal("../core/assets/ui/pixthulhu-ui.json"),
+				new TextureAtlas("../core/assets/ui/pixthulhu-ui.atlas"));
+		
 		
 		//build all layers
 		buildBackground();
 		Table layerControls = buildControls();
 		Table layerLogo = buildLogo();
 		Table layerOptionsWindow = buildOptionsWindowLayer();
+		Table layerHighscoreWindow = buildHighscoreWindowLayer();
 		
 		//assemble stage for menu screen
 		stage.clear();
@@ -105,8 +118,80 @@ public class MenuScreen extends AbstractGameScreen
 			stack.add(layerControls);
 		
 		stage.addActor(layerOptionsWindow);
+		stage.addActor(layerHighscoreWindow);
 	}
 	
+	private Table buildHighscoreWindowLayer()
+	{
+		winHighscore = new Window("", skinPixthulhu);
+		
+		//Build the list and exit button
+		winHighscore.add(buildHighscoreLables()).row();
+		winHighscore.add(buildHighscoreButton());
+		
+		//Make window black
+		winHighscore.setColor(1, 1, 1, 0.8f);
+		
+		//Hide by default
+		winHighscore.setVisible(false);
+		
+		if(debugEnabled)
+			winHighscore.debug();
+		
+		winHighscore.setSize(450, 600);
+		winHighscore.pack();
+		
+		//sets the position
+		winHighscore.setPosition(Constants.VIEWPORT_UI_WIDTH - winHighscore.getWidth() - 20, 50);
+		return winHighscore;
+	}
+
+	private Actor buildHighscoreButton()
+	{
+		Table table = new Table();
+		
+		table.center().bottom().padBottom(15f).padTop(15f);
+		
+		//add button
+		exitHighscore = new TextButton("Exit", skinPixthulhu);
+		table.add(exitHighscore);
+		
+		//give the exit button something to do
+		exitHighscore.addListener(new ChangeListener()
+			{
+				@Override
+				public void changed(ChangeEvent event, Actor actor)
+					{
+						exitHighscores();
+					}
+			});
+		
+		return table;
+	}
+
+	private Table buildHighscoreLables()
+	{
+		Table table = new Table();
+		
+		table.center().top().padTop(20f);
+		
+		highscoreTitle = new Label("Highscores", skinPixthulhu);
+		highscoreTitle.setFontScale(1.5f);
+		table.add(highscoreTitle).padBottom(15f).row();
+		
+		highscores = new Label[ScoreList.MAXSCORES];
+		ScoreList.instance.load();
+		
+		//creates the labels
+		for(int i = 0; i < ScoreList.MAXSCORES; i++)
+		{
+			highscores[i] = new Label("Score " + (i + 1) + " : " + ScoreList.instance.getName(i) + " - " + ScoreList.instance.getScore(i), skinPixthulhu);
+			table.add(highscores[i]).row();
+		}
+		
+		return table;
+	}
+
 	/**
 	 * Builds the Table for the options window layer of the menu
 	 * @return Options Window Layer Table
@@ -290,7 +375,7 @@ public class MenuScreen extends AbstractGameScreen
 		
 		//add options button
 		btnMenuOptions = new Button(skinAmareth, "options");
-		layer.add(btnMenuOptions);
+		layer.add(btnMenuOptions).padBottom(100f);
 		
 		//give the options button something to do
 		btnMenuOptions.addListener(new ChangeListener()
@@ -299,6 +384,21 @@ public class MenuScreen extends AbstractGameScreen
 				public void changed(ChangeEvent event, Actor actor)
 					{
 						onOptionsClicked();
+					}
+			});
+		layer.row();
+		
+		//add highscores button
+		btnHighscores = new Button(skinAmareth, "highscore");
+		layer.add(btnHighscores);
+		
+		//give the options button something to do
+		btnHighscores.addListener(new ChangeListener()
+			{
+				@Override
+				public void changed(ChangeEvent event, Actor actor)
+					{
+						onHighscoresClicked();
 					}
 			});
 		
@@ -405,8 +505,17 @@ public class MenuScreen extends AbstractGameScreen
 	{
 		btnMenuPlay.setVisible(true);
 		btnMenuOptions.setVisible(true);
+		btnHighscores.setVisible(true);
 		winOptions.setVisible(false);
 		AudioManager.instance.onSettingsUpdated();
+	}
+	
+	private void onHighscoresClicked()
+	{
+		btnMenuPlay.setVisible(false);
+		btnMenuOptions.setVisible(false);
+		btnHighscores.setVisible(false);
+		winHighscore.setVisible(true);
 	}
 	
 	/**
@@ -417,6 +526,7 @@ public class MenuScreen extends AbstractGameScreen
 		loadSettings();
 		btnMenuPlay.setVisible(false);
 		btnMenuOptions.setVisible(false);
+		btnHighscores.setVisible(false);
 		winOptions.setVisible(true);
 	}
 	
@@ -451,5 +561,13 @@ public class MenuScreen extends AbstractGameScreen
 		prefs.volMusic = sldMusic.getValue();
 		prefs.showFpsCounter = chkShowFpsCounter.isChecked();
 		prefs.save();
+	}
+	
+	private void exitHighscores()
+	{
+		btnMenuPlay.setVisible(true);
+		btnMenuOptions.setVisible(true);
+		btnHighscores.setVisible(true);
+		winHighscore.setVisible(false);
 	}
 }

@@ -189,9 +189,10 @@ public class GameOverScreen extends AbstractGameScreen
 	
 	private void newScoreEnter()
 	{
-		String name = textInput.getMessageText();
+		String name = textInput.getText();
+		System.out.println(name);
 		
-		if(name == null)
+		if(name == "")
 			return;
 		
 		ScoreList.instance.insertScore(finalScore, name);

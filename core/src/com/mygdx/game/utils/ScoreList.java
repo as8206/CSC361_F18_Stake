@@ -81,7 +81,10 @@ public class ScoreList
 		for(int i = 0; i < MAXSCORES; i++)
 		{
 			if(newScore > scores[i])
+			{
 				rank = i;
+				break;
+			}
 		}
 		
 		if(rank == -1)
@@ -101,5 +104,17 @@ public class ScoreList
 			tempScore = tempScore2;
 			tempName = tempName2;
 		}
+		
+		save();
+	}
+	
+	public String getName(int i)
+	{
+		return names[i];
+	}
+	
+	public int getScore(int i)
+	{
+		return scores[i];
 	}
 }
