@@ -29,10 +29,7 @@ public class Constants
 	public static final String SKIN_LIBGDX_UI = "../core/assets/ui/uiskin.json";
 	
 	//Location of level 1
-	public static final String STARTROOM = "../core/assets/levels/start/testingRoom.png"; //TODO change to real spawn room
-	
-	//Location of level 2
-	public static final String LEVEL_02 = "../core/assets/levels/temp/level02.png";
+	public static final String STARTROOM = "../core/assets/levels/start/startingRoom.png";
 	
 	//Location of room png's
 	public static final String ROOMFILES = "../core/assets/levels/rooms"; //TODO break into various door entry point folders
