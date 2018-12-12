@@ -188,7 +188,7 @@ public class Room
 				{
 					if(pixelX == 0)
 					{
-						obj = new Door(Assets.instance.door.doorHor, Door.LEFT, worldController);
+						obj = new Door(Assets.instance.door.doorHor, Door.LEFT, worldController); //TODO maybe fix so actually verticle, but i kinda like it better this way
 					}
 					else if(pixelX == pixmap.getWidth()-1)
 					{

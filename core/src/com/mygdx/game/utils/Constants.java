@@ -35,7 +35,10 @@ public class Constants
 	public static final String LEVEL_02 = "../core/assets/levels/temp/level02.png";
 	
 	//Location of room png's
-	public static final String ROOMFILES = "../core/assets/levels/temp"; //TODO break into various door entry point folders
+	public static final String ROOMFILES = "../core/assets/levels/rooms"; //TODO break into various door entry point folders
+	
+	//Location of looped rooms
+	public static final String LOOPROOMS = "../core/assets/levels/loopedRooms";
 	
 	//offset of render vs collision box
 	public static final float OFFSET = 0.5f;
